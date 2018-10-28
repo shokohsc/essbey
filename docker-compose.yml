@@ -1,0 +1,569 @@
+version: '3'
+
+services:
+
+  samba:
+    container_name: samba
+    image: dperson/samba
+    domainname: ${DOMAIN_NAME}
+    command: '-s "shared;/mount;yes;no;yes;all;none"'
+    restart: unless-stopped
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ${DATA_PATH}:/mount
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+
+  traefik:
+    container_name: traefik
+    domainname: ${DOMAIN_NAME}
+    image: traefik
+    restart: unless-stopped
+    # Note I opt to whitelist certain apps for exposure to traefik instead of auto discovery
+    # use `--docker.exposedbydefault=true` if you don't want to have to do this
+    command: "--api --docker"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIG_PATH}/traefik/traefik.toml:/traefik.toml
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:traefik.shokohsc.duckdns.org"
+      - "traefik.backend=traefik"
+      - "traefik.port=8080"
+
+  whoami:
+    container_name: whoami
+    image: emilevauge/whoami # A container that exposes an API to show its IP address
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:whoami.shokohsc.duckdns.org"
+
+  pihole:
+    container_name: pihole
+    domainname: ${DOMAIN_NAME}
+    cap_add:
+      - net_admin
+    image: pihole/pihole:latest
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    ports:
+      - '0.0.0.0:53:53/tcp'
+      - '0.0.0.0:53:53/udp'
+      - '0.0.0.0:67:67/udp'
+    volumes:
+    # run `touch ./pihole.log` first unless you like errors
+    #  - ./pihole.log:/var/log/pihole.log
+      - ${CONFIG_PATH}/pihole:/etc/pihole/
+      - ${CONFIG_PATH}/dnsmasqd:/etc/dnsmasq.d/
+    environment:
+      ServerIP: 10.0.0.2
+      PROXY_LOCATION: pihole
+      VIRTUAL_HOST: ${PIHOLE_VIRTUAL_HOST}
+      VIRTUAL_PORT: 80
+      TZ: ${TZ}
+      WEBPASSWORD: ${PIHOLE_PASSWORD}
+      DNSMASQ_LISTENING: all
+      INTERFACE: eth0
+      DNS1: 185.187.240.11
+      DNS2: 1.1.1.1
+    restart: unless-stopped
+    networks:
+        discovery:
+            ipv4_address: 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+       # required when using --docker.exposedbydefault=false
+       - "traefik.enable=true"
+       # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
+       - "traefik.frontend.rule=HostRegexp:pihole.shokohsc.duckdns.org,{catchall:.*}"
+       - "traefik.frontend.priority=1"
+       - "traefik.backend=pihole"
+       - "traefik.port=80"
+
+  duckdns:
+    container_name: duckdns
+    image: linuxserver/duckdns
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
+      TOKEN: ${PUID}
+      TZ: ${TIMEZONE}
+    networks:
+      - discovery
+    depends_on:
+      - pihole
+    dns:
+      - 10.0.0.2
+
+  openvpn-as:
+    container_name: openvpn-as
+    image: linuxserver/openvpn-as
+    domainname: ${DOMAIN_NAME}
+    cap_add:
+      - net_admin
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "1194:1194/udp"
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+      INTERFACE: ${NIC_INTERFACE}
+    volumes:
+      - ${CONFIG_PATH}/openvpn:/config
+      - /dev/net:/dev/net
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:openvpn-as.shokohsc.duckdns.org"
+      - "traefik.backend=openvpn-as"
+      - "traefik.port=943"
+
+  transmission:
+    container_name: transmission
+    image: linuxserver/transmission
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    network_mode: "container:openvpn-as"
+    volumes:
+      - ${CONFIG_PATH}/transmission:/config
+      - ${DATA_PATH}/transmission:/downloads
+      - ${DATA_PATH}/transmission:/watch
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - openvpn-as
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:transmission.shokohsc.duckdns.org"
+      - "traefik.backend=transmission"
+      - "traefik.port=9091"
+
+  sabnzbd:
+    container_name: sabnzbd
+    image: linuxserver/sabnzbd
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/sabnzbd:/config
+      - ${DATA_PATH}:/downloads
+    network_mode: "container:openvpn-as"
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - openvpn-as
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:sabnzbd.shokohsc.duckdns.org"
+      - "traefik.backend=sabnzbd"
+      - "traefik.port=8080"
+
+  plex:
+    container_name: plex
+    image: linuxserver/plex
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    ports:
+      - "32400:32400/udp"
+      - "32469:32469/tcp"
+      - "32469:32469/udp"
+      - "5353:5353/udp"
+      - "1900:1900/udp"
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/plex:/config
+      - ${DATA_PATH}:/data/tvshows
+      - ${DATA_PATH}:/data/movies
+      - ${PLEX_TRANSCODING_PATH}:/transcode
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:plex.shokohsc.duckdns.org"
+      - "traefik.backend=plex"
+      - "traefik.port=32400"
+
+  headphones:
+    container_name: headphones
+    image: linuxserver/headphones
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/headphones:/config
+      - ${DATA_PATH}:/downloads
+      - ${DATA_PATH}:/music
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:headphones.shokohsc.duckdns.org"
+      - "traefik.backend=headphones"
+      - "traefik.port=8181"
+
+  lidarr:
+    container_name: lidarr
+    image: linuxserver/lidarr
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+    volumes:
+      - ${CONFIG_PATH}/lidarr:/config
+      - ${DATA_PATH}:/downloads
+      - ${DATA_PATH}:/music
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:lidarr.shokohsc.duckdns.org"
+      - "traefik.backend=lidarr"
+      - "traefik.port=8686"
+
+  jackett:
+    container_name: jackett
+    image: linuxserver/jackett
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/jackett:/config
+      - ${DATA_PATH}:/downloads
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:jackett.shokohsc.duckdns.org"
+      - "traefik.backend=jackett"
+      - "traefik.port=9117"
+
+  sickrage:
+    container_name: sickrage
+    image: linuxserver/sickrage
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/sickrage:/config
+      - ${DATA_PATH}:/downloads
+      - ${DATA_PATH}:/tv
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:sickrage.shokohsc.duckdns.org"
+      - "traefik.backend=sickrage"
+      - "traefik.port=8081"
+
+  mylar:
+    container_name: mylar
+    image: linuxserver/mylar
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/mylar:/config
+      - ${DATA_PATH}:/downloads
+      - ${DATA_PATH}:/comics
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:mylar.shokohsc.duckdns.org"
+      - "traefik.backend=mylar"
+      - "traefik.port=8090"
+
+  bazarr:
+    container_name: bazarr
+    image: linuxserver/bazarr
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/bazarr:/config
+      - ${DATA_PATH}:/movies
+      - ${DATA_PATH}:/tv
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:bazarr.shokohsc.duckdns.org"
+      - "traefik.backend=bazarr"
+      - "traefik.port=6767"
+
+  gazee:
+    container_name: gazee
+    image: linuxserver/gazee
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/gazee:/config
+      - ${DATA_PATH}:/comics
+      - ${DATA_PATH}:/mylar
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:gazee.shokohsc.duckdns.org"
+      - "traefik.backend=gazee"
+      - "traefik.port=4242"
+
+  libresonic:
+    container_name: libresonic
+    image: linuxserver/libresonic
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/libresonic:/config
+      - ${DATA_PATH}:/music
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:libresonic.shokohsc.duckdns.org"
+      - "traefik.backend=libresonic"
+      - "traefik.port=4040"
+
+  lychee:
+    container_name: lychee
+    image: linuxserver/lychee
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+    volumes:
+      - ${CONFIG_PATH}/lychee:/config
+      - ${DATA_PATH}:/pictures
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:lychee.shokohsc.duckdns.org"
+      - "traefik.backend=lychee"
+      - "traefik.port=80"
+
+  photoshow:
+    container_name: photoshow
+    image: linuxserver/photoshow
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+    volumes:
+      - ${CONFIG_PATH}/photoshow:/config
+      - ${DATA_PATH}:/Pictures:ro
+      - ${DATA_PATH}:/Thumbs
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:photoshow.shokohsc.duckdns.org"
+      - "traefik.backend=photoshow"
+      - "traefik.port=80"
+
+  heimdall:
+    container_name: heimdall
+    image: linuxserver/heimdall
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+    volumes:
+      - ${CONFIG_PATH}/heimdall:/config
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:heimdall.shokohsc.duckdns.org"
+      - "traefik.backend=heimdall"
+      - "traefik.port=80"
+
+  pydio:
+    container_name: pydio
+    image: linuxserver/pydio
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+    volumes:
+      - ${CONFIG_PATH}/pydio:/config
+      - ${DATA_PATH}:/data
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:pydio.shokohsc.duckdns.org"
+      - "traefik.backend=pydio"
+      - "traefik.port=443"
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIG_PATH}/portainer:/data
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:portainer.shokohsc.duckdns.org"
+      - "traefik.backend=portainer"
+      - "traefik.port=9000"
+
+  h5ai:
+    container_name: h5ai
+    image: clue/h5ai
+    domainname: ${DOMAIN_NAME}
+    restart: unless-stopped
+    volumes:
+      - ${CONFIG_PATH}/h5ai:/data
+    networks:
+      - discovery
+    dns:
+      - 10.0.0.2
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:h5ai.shokohsc.duckdns.org"
+      - "traefik.backend=h5ai"
+      - "traefik.port=80"
+
+networks:
+  # Discovery is manually created to avoid forcing any order of docker-compose stack creation (`docker network create discovery`)
+  # allows other compose files to be seen by proxy
+  # Not required if you aren't using multiple docker-compose files...
+  discovery:
+    external: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 10.0.0.0/24
