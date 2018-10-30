@@ -136,12 +136,9 @@ services:
     image: grafana/grafana
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
-    user: 472
     networks:
         discovery:
             ipv4_address: 10.0.0.55
-    volumes:
-      - ./config/grafana:/var/lib/grafana
     environment:
       GF_SERVER_ROOT_URL: https://grafana-shokohsc.duckdns.org
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
