@@ -587,11 +587,7 @@ services:
       - "traefik.port=80"
 
 networks:
-  # Discovery is manually created to avoid forcing any order of docker-compose stack creation (`docker network create discovery`)
-  # allows other compose files to be seen by proxy
-  # Not required if you aren't using multiple docker-compose files...
   discovery:
-    external: true
     driver: bridge
     ipam:
       driver: default
