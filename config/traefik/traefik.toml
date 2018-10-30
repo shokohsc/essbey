@@ -22,7 +22,7 @@ exposedByDefault = false
 
 [acme]
 email = "shokohsc@gmail.com"
-caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+#caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true

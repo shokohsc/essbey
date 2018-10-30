@@ -57,6 +57,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik/traefik.toml:/traefik.toml
+      - ./config/traefik/acme.json:/acme.json
     networks:
         discovery:
             ipv4_address: 10.0.0.52
@@ -65,7 +66,7 @@ services:
       - 1.1.1.1
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/traefik/"
+      - "traefik.frontend.rule=PathPrefix:/traefik/"
       - "traefik.frontend.priority=10"
       - "traefik.backend=traefik"
       - "traefik.port=8080"
@@ -109,7 +110,7 @@ services:
        # required when using --docker.exposedbydefault=false
        - "traefik.enable=true"
        # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*};PathPrefixStrip:/pihole/"
+       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*};PathPrefix:/pihole/"
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
@@ -131,7 +132,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/grafana/"
+      - "traefik.frontend.rule=PathPrefix:/grafana/"
       - "traefik.backend=grafana"
       - "traefik.port=3000"
 
@@ -164,7 +165,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/openvpn-as/"
+      - "traefik.frontend.rule=PathPrefix:/openvpn-as/"
       - "traefik.backend=openvpn-as"
       - "traefik.port=943"
 
@@ -184,7 +185,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/transmission/"
+      - "traefik.frontend.rule=PathPrefix:/transmission/"
       - "traefik.backend=transmission"
       - "traefik.port=9091"
 
@@ -207,7 +208,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/sabnzbd/"
+      - "traefik.frontend.rule=PathPrefix:/sabnzbd/"
       - "traefik.backend=sabnzbd"
       - "traefik.port=8080"
 
@@ -240,7 +241,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/plex/"
+      - "traefik.frontend.rule=PathPrefix:/plex/"
       - "traefik.backend=plex"
       - "traefik.port=32400"
 
@@ -266,7 +267,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/headphones/"
+      - "traefik.frontend.rule=PathPrefix:/headphones/"
       - "traefik.backend=headphones"
       - "traefik.port=8181"
 
@@ -291,7 +292,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/lidarr/"
+      - "traefik.frontend.rule=PathPrefix:/lidarr/"
       - "traefik.backend=lidarr"
       - "traefik.port=8686"
 
@@ -316,7 +317,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/jackett/"
+      - "traefik.frontend.rule=PathPrefix:/jackett/"
       - "traefik.backend=jackett"
       - "traefik.port=9117"
 
@@ -342,7 +343,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/sickrage/"
+      - "traefik.frontend.rule=PathPrefix:/sickrage/"
       - "traefik.backend=sickrage"
       - "traefik.port=8081"
 
@@ -368,7 +369,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/mylar/"
+      - "traefik.frontend.rule=PathPrefix:/mylar/"
       - "traefik.backend=mylar"
       - "traefik.port=8090"
 
@@ -394,7 +395,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/bazarr/"
+      - "traefik.frontend.rule=PathPrefix:/bazarr/"
       - "traefik.backend=bazarr"
       - "traefik.port=6767"
 
@@ -420,7 +421,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/gazee/"
+      - "traefik.frontend.rule=PathPrefix:/gazee/"
       - "traefik.backend=gazee"
       - "traefik.port=4242"
 
@@ -445,7 +446,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/libresonic/"
+      - "traefik.frontend.rule=PathPrefix:/libresonic/"
       - "traefik.backend=libresonic"
       - "traefik.port=4040"
 
@@ -469,7 +470,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/lychee/"
+      - "traefik.frontend.rule=PathPrefix:/lychee/"
       - "traefik.backend=lychee"
       - "traefik.port=80"
 
@@ -495,7 +496,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/photoshow/"
+      - "traefik.frontend.rule=PathPrefix:/photoshow/"
       - "traefik.backend=photoshow"
       - "traefik.port=80"
 
@@ -519,7 +520,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/heimdall/"
+      - "traefik.frontend.rule=PathPrefix:/heimdall/"
       - "traefik.backend=heimdall"
       - "traefik.port=80"
 
@@ -544,7 +545,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/pydio/"
+      - "traefik.frontend.rule=PathPrefix:/pydio/"
       - "traefik.backend=pydio"
       - "traefik.port=443"
 
@@ -565,7 +566,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/portainer/"
+      - "traefik.frontend.rule=PathPrefix:/portainer/"
       - "traefik.backend=portainer"
       - "traefik.port=9000"
 
@@ -588,7 +589,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/h5ai/"
+      - "traefik.frontend.rule=PathPrefix:/h5ai/"
       - "traefik.backend=h5ai"
       - "traefik.port=80"
 
