@@ -7,12 +7,15 @@ services:
     image: dperson/samba
     domainname: ${DOMAIN_NAME}
     command: '-s "shared;/mount;yes;no;yes;all;none"'
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     ports:
       - "139:139"
       - "445:445"
     volumes:
-      - ${DATA_PATH}:/mount
+      - ${DOWNLOAD_PATH}:/mount/downloads
+      - ${WORK_PATH}:/mount/work
+      - ${GAMES_DRIVE}:/mount/games
+      - ${MEDIA_DRIVE}:/mount/media
     networks:
       - discovery
     dns:
@@ -22,7 +25,7 @@ services:
     container_name: traefik
     domainname: ${DOMAIN_NAME}
     image: traefik
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     # Note I opt to whitelist certain apps for exposure to traefik instead of auto discovery
     # use `--docker.exposedbydefault=true` if you don't want to have to do this
     command: "--api --docker"
@@ -46,7 +49,7 @@ services:
     container_name: whoami
     image: emilevauge/whoami # A container that exposes an API to show its IP address
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     networks:
       - discovery
     dns:
@@ -67,9 +70,9 @@ services:
       - 127.0.0.1
       - 1.1.1.1
     ports:
-      - '0.0.0.0:53:53/tcp'
-      - '0.0.0.0:53:53/udp'
-      - '0.0.0.0:67:67/udp'
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '67:67/udp'
     volumes:
     # run `touch ./pihole.log` first unless you like errors
     #  - ./pihole.log:/var/log/pihole.log
@@ -86,7 +89,7 @@ services:
       INTERFACE: eth0
       DNS1: 185.187.240.11
       DNS2: 1.1.1.1
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     networks:
         discovery:
             ipv4_address: 10.0.0.2
@@ -105,7 +108,7 @@ services:
     container_name: duckdns
     image: linuxserver/duckdns
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
       TOKEN: ${PUID}
@@ -124,11 +127,11 @@ services:
     cap_add:
       - net_admin
     privileged: true
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     ports:
-      - "1194:1194/udp"
-      - "51413:51413/tcp"
-      - "51413:51413/udp"
+      - "32767:1194/udp"
+      - "32766:51413/tcp"
+      - "32766:51413/udp"
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
@@ -153,12 +156,12 @@ services:
     container_name: transmission
     image: linuxserver/transmission
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     network_mode: "container:openvpn-as"
     volumes:
       - ${CONFIG_PATH}/transmission:/config
-      - ${DATA_PATH}/transmission:/downloads
-      - ${DATA_PATH}/transmission:/watch
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${DOWNLOAD_PATH}:/watch
     dns:
       - 10.0.0.2
     depends_on:
@@ -173,14 +176,14 @@ services:
     container_name: sabnzbd
     image: linuxserver/sabnzbd
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/sabnzbd:/config
-      - ${DATA_PATH}:/downloads
+      - ${DOWNLOAD_PATH}:/downloads
     network_mode: "container:openvpn-as"
     dns:
       - 10.0.0.2
@@ -196,7 +199,7 @@ services:
     container_name: plex
     image: linuxserver/plex
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     ports:
       - "32400:32400/udp"
       - "32469:32469/tcp"
@@ -209,9 +212,9 @@ services:
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/plex:/config
-      - ${DATA_PATH}:/data/tvshows
-      - ${DATA_PATH}:/data/movies
-      - ${PLEX_TRANSCODING_PATH}:/transcode
+      - ${TVSHOWS_PATH}:/data/tvshows
+      - ${MOVIES_PATH}:/data/movies
+      - ${WORK_PATH}/transcode:/transcode
     networks:
       - discovery
     dns:
@@ -228,15 +231,15 @@ services:
     container_name: headphones
     image: linuxserver/headphones
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/headphones:/config
-      - ${DATA_PATH}:/downloads
-      - ${DATA_PATH}:/music
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${MUSIC_PATH}:/music
     networks:
       - discovery
     dns:
@@ -253,14 +256,14 @@ services:
     container_name: lidarr
     image: linuxserver/lidarr
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
     volumes:
       - ${CONFIG_PATH}/lidarr:/config
-      - ${DATA_PATH}:/downloads
-      - ${DATA_PATH}:/music
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${MUSIC_PATH}:/music
     networks:
       - discovery
     dns:
@@ -277,14 +280,14 @@ services:
     container_name: jackett
     image: linuxserver/jackett
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/jackett:/config
-      - ${DATA_PATH}:/downloads
+      - ${DOWNLOAD_PATH}:/downloads
     networks:
       - discovery
     dns:
@@ -301,15 +304,15 @@ services:
     container_name: sickrage
     image: linuxserver/sickrage
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/sickrage:/config
-      - ${DATA_PATH}:/downloads
-      - ${DATA_PATH}:/tv
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${TVSHOWS_PATH}:/tv
     networks:
       - discovery
     dns:
@@ -326,15 +329,15 @@ services:
     container_name: mylar
     image: linuxserver/mylar
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/mylar:/config
-      - ${DATA_PATH}:/downloads
-      - ${DATA_PATH}:/comics
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${COMICS_PATH}:/comics
     networks:
       - discovery
     dns:
@@ -351,15 +354,15 @@ services:
     container_name: bazarr
     image: linuxserver/bazarr
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/bazarr:/config
-      - ${DATA_PATH}:/movies
-      - ${DATA_PATH}:/tv
+      - ${MOVIES_PATH}:/movies
+      - ${TVSHOWS_PATH}:/tv
     networks:
       - discovery
     dns:
@@ -376,15 +379,15 @@ services:
     container_name: gazee
     image: linuxserver/gazee
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/gazee:/config
-      - ${DATA_PATH}:/comics
-      - ${DATA_PATH}:/mylar
+      - ${COMICS_PATH}:/comics
+      - ${CONFIG_PATH}/mylar:/mylar
     networks:
       - discovery
     dns:
@@ -401,14 +404,14 @@ services:
     container_name: libresonic
     image: linuxserver/libresonic
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIG_PATH}/libresonic:/config
-      - ${DATA_PATH}:/music
+      - ${MUSIC_PATH}:/music
     networks:
       - discovery
     dns:
@@ -425,13 +428,13 @@ services:
     container_name: lychee
     image: linuxserver/lychee
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
     volumes:
       - ${CONFIG_PATH}/lychee:/config
-      - ${DATA_PATH}:/pictures
+      - ${PHOTOS_PATH}:/pictures
     networks:
       - discovery
     dns:
@@ -448,15 +451,15 @@ services:
     container_name: photoshow
     image: linuxserver/photoshow
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
     volumes:
       - ${CONFIG_PATH}/photoshow:/config
-      - ${DATA_PATH}:/Pictures:ro
-      - ${DATA_PATH}:/Thumbs
+      - ${PHOTOS_PATH}:/Pictures:ro
+      - ${PHOTOS_PATH}:/Thumbs
     networks:
       - discovery
     dns:
@@ -473,7 +476,7 @@ services:
     container_name: heimdall
     image: linuxserver/heimdall
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
@@ -496,7 +499,7 @@ services:
     container_name: pydio
     image: linuxserver/pydio
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
@@ -520,7 +523,7 @@ services:
     container_name: portainer
     image: portainer/portainer
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${CONFIG_PATH}/portainer:/data
@@ -540,9 +543,12 @@ services:
     container_name: h5ai
     image: clue/h5ai
     domainname: ${DOMAIN_NAME}
-    restart: unless-stopped
+    restart: ${RESTART_MODE}
     volumes:
-      - ${CONFIG_PATH}/h5ai:/data
+      - ${DOWNLOAD_PATH}:/var/www/downloads
+      - ${WORK_PATH}:/var/www/work
+      - ${GAMES_DRIVE}:/var/www/games
+      - ${MEDIA_DRIVE}:/var/www/media
     networks:
       - discovery
     dns:
