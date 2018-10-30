@@ -182,7 +182,7 @@ services:
     image: linuxserver/transmission
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
-    network_mode: "container:[openvpn-as]"
+    network_mode: "service:openvpn-as"
     volumes:
       - ./config/transmission:/config
       - ./download:/downloads
@@ -209,7 +209,7 @@ services:
     volumes:
       - ./config/sabnzbd:/config
       - ./download:/downloads
-    network_mode: "container:[openvpn-as]"
+    network_mode: "service:openvpn-as"
     dns:
       - 10.0.0.2
     depends_on:
