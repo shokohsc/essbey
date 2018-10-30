@@ -43,7 +43,7 @@ services:
       - 1.1.1.1
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:traefik.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:traefik-shokohsc.duckdns.org"
       - "traefik.backend=traefik"
       - "traefik.port=8080"
 
@@ -61,7 +61,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:whoami.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:whoami-shokohsc.duckdns.org"
 
   pihole:
     container_name: pihole
@@ -102,7 +102,7 @@ services:
        # required when using --docker.exposedbydefault=false
        - "traefik.enable=true"
        # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:pihole.shokohsc.duckdns.org,{catchall:.*}"
+       - "traefik.frontend.rule=HostRegexp:pihole-shokohsc.duckdns.org,{catchall:.*}"
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
@@ -134,7 +134,7 @@ services:
     volumes:
       - ./config/grafana:/var/lib/grafana
     environment:
-      GF_SERVER_ROOT_URL: https://grafana.shokohsc.duckdns.org
+      GF_SERVER_ROOT_URL: https://grafana-shokohsc.duckdns.org
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
     dns:
       - 10.0.0.2
@@ -142,7 +142,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:grafana.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:grafana-shokohsc.duckdns.org"
       - "traefik.backend=grafana"
       - "traefik.port=3000"
 
@@ -174,7 +174,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:openvpn-as.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:openvpn-as-shokohsc.duckdns.org"
       - "traefik.backend=openvpn-as"
       - "traefik.port=943"
 
@@ -194,7 +194,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:transmission.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:transmission-shokohsc.duckdns.org"
       - "traefik.backend=transmission"
       - "traefik.port=9091"
 
@@ -217,7 +217,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:sabnzbd.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:sabnzbd-shokohsc.duckdns.org"
       - "traefik.backend=sabnzbd"
       - "traefik.port=8080"
 
@@ -249,7 +249,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:plex.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:plex-shokohsc.duckdns.org"
       - "traefik.backend=plex"
       - "traefik.port=32400"
 
@@ -274,7 +274,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:headphones.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:headphones-shokohsc.duckdns.org"
       - "traefik.backend=headphones"
       - "traefik.port=8181"
 
@@ -298,7 +298,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:lidarr.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:lidarr-shokohsc.duckdns.org"
       - "traefik.backend=lidarr"
       - "traefik.port=8686"
 
@@ -322,7 +322,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:jackett.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:jackett-shokohsc.duckdns.org"
       - "traefik.backend=jackett"
       - "traefik.port=9117"
 
@@ -347,7 +347,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:sickrage.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:sickrage-shokohsc.duckdns.org"
       - "traefik.backend=sickrage"
       - "traefik.port=8081"
 
@@ -372,7 +372,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:mylar.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:mylar-shokohsc.duckdns.org"
       - "traefik.backend=mylar"
       - "traefik.port=8090"
 
@@ -397,7 +397,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:bazarr.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:bazarr-shokohsc.duckdns.org"
       - "traefik.backend=bazarr"
       - "traefik.port=6767"
 
@@ -422,7 +422,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:gazee.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:gazee-shokohsc.duckdns.org"
       - "traefik.backend=gazee"
       - "traefik.port=4242"
 
@@ -446,7 +446,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:libresonic.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:libresonic-shokohsc.duckdns.org"
       - "traefik.backend=libresonic"
       - "traefik.port=4040"
 
@@ -469,7 +469,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:lychee.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:lychee-shokohsc.duckdns.org"
       - "traefik.backend=lychee"
       - "traefik.port=80"
 
@@ -494,7 +494,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:photoshow.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:photoshow-shokohsc.duckdns.org"
       - "traefik.backend=photoshow"
       - "traefik.port=80"
 
@@ -517,7 +517,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:heimdall.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:heimdall-shokohsc.duckdns.org"
       - "traefik.backend=heimdall"
       - "traefik.port=80"
 
@@ -541,7 +541,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:pydio.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:pydio-shokohsc.duckdns.org"
       - "traefik.backend=pydio"
       - "traefik.port=443"
 
@@ -561,7 +561,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:portainer.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:portainer-shokohsc.duckdns.org"
       - "traefik.backend=portainer"
       - "traefik.port=9000"
 
@@ -583,7 +583,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:h5ai.shokohsc.duckdns.org"
+      - "traefik.frontend.rule=Host:h5ai-shokohsc.duckdns.org"
       - "traefik.backend=h5ai"
       - "traefik.port=80"
 
