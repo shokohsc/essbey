@@ -66,6 +66,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/traefik"
+      - "traefik.frontend.priority=10"
       - "traefik.backend=traefik"
       - "traefik.port=8080"
 
@@ -125,7 +126,7 @@ services:
        # required when using --docker.exposedbydefault=false
        - "traefik.enable=true"
        # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:pihole-shokohsc.duckdns.org,{catchall:.*}"
+       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*}"
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
@@ -135,7 +136,7 @@ services:
     image: grafana/grafana
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
-    user: ${PUID}
+    user: 472
     networks:
         discovery:
             ipv4_address: 10.0.0.55
