@@ -65,7 +65,7 @@ services:
       - 1.1.1.1
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/traefik"
+      - "traefik.frontend.rule=PathPrefixStrip:shokohsc.duckdns.org/traefik"
       - "traefik.frontend.priority=10"
       - "traefik.backend=traefik"
       - "traefik.port=8080"
