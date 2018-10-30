@@ -12,10 +12,10 @@ services:
       - "139:139"
       - "445:445"
     volumes:
-      - ${DOWNLOAD_PATH}:/mount/downloads
-      - ${WORK_PATH}:/mount/work
-      - ${GAMES_DRIVE}:/mount/games
-      - ${MEDIA_DRIVE}:/mount/media
+      - ./download:/mount/downloads
+      - ./work:/mount/work
+      - /mnt/games:/mount/games
+      - /mnt/media:/mount/media
     networks:
       - discovery
     dns:
@@ -35,7 +35,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${CONFIG_PATH}/traefik/traefik.toml:/traefik.toml
+      - ./config/traefik/traefik.toml:/traefik.toml
     networks:
       - discovery
     dns:
@@ -78,8 +78,8 @@ services:
     volumes:
     # run `touch ./pihole.log` first unless you like errors
     #  - ./pihole.log:/var/log/pihole.log
-      - ${CONFIG_PATH}/pihole:/etc/pihole/
-      - ${CONFIG_PATH}/dnsmasqd:/etc/dnsmasq.d/
+      - ./config/pihole:/etc/pihole/
+      - ./config/dnsmasqd:/etc/dnsmasq.d/
     environment:
       ServerIP: 10.0.0.2
       PROXY_LOCATION: pihole
@@ -130,7 +130,7 @@ services:
     networks:
       - discovery
     volumes:
-      - ${CONFIG_PATH}/grafana:/var/lib/grafana
+      - ./config/grafana:/var/lib/grafana
     environment:
       GF_SERVER_ROOT_URL: https://grafana.shokohsc.duckdns.org
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
@@ -163,7 +163,7 @@ services:
       TZ: ${TIMEZONE}
       INTERFACE: ${NIC_INTERFACE}
     volumes:
-      - ${CONFIG_PATH}/openvpn:/config
+      - ./config/openvpn:/config
       - /dev/net:/dev/net
     networks:
       - discovery
@@ -184,9 +184,9 @@ services:
     restart: ${RESTART_MODE}
     network_mode: "container:openvpn-as"
     volumes:
-      - ${CONFIG_PATH}/transmission:/config
-      - ${DOWNLOAD_PATH}:/downloads
-      - ${DOWNLOAD_PATH}:/watch
+      - ./config/transmission:/config
+      - ./download:/downloads
+      - ./download:/watch
     dns:
       - 10.0.0.2
     depends_on:
@@ -207,8 +207,8 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/sabnzbd:/config
-      - ${DOWNLOAD_PATH}:/downloads
+      - ./config/sabnzbd:/config
+      - ./download:/downloads
     network_mode: "container:openvpn-as"
     dns:
       - 10.0.0.2
@@ -236,10 +236,10 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/plex:/config
-      - ${TVSHOWS_PATH}:/data/tvshows
-      - ${MOVIES_PATH}:/data/movies
-      - ${WORK_PATH}/transcode:/transcode
+      - ./config/plex:/config
+      - /mnt/media/tvshows:/data/tvshows
+      - /mnt/media/movies:/data/movies
+      - ./work/transcode:/transcode
     networks:
       - discovery
     dns:
@@ -262,9 +262,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/headphones:/config
-      - ${DOWNLOAD_PATH}:/downloads
-      - ${MUSIC_PATH}:/music
+      - ./config/headphones:/config
+      - ./download:/downloads
+      - /mnt/media/music:/music
     networks:
       - discovery
     dns:
@@ -286,9 +286,9 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
     volumes:
-      - ${CONFIG_PATH}/lidarr:/config
-      - ${DOWNLOAD_PATH}:/downloads
-      - ${MUSIC_PATH}:/music
+      - ./config/lidarr:/config
+      - ./download:/downloads
+      - /mnt/media/music:/music
     networks:
       - discovery
     dns:
@@ -311,8 +311,8 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/jackett:/config
-      - ${DOWNLOAD_PATH}:/downloads
+      - ./config/jackett:/config
+      - ./download:/downloads
     networks:
       - discovery
     dns:
@@ -335,9 +335,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/sickrage:/config
-      - ${DOWNLOAD_PATH}:/downloads
-      - ${TVSHOWS_PATH}:/tv
+      - ./config/sickrage:/config
+      - ./download:/downloads
+      - /mnt/media/tvshows:/tv
     networks:
       - discovery
     dns:
@@ -360,9 +360,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/mylar:/config
-      - ${DOWNLOAD_PATH}:/downloads
-      - ${COMICS_PATH}:/comics
+      - ./config/mylar:/config
+      - ./download:/downloads
+      - /mnt/media/comics:/comics
     networks:
       - discovery
     dns:
@@ -385,9 +385,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/bazarr:/config
-      - ${MOVIES_PATH}:/movies
-      - ${TVSHOWS_PATH}:/tv
+      - ./config/bazarr:/config
+      - /mnt/media/movies:/movies
+      - /mnt/media/tvshows:/tv
     networks:
       - discovery
     dns:
@@ -410,9 +410,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/gazee:/config
-      - ${COMICS_PATH}:/comics
-      - ${CONFIG_PATH}/mylar:/mylar
+      - ./config/gazee:/config
+      - /mnt/media/comics:/comics
+      - ./config/mylar:/mylar
     networks:
       - discovery
     dns:
@@ -435,8 +435,8 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/libresonic:/config
-      - ${MUSIC_PATH}:/music
+      - ./config/libresonic:/config
+      - /mnt/media/music:/music
     networks:
       - discovery
     dns:
@@ -458,8 +458,8 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
     volumes:
-      - ${CONFIG_PATH}/lychee:/config
-      - ${PHOTOS_PATH}:/pictures
+      - ./config/lychee:/config
+      - /mnt/media/photos:/pictures
     networks:
       - discovery
     dns:
@@ -482,9 +482,9 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/photoshow:/config
-      - ${PHOTOS_PATH}:/Pictures:ro
-      - ${PHOTOS_PATH}:/Thumbs
+      - ./config/photoshow:/config
+      - /mnt/media/photos:/Pictures:ro
+      - /mnt/media/photos:/Thumbs
     networks:
       - discovery
     dns:
@@ -507,7 +507,7 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/heimdall:/config
+      - ./config/heimdall:/config
     networks:
       - discovery
     dns:
@@ -530,8 +530,8 @@ services:
       PUID: ${PUID}
       TZ: ${TIMEZONE}
     volumes:
-      - ${CONFIG_PATH}/pydio:/config
-      - ${DATA_PATH}:/data
+      - ./config/pydio:/config
+      - /mnt/media/data:/data
     networks:
       - discovery
     dns:
@@ -551,7 +551,7 @@ services:
     restart: ${RESTART_MODE}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${CONFIG_PATH}/portainer:/data
+      - ./config/portainer:/data
     networks:
       - discovery
     dns:
@@ -570,10 +570,10 @@ services:
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
     volumes:
-      - ${DOWNLOAD_PATH}:/var/www/downloads
-      - ${WORK_PATH}:/var/www/work
-      - ${GAMES_DRIVE}:/var/www/games
-      - ${MEDIA_DRIVE}:/var/www/media
+      - ./download:/var/www/downloads
+      - ./work:/var/www/work
+      - /mnt/games:/var/www/games
+      - /mnt/media:/var/www/media
     networks:
       - discovery
     dns:
