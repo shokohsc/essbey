@@ -18,9 +18,27 @@ services:
       - /mnt/media:/mount/media
     networks:
         discovery:
-            ipv4_address: 10.0.0.1
+            ipv4_address: 10.0.0.50
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
+      - 1.1.1.1
+
+  duckdns:
+    container_name: duckdns
+    image: linuxserver/duckdns
+    domainname: ${DOMAIN_NAME}
+    restart: ${RESTART_MODE}
+    environment:
+      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
+      TOKEN: ${PUID}
+      TZ: ${TIMEZONE}
+    networks:
+        discovery:
+            ipv4_address: 10.0.0.51
+    depends_on:
+      - pihole
+    dns:
+      - 10.0.0.54
       - 1.1.1.1
 
   traefik:
@@ -39,9 +57,9 @@ services:
       - ./config/traefik/traefik.toml:/traefik.toml
     networks:
         discovery:
-            ipv4_address: 10.0.0.2
+            ipv4_address: 10.0.0.52
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
       - 1.1.1.1
     labels:
       - "traefik.enable=true"
@@ -56,9 +74,9 @@ services:
     restart: ${RESTART_MODE}
     networks:
         discovery:
-            ipv4_address: 10.0.0.3
+            ipv4_address: 10.0.0.53
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
       - 1.1.1.1
     depends_on:
       - traefik
@@ -85,20 +103,20 @@ services:
       - ./config/pihole:/etc/pihole/
       - ./config/dnsmasqd:/etc/dnsmasq.d/
     environment:
-      ServerIP: 10.0.0.4
+      ServerIP: 10.0.0.54
       PROXY_LOCATION: pihole
       VIRTUAL_HOST: ${PIHOLE_VIRTUAL_HOST}
       VIRTUAL_PORT: 80
       TZ: ${TIMEZONE}
       WEBPASSWORD: ${GLOBAL_PASSWORD}
       DNSMASQ_LISTENING: all
-      INTERFACE: wlp58s0
+      INTERFACE: ${NIC_INTERFACE}
       DNS1: 185.187.240.11
       DNS2: 1.1.1.1
     restart: ${RESTART_MODE}
     networks:
         discovery:
-            ipv4_address: 10.0.0.4
+            ipv4_address: 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -110,24 +128,6 @@ services:
        - "traefik.backend=pihole"
        - "traefik.port=80"
 
-  duckdns:
-    container_name: duckdns
-    image: linuxserver/duckdns
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
-      TOKEN: ${PUID}
-      TZ: ${TIMEZONE}
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.5
-    depends_on:
-      - pihole
-    dns:
-      - 10.0.0.4
-      - 1.1.1.1
-
   grafana:
     container_name: grafana
     image: grafana/grafana
@@ -135,14 +135,14 @@ services:
     restart: ${RESTART_MODE}
     networks:
         discovery:
-            ipv4_address: 10.0.0.6
+            ipv4_address: 10.0.0.55
     volumes:
       - ./config/grafana:/var/lib/grafana
     environment:
       GF_SERVER_ROOT_URL: https://grafana-shokohsc.duckdns.org
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -173,9 +173,9 @@ services:
       - /dev/net:/dev/net
     networks:
         discovery:
-            ipv4_address: 10.0.0.7
+            ipv4_address: 10.0.0.56
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -195,7 +195,7 @@ services:
       - ./download:/downloads
       - ./download:/watch
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - openvpn-as
     labels:
@@ -218,7 +218,7 @@ services:
       - ./download:/downloads
     network_mode: "service:openvpn-as"
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - openvpn-as
     labels:
@@ -249,9 +249,9 @@ services:
       - ./work/transcode:/transcode
     networks:
         discovery:
-            ipv4_address: 10.0.0.8
+            ipv4_address: 10.0.0.57
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -275,9 +275,9 @@ services:
       - /mnt/media/music:/music
     networks:
         discovery:
-            ipv4_address: 10.0.0.9
+            ipv4_address: 10.0.0.58
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -300,9 +300,9 @@ services:
       - /mnt/media/music:/music
     networks:
         discovery:
-            ipv4_address: 10.0.0.10
+            ipv4_address: 10.0.0.59
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -325,9 +325,9 @@ services:
       - ./download:/downloads
     networks:
         discovery:
-            ipv4_address: 10.0.0.11
+            ipv4_address: 10.0.0.60
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -351,9 +351,9 @@ services:
       - /mnt/media/tvshows:/tv
     networks:
         discovery:
-            ipv4_address: 10.0.0.11
+            ipv4_address: 10.0.0.61
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -377,9 +377,9 @@ services:
       - /mnt/media/comics:/comics
     networks:
         discovery:
-            ipv4_address: 10.0.0.12
+            ipv4_address: 10.0.0.62
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -403,9 +403,9 @@ services:
       - /mnt/media/tvshows:/tv
     networks:
         discovery:
-            ipv4_address: 10.0.0.13
+            ipv4_address: 10.0.0.63
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -429,9 +429,9 @@ services:
       - ./config/mylar:/mylar
     networks:
         discovery:
-            ipv4_address: 10.0.0.14
+            ipv4_address: 10.0.0.64
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -454,9 +454,9 @@ services:
       - /mnt/media/music:/music
     networks:
         discovery:
-            ipv4_address: 10.0.0.15
+            ipv4_address: 10.0.0.65
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -478,9 +478,9 @@ services:
       - /mnt/media/photos:/pictures
     networks:
         discovery:
-            ipv4_address: 10.0.0.16
+            ipv4_address: 10.0.0.66
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -504,9 +504,9 @@ services:
       - /mnt/media/photos:/Thumbs
     networks:
         discovery:
-            ipv4_address: 10.0.0.17
+            ipv4_address: 10.0.0.67
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -528,9 +528,9 @@ services:
       - ./config/heimdall:/config
     networks:
         discovery:
-            ipv4_address: 10.0.0.18
+            ipv4_address: 10.0.0.68
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -553,9 +553,9 @@ services:
       - /mnt/media/data:/data
     networks:
         discovery:
-            ipv4_address: 10.0.0.19
+            ipv4_address: 10.0.0.69
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -574,9 +574,9 @@ services:
       - ./config/portainer:/data
     networks:
         discovery:
-            ipv4_address: 10.0.0.40
+            ipv4_address: 10.0.0.70
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
@@ -597,9 +597,9 @@ services:
       - /mnt/media:/var/www/media
     networks:
         discovery:
-            ipv4_address: 10.0.0.41
+            ipv4_address: 10.0.0.71
     dns:
-      - 10.0.0.4
+      - 10.0.0.54
     depends_on:
       - traefik
     labels:
