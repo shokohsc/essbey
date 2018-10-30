@@ -56,6 +56,7 @@ services:
       - discovery
     dns:
       - 10.0.0.2
+      - 1.1.1.1
     depends_on:
       - traefik
     labels:
@@ -121,6 +122,7 @@ services:
       - pihole
     dns:
       - 10.0.0.2
+      - 1.1.1.1
 
   grafana:
     container_name: grafana
@@ -136,7 +138,6 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
     dns:
       - 10.0.0.2
-      - 1.1.1.1
     depends_on:
       - traefik
     labels:
