@@ -123,7 +123,7 @@ services:
         discovery:
             ipv4_address: 10.0.0.55
     environment:
-      GF_SERVER_ROOT_URL: https://grafana-shokohsc.duckdns.org
+      GF_SERVER_ROOT_URL: https://shokohsc.duckdns.org/grafana/
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
     dns:
       - 10.0.0.54
