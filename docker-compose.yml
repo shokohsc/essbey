@@ -133,6 +133,7 @@ services:
     image: grafana/grafana
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
+    user: ${PUID}
     networks:
         discovery:
             ipv4_address: 10.0.0.55
