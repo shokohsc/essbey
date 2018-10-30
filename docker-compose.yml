@@ -70,23 +70,6 @@ services:
       - "traefik.backend=traefik"
       - "traefik.port=8080"
 
-  # whoami:
-  #   container_name: whoami
-  #   image: emilevauge/whoami # A container that exposes an API to show its IP address
-  #   domainname: ${DOMAIN_NAME}
-  #   restart: ${RESTART_MODE}
-  #   networks:
-  #       discovery:
-  #           ipv4_address: 10.0.0.53
-  #   dns:
-  #     - 10.0.0.54
-  #     - 1.1.1.1
-  #   depends_on:
-  #     - traefik
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/whoami"
-
   pihole:
     container_name: pihole
     domainname: ${DOMAIN_NAME}
@@ -126,7 +109,7 @@ services:
        # required when using --docker.exposedbydefault=false
        - "traefik.enable=true"
        # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*}"
+       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*};PathPrefixStrip:/pihole/"
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
@@ -148,7 +131,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/grafana"
+      - "traefik.frontend.rule=PathPrefixStrip:/grafana/"
       - "traefik.backend=grafana"
       - "traefik.port=3000"
 
@@ -181,7 +164,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/openvpn-as"
+      - "traefik.frontend.rule=PathPrefixStrip:/openvpn-as/"
       - "traefik.backend=openvpn-as"
       - "traefik.port=943"
 
@@ -201,7 +184,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/transmission"
+      - "traefik.frontend.rule=PathPrefixStrip:/transmission/"
       - "traefik.backend=transmission"
       - "traefik.port=9091"
 
@@ -224,7 +207,7 @@ services:
       - openvpn-as
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/sabnzbd"
+      - "traefik.frontend.rule=PathPrefixStrip:/sabnzbd/"
       - "traefik.backend=sabnzbd"
       - "traefik.port=8080"
 
@@ -257,7 +240,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/plex"
+      - "traefik.frontend.rule=PathPrefixStrip:/plex/"
       - "traefik.backend=plex"
       - "traefik.port=32400"
 
@@ -283,7 +266,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/headphones"
+      - "traefik.frontend.rule=PathPrefixStrip:/headphones/"
       - "traefik.backend=headphones"
       - "traefik.port=8181"
 
@@ -308,7 +291,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/lidarr"
+      - "traefik.frontend.rule=PathPrefixStrip:/lidarr/"
       - "traefik.backend=lidarr"
       - "traefik.port=8686"
 
@@ -333,7 +316,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/jackett"
+      - "traefik.frontend.rule=PathPrefixStrip:/jackett/"
       - "traefik.backend=jackett"
       - "traefik.port=9117"
 
@@ -359,7 +342,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/sickrage"
+      - "traefik.frontend.rule=PathPrefixStrip:/sickrage/"
       - "traefik.backend=sickrage"
       - "traefik.port=8081"
 
@@ -385,7 +368,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/mylar"
+      - "traefik.frontend.rule=PathPrefixStrip:/mylar/"
       - "traefik.backend=mylar"
       - "traefik.port=8090"
 
@@ -411,7 +394,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/bazarr"
+      - "traefik.frontend.rule=PathPrefixStrip:/bazarr/"
       - "traefik.backend=bazarr"
       - "traefik.port=6767"
 
@@ -437,7 +420,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/gazee"
+      - "traefik.frontend.rule=PathPrefixStrip:/gazee/"
       - "traefik.backend=gazee"
       - "traefik.port=4242"
 
@@ -462,7 +445,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/libresonic"
+      - "traefik.frontend.rule=PathPrefixStrip:/libresonic/"
       - "traefik.backend=libresonic"
       - "traefik.port=4040"
 
@@ -486,7 +469,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/lychee"
+      - "traefik.frontend.rule=PathPrefixStrip:/lychee/"
       - "traefik.backend=lychee"
       - "traefik.port=80"
 
@@ -512,7 +495,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/photoshow"
+      - "traefik.frontend.rule=PathPrefixStrip:/photoshow/"
       - "traefik.backend=photoshow"
       - "traefik.port=80"
 
@@ -536,7 +519,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/heimdall"
+      - "traefik.frontend.rule=PathPrefixStrip:/heimdall/"
       - "traefik.backend=heimdall"
       - "traefik.port=80"
 
@@ -561,7 +544,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/pydio"
+      - "traefik.frontend.rule=PathPrefixStrip:/pydio/"
       - "traefik.backend=pydio"
       - "traefik.port=443"
 
@@ -582,7 +565,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/portainer"
+      - "traefik.frontend.rule=PathPrefixStrip:/portainer/"
       - "traefik.backend=portainer"
       - "traefik.port=9000"
 
@@ -605,7 +588,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:shokohsc.duckdns.org/h5ai"
+      - "traefik.frontend.rule=PathPrefixStrip:/h5ai/"
       - "traefik.backend=h5ai"
       - "traefik.port=80"
 
