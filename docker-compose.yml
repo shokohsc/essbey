@@ -20,6 +20,7 @@ services:
       - discovery
     dns:
       - 10.0.0.2
+      - 1.1.1.1
 
   traefik:
     container_name: traefik
@@ -39,6 +40,7 @@ services:
       - discovery
     dns:
       - 10.0.0.2
+      - 1.1.1.1
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=Host:traefik.shokohsc.duckdns.org"
@@ -84,7 +86,7 @@ services:
       VIRTUAL_HOST: ${PIHOLE_VIRTUAL_HOST}
       VIRTUAL_PORT: 80
       TZ: ${TZ}
-      WEBPASSWORD: ${PIHOLE_PASSWORD}
+      WEBPASSWORD: ${GLOBAL_PASSWORD}
       DNSMASQ_LISTENING: all
       INTERFACE: eth0
       DNS1: 185.187.240.11
@@ -119,6 +121,29 @@ services:
       - pihole
     dns:
       - 10.0.0.2
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    domainname: ${DOMAIN_NAME}
+    restart: ${RESTART_MODE}
+    networks:
+      - discovery
+    volumes:
+      - ${CONFIG_PATH}/grafana:/var/lib/grafana
+    environment:
+      GF_SERVER_ROOT_URL: https://grafana.shokohsc.duckdns.org
+      GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    dns:
+      - 10.0.0.2
+      - 1.1.1.1
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:grafana.shokohsc.duckdns.org"
+      - "traefik.backend=grafana"
+      - "traefik.port=3000"
 
   openvpn-as:
     container_name: openvpn-as
