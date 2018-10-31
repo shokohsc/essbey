@@ -151,6 +151,8 @@ services:
       - "32766:51413/udp"
     volumes:
       - ./config/openvpn:/etc/openvpn
+      - ./config/hosts:/etc/hosts
+      - ./config/resolv.conf:/etc/resolv.conf
     networks:
         discovery:
             ipv4_address: 10.0.0.56
