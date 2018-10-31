@@ -97,7 +97,7 @@ services:
       TZ: ${TIMEZONE}
       WEBPASSWORD: ${GLOBAL_PASSWORD}
       DNSMASQ_LISTENING: all
-      INTERFACE: ${NIC_INTERFACE}
+      # INTERFACE: ${NIC_INTERFACE}
       DNS1: 185.187.240.11
       DNS2: 1.1.1.1
     restart: ${RESTART_MODE}
