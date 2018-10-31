@@ -256,7 +256,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/plex"
+      - "traefik.frontend.rule=PathPrefixStrip:/plex,AddPrefix:/web"
       - "traefik.backend=plex"
       - "traefik.port=32400"
       # https://github.com/containous/traefik/issues/563#issuecomment-421360934
@@ -286,9 +286,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/headphones"
+      - "traefik.frontend.rule=PathPrefixStrip:/headphones"
       - "traefik.backend=headphones"
       - "traefik.port=8181"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/headphones$$"
+      - "traefik.frontend.redirect.replacement=$$1/headphones/"
+      - "traefik.frontend.rule=PathPrefix:/headphones;ReplacePathRegex: ^/headphones/(.*) /$$1"
 
   lidarr:
     container_name: lidarr
@@ -311,9 +315,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/lidarr"
+      - "traefik.frontend.rule=PathPrefixStrip:/lidarr"
       - "traefik.backend=lidarr"
       - "traefik.port=8686"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/lidarr$$"
+      - "traefik.frontend.redirect.replacement=$$1/lidarr/"
+      - "traefik.frontend.rule=PathPrefix:/lidarr;ReplacePathRegex: ^/lidarr/(.*) /$$1"
 
   jackett:
     container_name: jackett
@@ -336,9 +344,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/jackett"
+      - "traefik.frontend.rule=PathPrefixStrip:/jackett"
       - "traefik.backend=jackett"
       - "traefik.port=9117"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/jackett$$"
+      - "traefik.frontend.redirect.replacement=$$1/jackett/"
+      - "traefik.frontend.rule=PathPrefix:/jackett;ReplacePathRegex: ^/jackett/(.*) /$$1"
 
   sickrage:
     container_name: sickrage
@@ -362,9 +374,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/sickrage"
+      - "traefik.frontend.rule=PathPrefixStrip:/sickrage"
       - "traefik.backend=sickrage"
       - "traefik.port=8081"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/sickrage$$"
+      - "traefik.frontend.redirect.replacement=$$1/sickrage/"
+      - "traefik.frontend.rule=PathPrefix:/sickrage;ReplacePathRegex: ^/sickrage/(.*) /$$1"
 
   mylar:
     container_name: mylar
@@ -388,9 +404,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/mylar"
+      - "traefik.frontend.rule=PathPrefixStrip:/mylar"
       - "traefik.backend=mylar"
       - "traefik.port=8090"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/mylar$$"
+      - "traefik.frontend.redirect.replacement=$$1/mylar/"
+      - "traefik.frontend.rule=PathPrefix:/mylar;ReplacePathRegex: ^/mylar/(.*) /$$1"
 
   bazarr:
     container_name: bazarr
@@ -414,9 +434,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/bazarr"
+      - "traefik.frontend.rule=PathPrefixStrip:/bazarr"
       - "traefik.backend=bazarr"
       - "traefik.port=6767"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/bazarr$$"
+      - "traefik.frontend.redirect.replacement=$$1/bazarr/"
+      - "traefik.frontend.rule=PathPrefix:/bazarr;ReplacePathRegex: ^/bazarr/(.*) /$$1"
 
   gazee:
     container_name: gazee
@@ -430,7 +454,7 @@ services:
     volumes:
       - ./config/gazee:/config
       - /mnt/media/comics:/comics
-      - ./config/mylar:/mylar
+      # - ./config/mylar:/mylar
     networks:
         discovery:
             ipv4_address: 10.0.0.64
@@ -440,9 +464,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/gazee"
+      - "traefik.frontend.rule=PathPrefixStrip:/gazee"
       - "traefik.backend=gazee"
       - "traefik.port=4242"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/gazee$$"
+      - "traefik.frontend.redirect.replacement=$$1/gazee/"
+      - "traefik.frontend.rule=PathPrefix:/gazee;ReplacePathRegex: ^/gazee/(.*) /$$1"
 
   libresonic:
     container_name: libresonic
@@ -465,9 +493,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/libresonic"
+      - "traefik.frontend.rule=PathPrefixStrip:/libresonic"
       - "traefik.backend=libresonic"
       - "traefik.port=4040"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/libresonic$$"
+      - "traefik.frontend.redirect.replacement=$$1/libresonic/"
+      - "traefik.frontend.rule=PathPrefix:/libresonic;ReplacePathRegex: ^/libresonic/(.*) /$$1"
 
   lychee:
     container_name: lychee
@@ -489,9 +521,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/lychee"
+      - "traefik.frontend.rule=PathPrefixStrip:/lychee"
       - "traefik.backend=lychee"
       - "traefik.port=80"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/lychee$$"
+      - "traefik.frontend.redirect.replacement=$$1/lychee/"
+      - "traefik.frontend.rule=PathPrefix:/lychee;ReplacePathRegex: ^/lychee/(.*) /$$1"
 
   photoshow:
     container_name: photoshow
@@ -515,9 +551,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/photoshow"
+      - "traefik.frontend.rule=PathPrefixStrip:/photoshow"
       - "traefik.backend=photoshow"
       - "traefik.port=80"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/photoshow$$"
+      - "traefik.frontend.redirect.replacement=$$1/photoshow/"
+      - "traefik.frontend.rule=PathPrefix:/photoshow;ReplacePathRegex: ^/photoshow/(.*) /$$1"
 
   heimdall:
     container_name: heimdall
@@ -539,9 +579,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/heimdall"
+      - "traefik.frontend.rule=PathPrefixStrip:/heimdall"
       - "traefik.backend=heimdall"
       - "traefik.port=80"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/heimdall$$"
+      - "traefik.frontend.redirect.replacement=$$1/heimdall/"
+      - "traefik.frontend.rule=PathPrefix:/heimdall;ReplacePathRegex: ^/heimdall/(.*) /$$1"
 
   pydio:
     container_name: pydio
@@ -564,9 +608,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/pydio"
+      - "traefik.frontend.rule=PathPrefixStrip:/pydio"
       - "traefik.backend=pydio"
       - "traefik.port=443"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/pydio$$"
+      - "traefik.frontend.redirect.replacement=$$1/pydio/"
+      - "traefik.frontend.rule=PathPrefix:/pydio;ReplacePathRegex: ^/pydio/(.*) /$$1"
 
   portainer:
     container_name: portainer
@@ -611,6 +659,10 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/h5ai"
+      - "traefik.frontend.rule=PathPrefixStrip:/h5ai"
       - "traefik.backend=h5ai"
       - "traefik.port=80"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/h5ai$$"
+      - "traefik.frontend.redirect.replacement=$$1/h5ai/"
+      - "traefik.frontend.rule=PathPrefix:/h5ai;ReplacePathRegex: ^/h5ai/(.*) /$$1"
