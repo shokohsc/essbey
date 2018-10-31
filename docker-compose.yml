@@ -89,6 +89,8 @@ services:
     #  - ./pihole.log:/var/log/pihole.log
       - ./config/pihole:/etc/pihole/
       - ./config/dnsmasqd:/etc/dnsmasq.d/
+      - ./config/hosts:/etc/hosts
+      - ./config/resolv.conf:/etc/resolv.conf
     environment:
       ServerIP: 10.0.0.54
       PROXY_LOCATION: pihole
@@ -104,8 +106,6 @@ services:
     networks:
         discovery:
             ipv4_address: 10.0.0.54
-    extra_hosts:
-        - "shokohsc.duckdns.org:10.0.0.54"
     depends_on:
       - traefik
     labels:
@@ -154,9 +154,6 @@ services:
     networks:
         discovery:
             ipv4_address: 10.0.0.56
-    extra_hosts:
-        - "pihole.vpn:10.0.0.54"
-        - "grafana.vpn:10.0.0.55"
     dns:
       - 10.0.0.54
     depends_on:
