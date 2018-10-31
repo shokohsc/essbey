@@ -672,6 +672,7 @@ services:
       - "traefik.frontend.redirect.regex=^(.*)/portainer$$"
       - "traefik.frontend.redirect.replacement=$$1/portainer/"
       - "traefik.frontend.rule=PathPrefix:/portainer;ReplacePathRegex: ^/portainer/(.*) /$$1"
+
   h5ai:
     container_name: h5ai
     image: clue/h5ai
@@ -700,3 +701,46 @@ services:
       - "traefik.frontend.redirect.regex=^(.*)/h5ai$$"
       - "traefik.frontend.redirect.replacement=$$1/h5ai/"
       - "traefik.frontend.rule=PathPrefix:/h5ai;ReplacePathRegex: ^/h5ai/(.*) /$$1"
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb
+    domainname: ${DOMAIN_NAME}
+    restart: ${RESTART_MODE}
+    volumes:
+      - ./config/influxdb:/var/lib/influxdb
+    ports:
+      - "9021:8083"
+    networks:
+        discovery:
+            ipv4_address: 10.0.0.72
+    dns:
+      - 10.0.0.54
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=PathPrefixStrip:/influxdb"
+      - "traefik.backend=influxdb"
+      - "traefik.port=8083"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/influxdb$$"
+      - "traefik.frontend.redirect.replacement=$$1/influxdb/"
+      - "traefik.frontend.rule=PathPrefix:/influxdb;ReplacePathRegex: ^/influxdb/(.*) /$$1"
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    domainname: ${DOMAIN_NAME}
+    restart: ${RESTART_MODE}
+    volumes:
+      - ./config/prometheus:/etc/prometheus/prometheus.yml
+    networks:
+        discovery:
+            ipv4_address: 10.0.0.73
+    dns:
+      - 10.0.0.54
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=false"
