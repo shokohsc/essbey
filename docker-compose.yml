@@ -63,6 +63,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "9001:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik/traefik.toml:/traefik.toml
@@ -97,6 +98,7 @@ services:
       - '53:53/tcp'
       - '53:53/udp'
       - '67:67/udp'
+      - "9002:80"
     volumes:
     # run `touch ./pihole.log` first unless you like errors
     #  - ./pihole.log:/var/log/pihole.log
@@ -143,6 +145,8 @@ services:
     environment:
       GF_SERVER_ROOT_URL: https://shokohsc.duckdns.org/grafana/
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    ports:
+      - "9003:3000"
     dns:
       - 10.0.0.54
     depends_on:
@@ -168,6 +172,8 @@ services:
       - "32767:1194/udp"
       - "32766:51413/tcp"
       - "32766:51413/udp"
+      - "9004:9091"
+      - "9005:8080"
     volumes:
       - ./config/openvpn:/etc/openvpn
     networks:
@@ -238,6 +244,7 @@ services:
       - "32469:32469/udp"
       # - "5353:5353/udp"
       - "1900:1900/udp"
+      - "9006:32400"
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
@@ -277,6 +284,8 @@ services:
       - ./config/headphones:/config
       - ./download:/downloads
       - /mnt/media/music:/music
+    ports:
+      - "9007:8181"
     networks:
         discovery:
             ipv4_address: 10.0.0.58
@@ -306,6 +315,8 @@ services:
       - ./config/lidarr:/config
       - ./download:/downloads
       - /mnt/media/music:/music
+    ports:
+      - "9008:8686"
     networks:
         discovery:
             ipv4_address: 10.0.0.59
@@ -335,6 +346,8 @@ services:
     volumes:
       - ./config/jackett:/config
       - ./download:/downloads
+    ports:
+      - "9009:9117"
     networks:
         discovery:
             ipv4_address: 10.0.0.60
@@ -365,6 +378,8 @@ services:
       - ./config/sickrage:/config
       - ./download:/downloads
       - /mnt/media/tvshows:/tv
+    ports:
+      - "9010:8081"
     networks:
         discovery:
             ipv4_address: 10.0.0.61
@@ -395,6 +410,8 @@ services:
       - ./config/mylar:/config
       - ./download:/downloads
       - /mnt/media/comics:/comics
+    ports:
+      - "9011:8090"
     networks:
         discovery:
             ipv4_address: 10.0.0.62
@@ -425,6 +442,8 @@ services:
       - ./config/bazarr:/config
       - /mnt/media/movies:/movies
       - /mnt/media/tvshows:/tv
+    ports:
+      - "9012:6767"
     networks:
         discovery:
             ipv4_address: 10.0.0.63
@@ -455,6 +474,8 @@ services:
       - ./config/gazee:/config
       - /mnt/media/comics:/comics
       # - ./config/mylar:/mylar
+    ports:
+      - "9013:4242"
     networks:
         discovery:
             ipv4_address: 10.0.0.64
@@ -484,6 +505,8 @@ services:
     volumes:
       - ./config/libresonic:/config
       - /mnt/media/music:/music
+    ports:
+      - "9014:4040"
     networks:
         discovery:
             ipv4_address: 10.0.0.65
@@ -512,6 +535,8 @@ services:
     volumes:
       - ./config/lychee:/config
       - /mnt/media/photos:/pictures
+    ports:
+      - "9015:80"
     networks:
         discovery:
             ipv4_address: 10.0.0.66
@@ -545,6 +570,8 @@ services:
     networks:
         discovery:
             ipv4_address: 10.0.0.67
+    ports:
+      - "9016:80"
     dns:
       - 10.0.0.54
     depends_on:
@@ -570,6 +597,8 @@ services:
       TZ: ${TIMEZONE}
     volumes:
       - ./config/heimdall:/config
+    ports:
+      - "9017:80"
     networks:
         discovery:
             ipv4_address: 10.0.0.68
@@ -599,6 +628,8 @@ services:
     volumes:
       - ./config/pydio:/config
       - /mnt/media/data:/data
+    ports:
+      - "9018:443"
     networks:
         discovery:
             ipv4_address: 10.0.0.69
@@ -624,6 +655,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/portainer:/data
+    ports:
+      - "9019:9000"
     networks:
         discovery:
             ipv4_address: 10.0.0.70
@@ -650,6 +683,8 @@ services:
       - ./work:/var/www/work
       - /mnt/games:/var/www/games
       - /mnt/media:/var/www/media
+    ports:
+      - "9020:80"
     networks:
         discovery:
             ipv4_address: 10.0.0.71
