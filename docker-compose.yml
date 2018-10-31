@@ -733,8 +733,6 @@ services:
     image: prom/prometheus
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
-    volumes:
-      - ./config/prometheus:/etc/prometheus/prometheus.yml
     networks:
         discovery:
             ipv4_address: 10.0.0.73
