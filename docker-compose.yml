@@ -143,7 +143,6 @@ services:
         discovery:
             ipv4_address: 10.0.0.55
     environment:
-      GF_SERVER_ROOT_URL: https://shokohsc.duckdns.org/grafana/
       GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
     ports:
       - "9003:3000"
