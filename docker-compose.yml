@@ -1,5 +1,14 @@
 version: '3'
 
+networks:
+  discovery:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 10.0.0.0/24
+
 services:
 
   samba:
@@ -118,10 +127,10 @@ services:
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/pihole$$"
-      - "traefik.frontend.redirect.replacement=$$1/pihole/"
-      - "traefik.frontend.rule=PathPrefix:/pihole;ReplacePathRegex: ^/pihole/(.*) /$$1"
+       # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+       - "traefik.frontend.redirect.regex=^(.*)/pihole$$"
+       - "traefik.frontend.redirect.replacement=$$1/pihole/"
+       - "traefik.frontend.rule=PathPrefix:/pihole;ReplacePathRegex: ^/pihole/(.*) /$$1"
 
   grafana:
     container_name: grafana
@@ -593,12 +602,3 @@ services:
       - "traefik.frontend.rule=PathPrefix:/h5ai"
       - "traefik.backend=h5ai"
       - "traefik.port=80"
-
-networks:
-  discovery:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      -
-        subnet: 10.0.0.0/24
