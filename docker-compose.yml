@@ -194,9 +194,13 @@ services:
       - openvpn
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/transmission"
+      - "traefik.frontend.rule=PathPrefixStrip:/transmission"
       - "traefik.backend=transmission"
       - "traefik.port=9091"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/transmission$$"
+      - "traefik.frontend.redirect.replacement=$$1/transmission/"
+      - "traefik.frontend.rule=PathPrefix:/transmission;ReplacePathRegex: ^/transmission/(.*) /$$1"
 
   sabnzbd:
     container_name: sabnzbd
@@ -215,9 +219,13 @@ services:
       - openvpn
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/sabnzbd"
+      - "traefik.frontend.rule=PathPrefixStrip:/sabnzbd"
       - "traefik.backend=sabnzbd"
       - "traefik.port=8080"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/sabnzbd$$"
+      - "traefik.frontend.redirect.replacement=$$1/sabnzbd/"
+      - "traefik.frontend.rule=PathPrefix:/sabnzbd;ReplacePathRegex: ^/sabnzbd/(.*) /$$1"
 
   plex:
     container_name: plex
@@ -248,9 +256,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/plex"
+      - "traefik.frontend.rule=PathPrefixStrip:/plex"
       - "traefik.backend=plex"
       - "traefik.port=32400"
+      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
+      - "traefik.frontend.redirect.regex=^(.*)/plex$$"
+      - "traefik.frontend.redirect.replacement=$$1/plex/"
+      - "traefik.frontend.rule=PathPrefix:/plex;ReplacePathRegex: ^/plex/(.*) /$$1"
 
   headphones:
     container_name: headphones
