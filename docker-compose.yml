@@ -110,7 +110,7 @@ services:
        # required when using --docker.exposedbydefault=false
        - "traefik.enable=true"
        # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*};PathPrefix:/pihole/"
+       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*};PathPrefixStrip:/pihole/"
        - "traefik.frontend.priority=1"
        - "traefik.backend=pihole"
        - "traefik.port=80"
@@ -132,57 +132,45 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/grafana/"
+      - "traefik.frontend.rule=PathPrefixStrip:/grafana/"
       - "traefik.backend=grafana"
       - "traefik.port=3000"
 
-  openvpn-as:
-    container_name: openvpn-as
-    image: linuxserver/openvpn-as
+  openvpn:
+    container_name: openvpn
+    image: kylemanna/openvpn
     domainname: ${DOMAIN_NAME}
     cap_add:
       - net_admin
-    privileged: true
     restart: ${RESTART_MODE}
     ports:
       - "32767:1194/udp"
       - "32766:51413/tcp"
       - "32766:51413/udp"
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-      INTERFACE: ${NIC_INTERFACE}
     volumes:
-      - ./config/openvpn:/config
-      - /dev/net:/dev/net
+      - ./config/openvpn:/etc/openvpn
     networks:
         discovery:
             ipv4_address: 10.0.0.56
     dns:
       - 10.0.0.54
     depends_on:
-      - traefik
+      - pihole
     labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/openvpn-as/"
-      - "traefik.backend=openvpn-as"
-      - "traefik.port=943"
+      - "traefik.enable=false"
 
   transmission:
     container_name: transmission
     image: linuxserver/transmission
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
-    network_mode: "service:openvpn-as"
+    network_mode: "service:openvpn"
     volumes:
       - ./config/transmission:/config
       - ./download:/downloads
       - ./download:/watch
-    dns:
-      - 10.0.0.54
     depends_on:
-      - openvpn-as
+      - openvpn
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=PathPrefix:/transmission/"
@@ -201,11 +189,9 @@ services:
     volumes:
       - ./config/sabnzbd:/config
       - ./download:/downloads
-    network_mode: "service:openvpn-as"
-    dns:
-      - 10.0.0.54
+    network_mode: "service:openvpn"
     depends_on:
-      - openvpn-as
+      - openvpn
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=PathPrefix:/sabnzbd/"
@@ -221,7 +207,7 @@ services:
       - "32400:32400/udp"
       - "32469:32469/tcp"
       - "32469:32469/udp"
-      - "5353:5353/udp"
+        #  - "5353:5353/udp"
       - "1900:1900/udp"
     environment:
       PGID: ${PGID}
@@ -241,7 +227,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefix:/plex/"
+      - "traefik.frontend.rule=PathPrefix:/plex"
       - "traefik.backend=plex"
       - "traefik.port=32400"
 
