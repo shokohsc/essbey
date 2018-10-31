@@ -708,7 +708,7 @@ services:
     domainname: ${DOMAIN_NAME}
     restart: ${RESTART_MODE}
     environment:
-        INFLUXDB_ADMIN_ENABLED: true
+        INFLUXDB_ADMIN_ENABLED: "true"
     volumes:
       - ./config/influxdb:/var/lib/influxdb
     ports:
