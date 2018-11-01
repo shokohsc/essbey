@@ -1,746 +1,255 @@
-version: '3'
+version: '2'
 
 networks:
-  discovery:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      -
-        subnet: 10.0.0.0/24
+
+    connected:
+        driver: bridge
+        ipam:
+            driver: default
+            config: # http://www.subnet-calculator.com/subnet.php?net_class=B
+            - subnet: 172.16.0.0/25 # 172.16.0.1 - 172.16.0.126
+              gateway: 172.16.0.126
+              ip_range: 172.16.0.0/26 # 172.16.0.1 - 172.16.0.62
+
+    hidden:
+        internal: true
 
 services:
 
-  samba:
-    container_name: samba
-    image: dperson/samba
-    domainname: ${DOMAIN_NAME}
-    command: '-s "shared;/mount;yes;no;yes;all;none"'
-    restart: ${RESTART_MODE}
-    ports:
-      - "139:139"
-      - "445:445"
-    volumes:
-      - ./download:/mount/downloads
-      - ./work:/mount/work
-      - /mnt/games:/mount/games
-      - /mnt/media:/mount/media
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.50
-    dns:
-      - 10.0.0.54
-      - 1.1.1.1
-    labels:
-      - "traefik.enable=false"
+    openvpn:
+        container_name: openvpn
+        image: kylemanna/openvpn
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        ports:
+            - "32767:1194/udp"
+            - "32766:51413/tcp"
+            - "32766:51413/udp"
+            - "9001:9091"
+        volumes:
+            - ./config/openvpn:/etc/openvpn
+        networks:
+            - connected
 
-  duckdns:
-    container_name: duckdns
-    image: linuxserver/duckdns
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
-      TOKEN: ${PUID}
-      TZ: ${TIMEZONE}
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.51
-    depends_on:
-      - pihole
-    dns:
-      - 10.0.0.54
-      - 1.1.1.1
+    nginx: # Reverse proxy
+        container_name: nginx
+        image: nginx
+        restart: ${RESTART_MODE}
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./config/nginx/certs:/etc/nginx/certs
+            - ./config/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+            - ./config/nginx/conf/proxy.conf:/etc/nginx/conf.d/proxy.conf
+            - ./config/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - connected
 
-  traefik:
-    container_name: traefik
-    domainname: ${DOMAIN_NAME}
-    image: traefik
-    restart: ${RESTART_MODE}
-    # Note I opt to whitelist certain apps for exposure to traefik instead of auto discovery
-    # use `--docker.exposedbydefault=true` if you don't want to have to do this
-    command: "--api --docker"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "9001:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/traefik/traefik.toml:/traefik.toml
-      - ./config/traefik/acme.json:/acme.json
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.52
-    dns:
-      - 10.0.0.54
-      - 1.1.1.1
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/traefik"
-      - "traefik.frontend.priority=10"
-      - "traefik.backend=traefik"
-      - "traefik.port=8080"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/traefik$$"
-      - "traefik.frontend.redirect.replacement=$$1/traefik/"
-      - "traefik.frontend.rule=PathPrefix:/traefik;ReplacePathRegex: ^/traefik/(.*) /$$1"
+    duckdns: # Dynamic IP <-> Domain
+        container_name: duckdns
+        image: linuxserver/duckdns
+        restart: ${RESTART_MODE}
+        environment:
+            SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
+            TOKEN: ${PUID}
+            TZ: ${TIMEZONE}
+        networks:
+            - connected
 
-  pihole:
-    container_name: pihole
-    domainname: ${DOMAIN_NAME}
-    cap_add:
-      - net_admin
-    image: pihole/pihole:latest
-    dns:
-      - 127.0.0.1
-      - 1.1.1.1
-    ports:
-      - '53:53/tcp'
-      - '53:53/udp'
-      - '67:67/udp'
-      - "9002:80"
-    volumes:
-    # run `touch ./pihole.log` first unless you like errors
-    #  - ./pihole.log:/var/log/pihole.log
-      - ./config/pihole:/etc/pihole/
-      - ./config/dnsmasqd:/etc/dnsmasq.d/
-    environment:
-      ServerIP: 10.0.0.54
-      PROXY_LOCATION: pihole
-      VIRTUAL_HOST: ${PIHOLE_VIRTUAL_HOST}
-      VIRTUAL_PORT: 80
-      TZ: ${TIMEZONE}
-      WEBPASSWORD: ${GLOBAL_PASSWORD}
-      DNSMASQ_LISTENING: all
-      # INTERFACE: ${NIC_INTERFACE}
-      DNS1: 185.187.240.11
-      DNS2: 1.1.1.1
-    restart: ${RESTART_MODE}
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-       # required when using --docker.exposedbydefault=false
-       - "traefik.enable=true"
-       # https://www.techjunktrunk.com/docker/2017/11/03/traefik-default-server-catch-all/
-       - "traefik.frontend.rule=HostRegexp:shokohsc.duckdns.org,{catchall:.*},PathPrefixStrip:/pihole"
-       - "traefik.frontend.priority=1"
-       - "traefik.backend=pihole"
-       - "traefik.port=80"
-       # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-       - "traefik.frontend.redirect.regex=^(.*)/pihole$$"
-       - "traefik.frontend.redirect.replacement=$$1/pihole/"
-       - "traefik.frontend.rule=PathPrefix:/pihole;ReplacePathRegex: ^/pihole/(.*) /$$1"
+    transmission: # Torrent client
+        container_name: transmission
+        image: linuxserver/transmission
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/transmission:/config
+            - ./download:/downloads
+            - ./shared/transmission:/watch
+        network_mode: "service:openvpn"
+        depends_on:
+            - openvpn
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.55
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-    ports:
-      - "9003:3000"
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/grafana"
-      - "traefik.backend=grafana"
-      - "traefik.port=3000"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/grafana$$"
-      - "traefik.frontend.redirect.replacement=$$1/grafana/"
-      - "traefik.frontend.rule=PathPrefix:/grafana;ReplacePathRegex: ^/grafana/(.*) /$$1"
+    plex: # Media server
+        container_name: plex
+        image: plexinc/pms-docker
+        restart: ${RESTART_MODE}
+        ports:
+            - "9002:32400/tcp"
+            - "3005:3005/tcp"
+            - "8324:8324/tcp"
+            - "32469:32469/tcp"
+            - "1900:1900/udp"
+            - "32410:32410/udp"
+            - "32412:32412/udp"
+            - "32413:32413/udp"
+            - "32414:32414/udp"
+        environment:
+            ADVERTISE_IP: "http://${IP}:9002/"
+            PLEX_CLAIM: ${PLEX_CLAIM}
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/plex:/config
+            - ./download:/data
+            - ./shared/plex:/data
+            - ./work/plex:/transcode
+        networks:
+            - connected
+        depends_on:
+            - nginx
+        hostname: plex
 
-  openvpn:
-    container_name: openvpn
-    image: kylemanna/openvpn
-    domainname: ${DOMAIN_NAME}
-    cap_add:
-      - net_admin
-    restart: ${RESTART_MODE}
-    ports:
-      - "32767:1194/udp"
-      - "32766:51413/tcp"
-      - "32766:51413/udp"
-      - "9004:9091"
-      - "9005:8080"
-    volumes:
-      - ./config/openvpn:/etc/openvpn
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.56
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - pihole
-    labels:
-      - "traefik.enable=false"
+    gazee: # Comics connected server
+        container_name: gazee
+        image: linuxserver/gazee
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/gazee:/config
+            - ./download:/comics
+            - ./shared/gazee:/comics
+        ports:
+            - "9003:4242"
+        networks:
+            - connected
+        depends_on:
+            - nginx
 
-  transmission:
-    container_name: transmission
-    image: linuxserver/transmission
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    network_mode: "service:openvpn"
-    volumes:
-      - ./config/transmission:/config
-      - ./download:/downloads
-      - ./download:/watch
-    depends_on:
-      - openvpn
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/transmission"
-      - "traefik.backend=transmission"
-      - "traefik.port=9091"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/transmission$$"
-      - "traefik.frontend.redirect.replacement=$$1/transmission/"
-      - "traefik.frontend.rule=PathPrefix:/transmission;ReplacePathRegex: ^/transmission/(.*) /$$1"
+    lychee: # Picture tool connected server
+        container_name: lychee
+        image: linuxserver/lychee
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+        volumes:
+            - ./config/lychee:/config
+            - ./shared/lychee:/pictures
+        ports:
+            - "9004:80"
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - nginx
+            - mariadb
 
-  sabnzbd:
-    container_name: sabnzbd
-    image: linuxserver/sabnzbd
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/sabnzbd:/config
-      - ./download:/downloads
-    network_mode: "service:openvpn"
-    depends_on:
-      - openvpn
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/sabnzbd"
-      - "traefik.backend=sabnzbd"
-      - "traefik.port=8080"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/sabnzbd$$"
-      - "traefik.frontend.redirect.replacement=$$1/sabnzbd/"
-      - "traefik.frontend.rule=PathPrefix:/sabnzbd;ReplacePathRegex: ^/sabnzbd/(.*) /$$1"
+    pydio: # Online usb key connected server
+        container_name: pydio
+        image: linuxserver/pydio
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/pydio:/config
+            - ./config/nginx/certs/cert.pem:/config/keys/cert.crt:ro
+            - ./config/nginx/certs/key.pem:/config/keys/cert.key:ro
+            - ./work/pydio:/data
+        ports:
+            - "9005:443"
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - nginx
 
-  plex:
-    container_name: plex
-    image: linuxserver/plex
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    ports:
-      - "32400:32400/udp"
-      - "32469:32469/tcp"
-      - "32469:32469/udp"
-      # - "5353:5353/udp"
-      - "1900:1900/udp"
-      - "9006:32400"
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/plex:/config
-      - /mnt/media/tvshows:/data/tvshows
-      - /mnt/media/movies:/data/movies
-      - ./work/transcode:/transcode
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.57
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/plex,AddPrefix:/web"
-      - "traefik.backend=plex"
-      - "traefik.port=32400"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/plex$$"
-      - "traefik.frontend.redirect.replacement=$$1/plex/"
-      - "traefik.frontend.rule=PathPrefix:/plex;ReplacePathRegex: ^/plex/(.*) /$$1"
+    mariadb: # Database, pydio requirement
+        container_name: mariadb
+        image: mariadb
+        restart: ${RESTART_MODE}
+        environment:
+            MYSQL_ROOT_PASSWORD: ${GLOBAL_PASSWORD}
+        volumes:
+            - ./config/mariadb:/var/lib/mysql
+        networks:
+            - hidden
 
-  headphones:
-    container_name: headphones
-    image: linuxserver/headphones
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/headphones:/config
-      - ./download:/downloads
-      - /mnt/media/music:/music
-    ports:
-      - "9007:8181"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.58
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/headphones"
-      - "traefik.backend=headphones"
-      - "traefik.port=8181"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/headphones$$"
-      - "traefik.frontend.redirect.replacement=$$1/headphones/"
-      - "traefik.frontend.rule=PathPrefix:/headphones;ReplacePathRegex: ^/headphones/(.*) /$$1"
+    h5ai: # File exporer connected server
+        container_name: h5ai
+        image: clue/h5ai
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./download:/var/www/downloads
+            - ./shared:/var/www/shared
+        ports:
+            - "9006:80"
+        networks:
+            - connected
+        depends_on:
+            - nginx
 
-  lidarr:
-    container_name: lidarr
-    image: linuxserver/lidarr
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-    volumes:
-      - ./config/lidarr:/config
-      - ./download:/downloads
-      - /mnt/media/music:/music
-    ports:
-      - "9008:8686"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.59
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/lidarr"
-      - "traefik.backend=lidarr"
-      - "traefik.port=8686"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/lidarr$$"
-      - "traefik.frontend.redirect.replacement=$$1/lidarr/"
-      - "traefik.frontend.rule=PathPrefix:/lidarr;ReplacePathRegex: ^/lidarr/(.*) /$$1"
+    # grafana: # Monitoring tool connected server
+    #     container_name: grafana
+    #     image: grafana/grafana
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    #         GF_SERVER_ROOT_URL: "http://${IP}/grafana"
+    #     ports:
+    #         - "9007:3000"
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - nginx
+    #         - influxdb
+    #         - prometheus
+    #
+    # influxdb: # Database, grafana requirement
+    #     container_name: influxdb
+    #     image: influxdb
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
+    #
+    # prometheus: # Database, grafana requirement
+    #     container_name: prometheus
+    #     image: prom/prometheus
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
 
-  jackett:
-    container_name: jackett
-    image: linuxserver/jackett
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/jackett:/config
-      - ./download:/downloads
-    ports:
-      - "9009:9117"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.60
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/jackett"
-      - "traefik.backend=jackett"
-      - "traefik.port=9117"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/jackett$$"
-      - "traefik.frontend.redirect.replacement=$$1/jackett/"
-      - "traefik.frontend.rule=PathPrefix:/jackett;ReplacePathRegex: ^/jackett/(.*) /$$1"
+    samba: # SMB server read only guests
+        container_name: samba
+        image: dperson/samba
+        command: '-s "shared;/mount;yes;yes;yes;all;none"'
+        restart: ${RESTART_MODE}
+        ports:
+            - "139:139"
+            - "445:445"
+        volumes:
+            - ./download:/mount/downloads
+            - ./shared:/mount/shared
+        networks:
+            - hidden
 
-  sickrage:
-    container_name: sickrage
-    image: linuxserver/sickrage
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/sickrage:/config
-      - ./download:/downloads
-      - /mnt/media/tvshows:/tv
-    ports:
-      - "9010:8081"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.61
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/sickrage"
-      - "traefik.backend=sickrage"
-      - "traefik.port=8081"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/sickrage$$"
-      - "traefik.frontend.redirect.replacement=$$1/sickrage/"
-      - "traefik.frontend.rule=PathPrefix:/sickrage;ReplacePathRegex: ^/sickrage/(.*) /$$1"
+    sftp: # Sftp server read/write users
+        container_name: sftp
+        image: atmoz/sftp
+        command: 'shokohsc:${SFTP_PASSWORD}:1001'
+        restart: ${RESTART_MODE}
+        ports:
+            - "32768:22"
+        volumes:
+            - ./download:/home/shokohsc/upload/downloads
+            - ./shared:/home/shokohsc/upload/shared
+        networks:
+            - hidden
 
-  mylar:
-    container_name: mylar
-    image: linuxserver/mylar
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/mylar:/config
-      - ./download:/downloads
-      - /mnt/media/comics:/comics
-    ports:
-      - "9011:8090"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.62
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/mylar"
-      - "traefik.backend=mylar"
-      - "traefik.port=8090"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/mylar$$"
-      - "traefik.frontend.redirect.replacement=$$1/mylar/"
-      - "traefik.frontend.rule=PathPrefix:/mylar;ReplacePathRegex: ^/mylar/(.*) /$$1"
-
-  bazarr:
-    container_name: bazarr
-    image: linuxserver/bazarr
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/bazarr:/config
-      - /mnt/media/movies:/movies
-      - /mnt/media/tvshows:/tv
-    ports:
-      - "9012:6767"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.63
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/bazarr"
-      - "traefik.backend=bazarr"
-      - "traefik.port=6767"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/bazarr$$"
-      - "traefik.frontend.redirect.replacement=$$1/bazarr/"
-      - "traefik.frontend.rule=PathPrefix:/bazarr;ReplacePathRegex: ^/bazarr/(.*) /$$1"
-
-  gazee:
-    container_name: gazee
-    image: linuxserver/gazee
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/gazee:/config
-      - /mnt/media/comics:/comics
-      # - ./config/mylar:/mylar
-    ports:
-      - "9013:4242"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.64
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/gazee"
-      - "traefik.backend=gazee"
-      - "traefik.port=4242"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/gazee$$"
-      - "traefik.frontend.redirect.replacement=$$1/gazee/"
-      - "traefik.frontend.rule=PathPrefix:/gazee;ReplacePathRegex: ^/gazee/(.*) /$$1"
-
-  libresonic:
-    container_name: libresonic
-    image: linuxserver/libresonic
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/libresonic:/config
-      - /mnt/media/music:/music
-    ports:
-      - "9014:4040"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.65
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/libresonic"
-      - "traefik.backend=libresonic"
-      - "traefik.port=4040"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/libresonic$$"
-      - "traefik.frontend.redirect.replacement=$$1/libresonic/"
-      - "traefik.frontend.rule=PathPrefix:/libresonic;ReplacePathRegex: ^/libresonic/(.*) /$$1"
-
-  lychee:
-    container_name: lychee
-    image: linuxserver/lychee
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-    volumes:
-      - ./config/lychee:/config
-      - /mnt/media/photos:/pictures
-    ports:
-      - "9015:80"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.66
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/lychee"
-      - "traefik.backend=lychee"
-      - "traefik.port=80"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/lychee$$"
-      - "traefik.frontend.redirect.replacement=$$1/lychee/"
-      - "traefik.frontend.rule=PathPrefix:/lychee;ReplacePathRegex: ^/lychee/(.*) /$$1"
-
-  photoshow:
-    container_name: photoshow
-    image: linuxserver/photoshow
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/photoshow:/config
-      - /mnt/media/photos:/Pictures:ro
-      - /mnt/media/photos:/Thumbs
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.67
-    ports:
-      - "9016:80"
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/photoshow"
-      - "traefik.backend=photoshow"
-      - "traefik.port=80"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/photoshow$$"
-      - "traefik.frontend.redirect.replacement=$$1/photoshow/"
-      - "traefik.frontend.rule=PathPrefix:/photoshow;ReplacePathRegex: ^/photoshow/(.*) /$$1"
-
-  heimdall:
-    container_name: heimdall
-    image: linuxserver/heimdall
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/heimdall:/config
-    ports:
-      - "9017:80"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.68
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/heimdall"
-      - "traefik.backend=heimdall"
-      - "traefik.port=80"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/heimdall$$"
-      - "traefik.frontend.redirect.replacement=$$1/heimdall/"
-      - "traefik.frontend.rule=PathPrefix:/heimdall;ReplacePathRegex: ^/heimdall/(.*) /$$1"
-
-  pydio:
-    container_name: pydio
-    image: linuxserver/pydio
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TIMEZONE}
-    volumes:
-      - ./config/pydio:/config
-      - /mnt/media/data:/data
-    ports:
-      - "9018:443"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.69
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/pydio"
-      - "traefik.backend=pydio"
-      - "traefik.port=443"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/pydio$$"
-      - "traefik.frontend.redirect.replacement=$$1/pydio/"
-      - "traefik.frontend.rule=PathPrefix:/pydio;ReplacePathRegex: ^/pydio/(.*) /$$1"
-
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/portainer:/data
-    ports:
-      - "9019:9000"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.70
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/portainer"
-      - "traefik.backend=portainer"
-      - "traefik.port=9000"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/portainer$$"
-      - "traefik.frontend.redirect.replacement=$$1/portainer/"
-      - "traefik.frontend.rule=PathPrefix:/portainer;ReplacePathRegex: ^/portainer/(.*) /$$1"
-
-  h5ai:
-    container_name: h5ai
-    image: clue/h5ai
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    volumes:
-      - ./download:/var/www/downloads
-      - ./work:/var/www/work
-      - /mnt/games:/var/www/games
-      - /mnt/media:/var/www/media
-    ports:
-      - "9020:80"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.71
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/h5ai"
-      - "traefik.backend=h5ai"
-      - "traefik.port=80"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/h5ai$$"
-      - "traefik.frontend.redirect.replacement=$$1/h5ai/"
-      - "traefik.frontend.rule=PathPrefix:/h5ai;ReplacePathRegex: ^/h5ai/(.*) /$$1"
-
-  influxdb:
-    container_name: influxdb
-    image: influxdb
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    environment:
-        INFLUXDB_ADMIN_ENABLED: "true"
-    volumes:
-      - ./config/influxdb:/var/lib/influxdb
-    ports:
-      - "9021:8083"
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.72
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=PathPrefixStrip:/influxdb"
-      - "traefik.backend=influxdb"
-      - "traefik.port=8083"
-      # https://github.com/containous/traefik/issues/563#issuecomment-421360934
-      - "traefik.frontend.redirect.regex=^(.*)/influxdb$$"
-      - "traefik.frontend.redirect.replacement=$$1/influxdb/"
-      - "traefik.frontend.rule=PathPrefix:/influxdb;ReplacePathRegex: ^/influxdb/(.*) /$$1"
-
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus
-    domainname: ${DOMAIN_NAME}
-    restart: ${RESTART_MODE}
-    networks:
-        discovery:
-            ipv4_address: 10.0.0.73
-    dns:
-      - 10.0.0.54
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=false"
+    adminer: # Admin mysql database tool web server
+        container_name: adminer
+        image: adminer
+        restart: ${RESTART_MODE}
+        ports:
+            - "9008:8080"
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - nginx
+            - mariadb

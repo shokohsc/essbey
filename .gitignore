@@ -1,8 +1,11 @@
 .git
 .env
+
+certs/
+download/
+work/
+shared/
+
 config/*
-!config/nginx
-transcode
-download
-data
-work
+config/nginx/certs/*
+!config/nginx/certs/.gitkeep
