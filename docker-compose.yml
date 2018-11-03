@@ -68,34 +68,6 @@ services:
         depends_on:
             - openvpn
 
-    plex: # Media server
-        container_name: plex
-        image: plexinc/pms-docker
-        restart: ${RESTART_MODE}
-        ports:
-            - "3005:3005/tcp"
-            - "8324:8324/tcp"
-            - "32469:32469/tcp"
-            - "1900:1900/udp"
-            - "32410:32410/udp"
-            - "32412:32412/udp"
-            - "32413:32413/udp"
-            - "32414:32414/udp"
-        environment:
-            ADVERTISE_IP: ${PLEX_ROOT_URL}
-            PLEX_CLAIM: ${PLEX_CLAIM}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/plex:/config
-            - ./download:/data
-            - ./shared/plex:/data
-            - ./work/plex:/transcode
-        networks:
-            - connected
-        depends_on:
-            - nginx
-        hostname: plex
-
     gazee: # Comics connected server
         container_name: gazee
         image: linuxserver/gazee
@@ -106,8 +78,8 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/gazee:/config
-            - ./download:/comics
-            - ./shared/gazee:/comics
+            - ./download:/comics/downloaded
+            - ./shared/gazee:/comics/shared
         networks:
             - connected
         depends_on:
