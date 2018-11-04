@@ -29,6 +29,9 @@
 
     $> echo -n "your-password" | docker run -i --rm atmoz/makepasswd --crypt-md5 --clearfrom=-
 
+# Nginx server names issue
+
+    Visit https://superuser.com/questions/1093419/alias-for-ips-in-the-home-lan-network
 # Start
 
     $> docker-compose up -d
