@@ -1,4 +1,4 @@
-#OPENVPN
+# OPENVPN
 
     $> docker-compose run --rm openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM:PORT -n <pihole_ip> -n 185.187.240.11 -n 8.8.8.8
     $> docker-compose run --rm openvpn ovpn_initpki
@@ -11,7 +11,7 @@
     $> docker-compose run --rm openvpn easyrsa build-client-full $CLIENTNAME
     $> docker-compose run --rm openvpn ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn
 
-#Certificates
+# Certificates
 
     $ make name=certs
     Country Name (2 letter code) [AU]: FR
