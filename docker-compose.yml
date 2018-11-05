@@ -211,31 +211,51 @@ services:
             - nginx
         hostname: "plex"
 
-    # grafana: # Monitoring tool connected server
-    #     container_name: grafana
-    #     image: grafana/grafana
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - nginx
-    #         - influxdb
-    #         - prometheus
+    grafana: # Monitoring tool connected server
+        container_name: grafana
+        image: grafana/grafana
+        restart: ${RESTART_MODE}
+        environment:
+            GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+            GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - nginx
+            - prometheus
+            - node-exporter
+            - cadvisor
 
-    # influxdb: # Database, grafana requirement
-    #     container_name: influxdb
-    #     image: influxdb
-    #     restart: ${RESTART_MODE}
-    #     networks:
-    #         - hidden
-    #
-    # prometheus: # Database, grafana requirement
-    #     container_name: prometheus
-    #     image: prom/prometheus
-    #     restart: ${RESTART_MODE}
-    #     networks:
-    #         - hidden
+    prometheus: # Database, grafana requirement
+        image: prom/prometheus:latest
+        container_name: monitoring_prometheus
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/prometheus:/etc/prometheus
+            - ./data/prometheus:/prometheus
+        command:
+            - '-config.file=/etc/prometheus/prometheus.yml'
+            - '-storage.local.path=/prometheus'
+        networks:
+            - hidden
+        hostname: "localhost"
+
+    node-exporter: # grafana requirement
+        image: prom/node-exporter:latest
+        container_name: node_exporter
+        restart: ${RESTART_MODE}
+        networks:
+            - hidden
+
+    cadvisor: # grafana requirement
+        image: google/cadvisor:latest
+        container_name: cadvisor
+        restart: ${RESTART_MODE}
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+        networks:
+            - hidden
