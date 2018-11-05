@@ -228,7 +228,7 @@ services:
             - cadvisor
 
     prometheus: # Database, grafana requirement
-        image: prom/prometheus:latest
+        image: prom/prometheus:v1.8.2
         container_name: prometheus
         restart: ${RESTART_MODE}
         volumes:
