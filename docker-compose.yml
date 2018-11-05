@@ -47,6 +47,7 @@ services:
         image: nginx
         restart: ${RESTART_MODE}
         ports:
+            - "80:80"
             - "443:443"
         volumes:
             - ./config/nginx/certs:/etc/nginx/certs
@@ -181,6 +182,34 @@ services:
         depends_on:
             - nginx
             - mariadb
+
+    plex: # Media server
+        container_name: plex
+        image: plexinc/pms-docker
+        restart: ${RESTART_MODE}
+        environment:
+            PLEX_CLAIM: ${PLEX_CLAIM}
+            ADVERTISE_IP: ${PLEX_ROOT_URL}
+            TZ: ${TIMEZONE}
+        ports:
+            - "3005:3005/tcp"
+            - "8324:8324/tcp"
+            - "32469:32469/tcp"
+            - "1900:1900/udp"
+            - "32410:32410/udp"
+            - "32412:32412/udp"
+            - "32413:32413/udp"
+            - "32414:32414/udp"
+        volumes:
+            - ./config/plex:/config
+            - ./work/plex:/transcode
+            - ./download:/data/downloads
+            - ./shared:/data/shared
+        networks:
+            - connected
+        depends_on:
+            - nginx
+        hostname: "plex"
 
     # grafana: # Monitoring tool connected server
     #     container_name: grafana
