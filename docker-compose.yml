@@ -229,7 +229,7 @@ services:
 
     prometheus: # Database, grafana requirement
         image: prom/prometheus:latest
-        container_name: monitoring_prometheus
+        container_name: prometheus
         restart: ${RESTART_MODE}
         volumes:
             - ./config/prometheus:/etc/prometheus
