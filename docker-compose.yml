@@ -14,6 +14,10 @@ networks:
     hidden:
         internal: true
 
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
 services:
 
     duckdns: # Dynamic IP <-> Domain
@@ -245,55 +249,94 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    # grafana: # Monitoring tool connected server
-    #     container_name: grafana
-    #     image: grafana/grafana
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - traefik
-    #         - prometheus
-    #         - node-exporter
-    #         - cadvisor
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:grafana.shokohsc"
-    #         - "traefik.port=3000"
-    #
-    # prometheus: # Database, grafana requirement
-    #     image: prom/prometheus:v1.8.2
-    #     container_name: prometheus
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - ./config/prometheus:/etc/prometheus
-    #         - ./data/prometheus:/prometheus
-    #     command:
-    #         - '-config.file=/etc/prometheus/prometheus.yml'
-    #         - '-storage.local.path=/prometheus'
-    #     networks:
-    #         - hidden
-    #     hostname: "localhost"
-    #
-    # node-exporter: # grafana requirement
-    #     image: prom/node-exporter:latest
-    #     container_name: node_exporter
-    #     restart: ${RESTART_MODE}
-    #     networks:
-    #         - hidden
-    #
-    # cadvisor: # grafana requirement
-    #     image: google/cadvisor:latest
-    #     container_name: cadvisor
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - /:/rootfs:ro
-    #         - /var/run:/var/run:rw
-    #         - /sys:/sys:ro
-    #         - /var/lib/docker/:/var/lib/docker:ro
-    #     networks:
-    #         - hidden
+    grafana: # Monitoring tool connected server
+        container_name: grafana
+        image: grafana/grafana:5.2.4
+        restart: ${RESTART_MODE}
+        environment:
+            GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+            GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+        volumes:
+            - grafana_data:/var/lib/grafana
+            - ./config/grafana/datasources:/etc/grafana/datasources
+            - ./config/grafana/dashboards:/etc/grafana/dashboards
+            - ./config/grafana/setup.sh:/setup.sh
+        entrypoint: /setup.sh
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - traefik
+            - prometheus
+            - node-exporter
+            - cadvisor
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:grafana.shokohsc"
+            - "traefik.port=3000"
+
+    prometheus: # Database, grafana requirement
+        image: prom/prometheus:v2.4.3
+        container_name: prometheus
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/prometheus/:/etc/prometheus/
+            - prometheus_data:/prometheus
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yml'
+            - '--storage.tsdb.path=/prometheus'
+            - '--web.console.libraries=/etc/prometheus/console_libraries'
+            - '--web.console.templates=/etc/prometheus/consoles'
+            - '--storage.tsdb.retention=200h'
+            - '--web.enable-lifecycle'
+        networks:
+            - hidden
+
+    alertmanager: # Grafana requirement
+        image: prom/alertmanager:v0.15.2
+        container_name: alertmanager
+        volumes:
+            - ./config/alertmanager/:/etc/alertmanager/
+        command:
+            - '--config.file=/etc/alertmanager/config.yml'
+            - '--storage.path=/alertmanager'
+        restart: ${RESTART_MODE}
+        networks:
+            - hidden
+
+    nodeexporter: # Grafana requirement
+        image: prom/node-exporter:v0.16.0
+        container_name: nodeexporter
+        restart: ${RESTART_MODE}
+        user: root
+        privileged: true
+        volumes:
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/rootfs:ro
+        command:
+            - '--path.procfs=/host/proc'
+            - '--path.sysfs=/host/sys'
+            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+        networks:
+            - hidden
+
+    cadvisor: # Grafana requirement
+        image: google/cadvisor:v0.31.0
+        container_name: cadvisor
+        restart: ${RESTART_MODE}
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:rw
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+        networks:
+            - hidden
+
+    pushgateway: # Grafana requirement
+        image: prom/pushgateway
+        container_name: pushgateway
+        restart: ${RESTART_MODE}
+        networks:
+            - hidden
