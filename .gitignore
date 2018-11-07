@@ -5,11 +5,3 @@ certs/
 download/
 work/
 shared/
-
-config/*
-
-config/traefik/certs/*
-!config/traefik/certs/.gitkeep
-!config/traefik/traefik.toml
-
-!config/prometheus
