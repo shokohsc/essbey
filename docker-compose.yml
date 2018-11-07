@@ -140,8 +140,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:pydio.shokohsc"
-            - "traefik.port=443"
-            - "traefik.frontend.headers.SSLRedirect=true"
+            - "traefik.port=80"
 
     mariadb: # Database, pydio & lychee requirement
         container_name: mariadb
