@@ -17,7 +17,7 @@ dump:
 
 # 6 Copy
 copy:
-	cp -R certs config/nginx
+	cp -R certs config/traefik
 
 # 7 Clean
 clean:

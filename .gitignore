@@ -8,8 +8,7 @@ shared/
 
 config/*
 
-config/nginx/certs/*
-!config/nginx/certs/.gitkeep
-!config/nginx/conf
+config/traefik/certs/*
+!config/traefik/certs/.gitkeep
 
 !config/prometheus

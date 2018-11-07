@@ -41,21 +41,29 @@ services:
             - ./config/openvpn:/etc/openvpn
         networks:
             - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:transmission.shokohsc"
+            - "traefik.port=9091"
 
-    nginx: # Reverse proxy
-        container_name: nginx
-        image: nginx
+    traefik: # Reverse proxy
+        container_name: traefik
+        image: traefik
         restart: ${RESTART_MODE}
+        command: --api --docker
         ports:
             - "80:80"
             - "443:443"
         volumes:
-            - ./config/nginx/certs:/etc/nginx/certs
-            - ./config/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-            - ./config/nginx/conf/proxy.conf:/etc/nginx/conf.d/proxy.conf
-            - ./config/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./config/traefik/certs:/etc/traefik/certs
+            - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml
         networks:
             - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:traefik.shokohsc"
+            - "traefik.port=8080"
 
     transmission: # Torrent client
         container_name: transmission
@@ -84,7 +92,11 @@ services:
         networks:
             - connected
         depends_on:
-            - nginx
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:gazee.shokohsc"
+            - "traefik.port=4242"
 
     lychee: # Picture tool connected server
         container_name: lychee
@@ -100,8 +112,12 @@ services:
             - connected
             - hidden
         depends_on:
-            - nginx
+            - traefik
             - mariadb
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:lychee.shokohsc"
+            - "traefik.port=80"
 
     pydio: # Online usb key connected server
         container_name: pydio
@@ -113,14 +129,18 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/pydio:/config
-            - ./config/nginx/certs/cert.pem:/config/keys/cert.crt:ro
-            - ./config/nginx/certs/key.pem:/config/keys/cert.key:ro
+            - ./config/traefik/certs/cert.pem:/config/keys/cert.crt:ro
+            - ./config/traefik/certs/key.pem:/config/keys/cert.key:ro
             - ./work/pydio:/data
         networks:
             - connected
             - hidden
         depends_on:
-            - nginx
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:pydio.shokohsc"
+            - "traefik.port=443"
 
     mariadb: # Database, pydio & lychee requirement
         container_name: mariadb
@@ -143,7 +163,11 @@ services:
         networks:
             - connected
         depends_on:
-            - nginx
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:h5ai.shokohsc"
+            - "traefik.port=80"
 
     samba: # SMB server read only guests
         container_name: samba
@@ -180,8 +204,12 @@ services:
             - connected
             - hidden
         depends_on:
-            - nginx
+            - traefik
             - mariadb
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:adminer.shokohsc"
+            - "traefik.port=8080"
 
     plex: # Media server
         container_name: plex
@@ -210,54 +238,62 @@ services:
         networks:
             - connected
         depends_on:
-            - nginx
+            - traefik
         hostname: "plex"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:plex.shokohsc"
+            - "traefik.port=32400"
 
-    grafana: # Monitoring tool connected server
-        container_name: grafana
-        image: grafana/grafana
-        restart: ${RESTART_MODE}
-        environment:
-            GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-            GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - nginx
-            - prometheus
-            - node-exporter
-            - cadvisor
-
-    prometheus: # Database, grafana requirement
-        image: prom/prometheus:v1.8.2
-        container_name: prometheus
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/prometheus:/etc/prometheus
-            - ./data/prometheus:/prometheus
-        command:
-            - '-config.file=/etc/prometheus/prometheus.yml'
-            - '-storage.local.path=/prometheus'
-        networks:
-            - hidden
-        hostname: "localhost"
-
-    node-exporter: # grafana requirement
-        image: prom/node-exporter:latest
-        container_name: node_exporter
-        restart: ${RESTART_MODE}
-        networks:
-            - hidden
-
-    cadvisor: # grafana requirement
-        image: google/cadvisor:latest
-        container_name: cadvisor
-        restart: ${RESTART_MODE}
-        volumes:
-            - /:/rootfs:ro
-            - /var/run:/var/run:rw
-            - /sys:/sys:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-        networks:
-            - hidden
+    # grafana: # Monitoring tool connected server
+    #     container_name: grafana
+    #     image: grafana/grafana
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - traefik
+    #         - prometheus
+    #         - node-exporter
+    #         - cadvisor
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:grafana.shokohsc"
+    #         - "traefik.port=3000"
+    #
+    # prometheus: # Database, grafana requirement
+    #     image: prom/prometheus:v1.8.2
+    #     container_name: prometheus
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/prometheus:/etc/prometheus
+    #         - ./data/prometheus:/prometheus
+    #     command:
+    #         - '-config.file=/etc/prometheus/prometheus.yml'
+    #         - '-storage.local.path=/prometheus'
+    #     networks:
+    #         - hidden
+    #     hostname: "localhost"
+    #
+    # node-exporter: # grafana requirement
+    #     image: prom/node-exporter:latest
+    #     container_name: node_exporter
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
+    #
+    # cadvisor: # grafana requirement
+    #     image: google/cadvisor:latest
+    #     container_name: cadvisor
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /:/rootfs:ro
+    #         - /var/run:/var/run:rw
+    #         - /sys:/sys:ro
+    #         - /var/lib/docker/:/var/lib/docker:ro
+    #     networks:
+    #         - hidden
