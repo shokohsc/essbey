@@ -30,6 +30,8 @@ services:
             TZ: ${TIMEZONE}
         networks:
             - connected
+        labels:
+            - "traefik.enable=false"
 
     openvpn:
         container_name: openvpn
@@ -186,6 +188,8 @@ services:
             - ./shared:/mount/shared
         networks:
             - connected
+        labels:
+            - "traefik.enable=false"
 
     sftp: # Sftp server read/write users
         container_name: sftp
@@ -199,6 +203,8 @@ services:
             - ./shared:/home/shokohsc/upload/shared
         networks:
             - connected
+        labels:
+            - "traefik.enable=false"
 
     adminer: # Admin mysql database tool web server
         container_name: adminer
@@ -274,6 +280,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.shokohsc"
+            - "traefik.docker.network=connected"
             - "traefik.port=3000"
 
     prometheus: # Database, grafana requirement
