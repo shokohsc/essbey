@@ -268,7 +268,8 @@ services:
         depends_on:
             - traefik
             - prometheus
-            - node-exporter
+            - pushgateway
+            - nodeexporter
             - cadvisor
         labels:
             - "traefik.enable=true"
