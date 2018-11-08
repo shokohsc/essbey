@@ -135,6 +135,7 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/pydio:/config
+            - ./config/pydio/default.conf:/defaults/default
             - ./config/traefik/certs/cert.pem:/config/keys/cert.crt:ro
             - ./config/traefik/certs/key.pem:/config/keys/cert.key:ro
             - ./work/pydio:/data
@@ -146,8 +147,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:pydio.shokohsc"
-            - "traefik.port=443"
-            - "traefik.protocol=https"
+            - "traefik.port=80"
 
     mariadb: # Database, pydio & lychee requirement
         container_name: mariadb
