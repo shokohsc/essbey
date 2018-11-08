@@ -160,3 +160,11 @@ domain = "shokohsc"
 # Default: true
 #
 exposedByDefault = false
+
+# If set to true invalid SSL certificates are accepted for backends.
+# This disables detection of man-in-the-middle attacks so should only be used on secure backend networks.
+#
+# Optional
+# Default: false
+#
+insecureSkipVerify = true

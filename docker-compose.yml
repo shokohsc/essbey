@@ -147,6 +147,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:pydio.shokohsc"
             - "traefik.port=80"
+            - "traefik.protocol=https"
 
     mariadb: # Database, pydio & lychee requirement
         container_name: mariadb
