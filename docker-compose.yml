@@ -135,7 +135,7 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/pydio:/config
-            - ./config/pydio/default.conf:/defaults/default
+            - ./config/pydio/default.conf:/etc/nginx/conf.d/default.conf
             - ./work/pydio:/data
         networks:
             - connected
