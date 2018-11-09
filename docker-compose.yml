@@ -85,14 +85,9 @@ services:
 
     gazee: # Comics connected server
         container_name: gazee
-        image: linuxserver/gazee
+        image: onigoetz/comicsreader
         restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
         volumes:
-            - ./config/gazee:/config
             - ./download:/comics/downloaded
             - ./shared/gazee:/comics/shared
         networks:
@@ -102,7 +97,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:gazee.shokohsc"
-            - "traefik.port=4242"
+            - "traefik.port=8080"
 
     h5ai: # File exporer connected server
         container_name: h5ai
@@ -210,7 +205,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.shokohsc"
-            - "traefik.docker.network=connected"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=3000"
 
     prometheus: # Database, grafana requirement
