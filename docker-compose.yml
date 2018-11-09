@@ -104,61 +104,6 @@ services:
             - "traefik.frontend.rule=Host:gazee.shokohsc"
             - "traefik.port=4242"
 
-    lychee: # Picture tool connected server
-        container_name: lychee
-        image: linuxserver/lychee
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-        volumes:
-            - ./config/lychee:/config
-            - ./shared/lychee:/pictures
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-            - mariadb
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:lychee.shokohsc"
-            - "traefik.port=80"
-
-    pydio: # Online usb key connected server
-        container_name: pydio
-        image: linuxserver/pydio
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/pydio:/config
-            - ./config/traefik/certs/cert.pem:/config/keys/cert.crt:ro
-            - ./config/traefik/certs/key.pem:/config/keys/cert.key:ro
-            - ./work/pydio:/data
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:pydio.shokohsc"
-            - "traefik.port=80"
-
-    mariadb: # Database, pydio & lychee requirement
-        container_name: mariadb
-        image: mariadb
-        restart: ${RESTART_MODE}
-        environment:
-            MYSQL_ROOT_PASSWORD: ${GLOBAL_PASSWORD}
-        volumes:
-            - ./config/mariadb:/var/lib/mysql
-        networks:
-            - hidden
-
     h5ai: # File exporer connected server
         container_name: h5ai
         image: clue/h5ai
@@ -205,21 +150,6 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
-
-    adminer: # Admin mysql database tool web server
-        container_name: adminer
-        image: adminer
-        restart: ${RESTART_MODE}
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-            - mariadb
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:adminer.shokohsc"
-            - "traefik.port=8080"
 
     plex: # Media server
         container_name: plex
