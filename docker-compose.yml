@@ -169,7 +169,7 @@ services:
             - ./work/plex:/transcode
             - ./download:/data/downloads
             - ./shared:/data/shared
-            - /mnt/media:/data/media
+            - /media/nuc/WD2To:/data/media
         networks:
             - connected
         depends_on:
