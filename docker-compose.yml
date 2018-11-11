@@ -141,7 +141,7 @@ services:
         volumes:
             - ./download:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
-            - /media/nuc/WD2To:/home/shokohsc/upload/ftp
+            - /media/nuc/WD2To:/home/shokohsc/upload/media
         networks:
             - connected
         labels:
