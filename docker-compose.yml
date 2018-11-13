@@ -85,11 +85,11 @@ services:
 
     gazee: # Comics connected server
         container_name: gazee
-        image: kalinon/comicstreamer
+        image: turzam/comicstreamer
         restart: ${RESTART_MODE}
         volumes:
-            - ./download:/data/downloaded
-            - ./shared/gazee:/data/shared
+            - ./download:/comics/downloaded
+            - ./shared/gazee:/comics/shared
         networks:
             - connected
         depends_on:
