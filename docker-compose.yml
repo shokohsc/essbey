@@ -85,7 +85,7 @@ services:
 
     gazee: # Comics connected server
         container_name: gazee
-        image: turzam/comicstreamer
+        image: hubcapps/gazee
         restart: ${RESTART_MODE}
         volumes:
             - ./download:/comics/downloaded
@@ -97,7 +97,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:gazee.shokohsc"
-            - "traefik.port=32500"
+            - "traefik.port=4242"
 
     h5ai: # File exporer connected server
         container_name: h5ai
