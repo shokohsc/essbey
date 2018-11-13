@@ -85,9 +85,13 @@ services:
 
     gazee: # Comics connected server
         container_name: gazee
-        image: hubcapps/gazee
+        image: linuxserver/gazee
         restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
         volumes:
+            - ./config/gazee:/config
             - ./download:/comics/downloaded
             - ./shared/gazee:/comics/shared
         networks:
