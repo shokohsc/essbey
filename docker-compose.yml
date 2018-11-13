@@ -85,11 +85,13 @@ services:
 
     gazee: # Comics connected server
         container_name: gazee
-        image: onigoetz/comicsreader
+        image: megar/comicz
         restart: ${RESTART_MODE}
+        environment:
+            comicvine_api: ${COMICVINE_API}
         volumes:
-            - ./download:/comics/downloaded
-            - ./shared/gazee:/comics/shared
+            - ./download:/app/data/downloaded
+            - ./shared/gazee:/app/data/shared
         networks:
             - connected
         depends_on:
@@ -97,7 +99,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:gazee.shokohsc"
-            - "traefik.port=8080"
+            - "traefik.port=3000"
 
     h5ai: # File exporer connected server
         container_name: h5ai
