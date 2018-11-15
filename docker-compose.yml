@@ -92,8 +92,7 @@ services:
             PUID: ${PUID}
         volumes:
             - ./config/gazee:/config
-            - ./download:/comics/downloaded
-            - ./shared/gazee:/comics/shared
+            - ./shared/gazee:/comics
         networks:
             - connected
         depends_on:
