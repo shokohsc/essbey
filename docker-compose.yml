@@ -129,6 +129,7 @@ services:
         volumes:
             - ./download:/mount/downloads
             - ./shared:/mount/shared
+            - /media/nuc/WD2To:/mount/media
         networks:
             - connected
         labels:
