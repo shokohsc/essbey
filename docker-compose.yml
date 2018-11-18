@@ -121,7 +121,7 @@ services:
     samba: # SMB server read only guests
         container_name: samba
         image: dperson/samba
-        command: '-s "shared;/mount;yes;yes;yes;all;none"'
+        command: '-s "shared;/mount;yes;no;yes;all;none"'
         restart: ${RESTART_MODE}
         ports:
             - "139:139"
@@ -145,7 +145,7 @@ services:
         volumes:
             - ./download:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
-            # - /media/nuc/WD2To:/home/shokohsc/upload/media
+            - /media/nuc/WD2To:/home/shokohsc/upload/media
         networks:
             - connected
         labels:
