@@ -109,6 +109,7 @@ services:
         volumes:
             - ./download:/var/www/downloads
             - ./shared:/var/www/shared
+            - /media/nuc/WD2To:/var/www/media
         networks:
             - connected
         depends_on:
