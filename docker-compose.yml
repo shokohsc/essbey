@@ -41,10 +41,27 @@ services:
         restart: ${RESTART_MODE}
         ports:
             - "32767:1194/udp"
-            - "32766:51413/tcp"
-            - "32766:51413/udp"
         volumes:
             - ./config/openvpn:/etc/openvpn
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
+    gateway:
+        container_name: gateway
+        image: dperson/openvpn-client
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        command: ${VPN_CONF}
+        ports:
+            - "32766:51413/tcp"
+            - "32766:51413/udp"
+        environment:
+            TZ: ${TIMEZONE}
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
         networks:
             - connected
         labels:
@@ -79,9 +96,9 @@ services:
             - ./config/transmission:/config
             - ./download:/downloads
             - ./shared/transmission:/watch
-        network_mode: "service:openvpn"
+        network_mode: "service:gateway"
         depends_on:
-            - openvpn
+            - gateway
 
     gazee: # Comics connected server
         container_name: gazee
