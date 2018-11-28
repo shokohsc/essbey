@@ -54,10 +54,11 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: ${VPN_CONF}
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
+        volumes:
+            - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
         environment:
             TZ: ${TIMEZONE}
         devices:
