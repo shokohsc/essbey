@@ -54,6 +54,7 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
+        command: "-r 192.168.1.0/24 -p 9091"
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
@@ -65,6 +66,7 @@ services:
             - "/dev/net/tun:/dev/net/tun"
         networks:
             - connected
+        dns: 8.8.8.8
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:transmission.shokohsc"
