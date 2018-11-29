@@ -33,7 +33,7 @@ services:
         labels:
             - "traefik.enable=false"
 
-    openvpn:
+    openvpn: # Internal vpn
         container_name: openvpn
         image: kylemanna/openvpn
         cap_add:
@@ -48,7 +48,7 @@ services:
         labels:
             - "traefik.enable=false"
 
-    gateway:
+    gateway: # Torrenting vpn
         container_name: gateway
         image: dperson/openvpn-client
         cap_add:
@@ -90,6 +90,19 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:traefik.shokohsc"
             - "traefik.port=8080"
+
+    portainer: # Docker management
+        container_name: portainer
+        image: portainer/portainer
+        restart: ${RESTART_MODE}
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:portainer.shokohsc"
+            - "traefik.port=9000"
 
     transmission: # Torrent client
         container_name: transmission

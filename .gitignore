@@ -7,3 +7,8 @@ certs/
 download/
 work/
 shared/
+
+config/gazee/
+config/openvpn/
+config/plex/
+config/transmission/
