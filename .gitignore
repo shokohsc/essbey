@@ -9,7 +9,6 @@ work/
 shared/
 
 config/gazee/
-config/heimdall/
 config/openvpn/
 config/plex/
 config/transmission/

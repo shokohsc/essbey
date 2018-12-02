@@ -187,25 +187,6 @@ services:
             - "traefik.frontend.rule=Host:h5ai.shokohsc"
             - "traefik.port=80"
 
-    heimdall: # File exporer connected server
-        container_name: heimdall
-        image: linuxserver/heimdall
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/heimdall:/config
-        networks:
-            - connected
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:heimdall.shokohsc"
-            - "traefik.port=80"
-
     plex: # Media server
         container_name: plex
         image: plexinc/pms-docker
