@@ -170,6 +170,26 @@ services:
             - "traefik.frontend.rule=Host:gazee.shokohsc"
             - "traefik.port=4242"
 
+    heimdall: # Bookmarks server
+        container_name: heimdall
+        image: linuxserver/heimdall
+        restart: ${RESTART_MODE}
+        environment:
+            TZ: ${TIMEZONE}
+            PGID: ${PGID}
+            PUID: ${PUID}
+        volumes:
+            - ./config/heimdall:/config
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:heimdall.shokohsc"
+            - "traefik.protocol=https"
+            - "traefik.port=443"
+
     h5ai: # File exporer connected server
         container_name: h5ai
         image: clue/h5ai
