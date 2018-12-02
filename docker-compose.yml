@@ -20,6 +20,39 @@ volumes:
 
 services:
 
+    samba: # SMB server
+        container_name: samba
+        image: dperson/samba
+        command: '-s "shared;/mount;yes;no;yes;all;none"'
+        restart: ${RESTART_MODE}
+        ports:
+            - "139:139"
+            - "445:445"
+        volumes:
+            - ./download/complete:/mount/downloads
+            - ./shared:/mount/shared
+            - /media/nuc/WD2To:/mount/media
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
+    sftp: # Sftp server
+        container_name: sftp
+        image: atmoz/sftp
+        command: ${SFTP_COMMAND}
+        restart: ${RESTART_MODE}
+        ports:
+            - "32768:22"
+        volumes:
+            - ./download/complete:/home/shokohsc/upload/downloads
+            - ./shared:/home/shokohsc/upload/shared
+            - /media/nuc/WD2To:/home/shokohsc/upload/media
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
         image: linuxserver/duckdns
@@ -99,6 +132,8 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - connected
+        depends_on:
+            - traefik
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:portainer.shokohsc"
@@ -140,7 +175,7 @@ services:
         image: clue/h5ai
         restart: ${RESTART_MODE}
         volumes:
-            - ./download:/var/www/downloads
+            - ./download/complete:/var/www/downloads
             - ./shared:/var/www/shared
             - /media/nuc/WD2To:/var/www/media
         networks:
@@ -152,38 +187,24 @@ services:
             - "traefik.frontend.rule=Host:h5ai.shokohsc"
             - "traefik.port=80"
 
-    samba: # SMB server read only guests
-        container_name: samba
-        image: dperson/samba
-        command: '-s "shared;/mount;yes;no;yes;all;none"'
+    heimdall: # File exporer connected server
+        container_name: heimdall
+        image: linuxserver/heimdall
         restart: ${RESTART_MODE}
-        ports:
-            - "139:139"
-            - "445:445"
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
         volumes:
-            - ./download:/mount/downloads
-            - ./shared:/mount/shared
-            - /media/nuc/WD2To:/mount/media
+            - ./config/heimdall:/config
         networks:
             - connected
+        depends_on:
+            - traefik
         labels:
-            - "traefik.enable=false"
-
-    sftp: # Sftp server read/write users
-        container_name: sftp
-        image: atmoz/sftp
-        command: ${SFTP_COMMAND}
-        restart: ${RESTART_MODE}
-        ports:
-            - "32768:22"
-        volumes:
-            - ./download:/home/shokohsc/upload/downloads
-            - ./shared:/home/shokohsc/upload/shared
-            - /media/nuc/WD2To:/home/shokohsc/upload/media
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:heimdall.shokohsc"
+            - "traefik.port=80"
 
     plex: # Media server
         container_name: plex
@@ -206,8 +227,6 @@ services:
         volumes:
             - ./config/plex:/config
             - ./work/plex:/transcode
-            - ./download:/data/downloads
-            - ./shared:/data/shared
             - /media/nuc/WD2To:/data/media
         networks:
             - connected
