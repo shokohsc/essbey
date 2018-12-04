@@ -170,24 +170,24 @@ services:
             - "traefik.frontend.rule=Host:gazee.shokohsc"
             - "traefik.port=4242"
 
-    filebrowser: # File exporer connected server
-        container_name: filebrowser
-        image: filebrowser/filebrowser
+    commander: # Web ui server admin
+        container_name: commander
+        image: coderaiser/cloudcmd
         restart: ${RESTART_MODE}
         volumes:
-            - ./config/filebrowser/config.json:/etc/config.json
-            - ./config/filebrowser/database.db:/etc/database.db
-            - ./download/complete:/data/downloads
-            - ./shared:/data/shared
-            - /media/nuc/WD2To:/data/media
+            - ./config/commander:/root
+            - /:/mnt/fs
+            # - ./download/complete:/data/downloads
+            # - ./shared:/data/shared
+            # - /media/nuc/WD2To:/data/media
         networks:
             - connected
         depends_on:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:filebrowser.shokohsc"
-            - "traefik.port=80"
+            - "traefik.frontend.rule=Host:commander.shokohsc"
+            - "traefik.port=8000"
 
     plex: # Media server
         container_name: plex
