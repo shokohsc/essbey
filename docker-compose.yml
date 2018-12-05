@@ -313,3 +313,14 @@ services:
         restart: ${RESTART_MODE}
         networks:
             - hidden
+
+    watchtower: # Watch tower keep all service up to date
+        image: v2tec/watchtower
+        container_name: watchtower
+        restart: ${RESTART_MODE}
+        command: --interval 3600 --cleanup
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /root/.docker/config.json:/config.json
+        networks:
+            - hidden
