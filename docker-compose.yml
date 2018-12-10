@@ -318,8 +318,56 @@ services:
         image: v2tec/watchtower
         container_name: watchtower
         restart: ${RESTART_MODE}
-        command: --interval 3600 --cleanup
+        command: --schedule "0 8 * * *" --cleanup
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - hidden
+
+    rocketchat: # Rocketchat
+        image: rocket.chat
+        container_name: rocketchat
+        restart: ${RESTART_MODE}
+        environment:
+            ROOT_URL: ${RC_ROOT_URL}
+            MONGO_URL: ${MONGO_URL}
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - traefik
+            - mongo
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:rocketchat.shokohsc"
+            - "traefik.docker.network=seedbox_connected"
+            - "traefik.port=3000"
+
+    mongo: # Rocketchat requirement
+        image: mongo
+        container_name: mongo
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/mongo:/data/db
+        networks:
+            - hidden
+
+    heimdall: # Heimdall
+        image: duhio/heimdall-https
+        container_name: heimdall
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/heimdall:/config
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:heimdall.shokohsc"
+            - "traefik.protocol=https"
+            - "traefik.port=443"

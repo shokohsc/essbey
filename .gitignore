@@ -13,3 +13,5 @@ config/commander/
 config/openvpn/
 config/plex/
 config/transmission/
+config/mongo
+config/heimdall
