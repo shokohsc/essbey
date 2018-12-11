@@ -355,7 +355,7 @@ services:
             - hidden
 
     heimdall: # Heimdall
-        image: duhio/heimdall-https
+        image: linuxserver/heimdall
         container_name: heimdall
         restart: ${RESTART_MODE}
         environment:
