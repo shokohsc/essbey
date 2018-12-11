@@ -371,3 +371,25 @@ services:
             - "traefik.frontend.rule=Host:heimdall.shokohsc"
             - "traefik.protocol=https"
             - "traefik.port=443"
+
+    monitor: # Openvpn monitor
+        image: ruimarinho/openvpn-monitor
+        container_name: monitor
+        restart: ${RESTART_MODE}
+        environment:
+            OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT: ${OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT}
+            OPENVPNMONITOR_DEFAULT_LATITUDE: ${OPENVPNMONITOR_DEFAULT_LATITUDE}
+            OPENVPNMONITOR_DEFAULT_LONGITUDE: ${OPENVPNMONITOR_DEFAULT_LONGITUDE}
+            OPENVPNMONITOR_DEFAULT_SITE: ${OPENVPNMONITOR_DEFAULT_SITE}
+            OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
+            OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
+            OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
+        networks:
+            - connected
+        depends_on:
+            - traefik
+            - openvpn
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:monitor.shokohsc"
+            - "traefik.port=80"
