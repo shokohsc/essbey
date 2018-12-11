@@ -330,7 +330,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
             ROOT_URL: ${RC_ROOT_URL}
-            MONGO_URL: ${MONGO_URL}
+            MONGO_URL: ${MONGO_URL}/rocketchat
         networks:
             - connected
             - hidden
@@ -392,4 +392,23 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:monitor.shokohsc"
+            - "traefik.port=80"
+
+    wekan: # Wekan
+        image: quay.io/wekan/wekan
+        container_name: wekan
+        restart: ${RESTART_MODE}
+        environment:
+            ROOT_URL: ${RC_ROOT_URL}
+            MONGO_URL: ${MONGO_URL}/wekan
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - traefik
+            - mongo
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:wekan.shokohsc"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=80"
