@@ -411,4 +411,4 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:wekan.shokohsc"
             - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=80"
+            - "traefik.port=3000"
