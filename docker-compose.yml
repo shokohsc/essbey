@@ -72,10 +72,9 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        expose:
-            - "5555"
         ports:
             - "32767:1194/udp"
+            - "35555:5555/tcp"
         volumes:
             - ./config/openvpn:/etc/openvpn
         networks:
