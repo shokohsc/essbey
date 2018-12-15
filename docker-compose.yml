@@ -371,8 +371,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:heimdall.shokohsc"
-            - "traefik.protocol=https"
-            - "traefik.port=443"
+            - "traefik.port=80"
 
     monitor: # Openvpn monitor
         image: ruimarinho/openvpn-monitor
