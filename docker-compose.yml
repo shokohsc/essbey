@@ -316,16 +316,6 @@ services:
         networks:
             - hidden
 
-    watchtower: # Watch tower keep all service up to date
-        image: v2tec/watchtower
-        container_name: watchtower
-        restart: ${RESTART_MODE}
-        command: --schedule "0 8 * * *" --cleanup
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        networks:
-            - hidden
-
     rocketchat: # Rocketchat
         image: rocket.chat
         container_name: rocketchat
