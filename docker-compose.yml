@@ -234,6 +234,7 @@ services:
             - "9090:9090/tcp"
             - "9777:9777/udp"
         volumes:
+            - config/kodi:/config/.kodi
             - /media/nuc/WD2To:/config/.kodi/media
         networks:
             - connected
