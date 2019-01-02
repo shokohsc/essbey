@@ -222,6 +222,29 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
+    kodi: # Media server
+        container_name: kodi
+        image: linuxserver/kodi-headless
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        ports:
+            - "9090:9090/tcp"
+            - "9777:9777/udp"
+        volumes:
+            - ./config/kodi:/config/.kodi
+            - /media/nuc/WD2To:/data/media
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:kodi.shokohsc"
+            - "traefik.port=8080"
+
     grafana: # Monitoring tool connected server
         container_name: grafana
         image: grafana/grafana:5.2.4
