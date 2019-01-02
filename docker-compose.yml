@@ -235,7 +235,7 @@ services:
             - "9777:9777/udp"
         volumes:
             - config/kodi:/config/.kodi
-            - /media/nuc/WD2To:/config/.kodi/media
+            - /media/nuc/WD2To:/data/media
         networks:
             - connected
         depends_on:
