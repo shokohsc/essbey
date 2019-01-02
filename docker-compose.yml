@@ -238,12 +238,28 @@ services:
             - /media/nuc/WD2To:/config/.kodi/media
         networks:
             - connected
+            - hidden
         depends_on:
             - traefik
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:kodi.shokohsc"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=8080"
+
+    mariadb: # Kodi requirement
+        image: mariadb
+        container_name: mariadb
+        restart: ${RESTART_MODE}
+        environment:
+            MYSQL_ROOT_PASSWORD: ${GLOBAL_PASSWORD}
+            MYSQL_DATABASE: kodi
+            MYSQL_USER: kodi
+            MYSQL_PASSWORD: kodi
+        volumes:
+            - ./config/mariadb:/var/lib/mysql
+        networks:
+            - hidden
 
     grafana: # Monitoring tool connected server
         container_name: grafana
