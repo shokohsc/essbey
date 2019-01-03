@@ -224,7 +224,7 @@ services:
 
     kodi: # Media server
         container_name: kodi
-        image: linuxserver/kodi-headless
+        image: linuxserver/kodi-headless:Krypton
         restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
