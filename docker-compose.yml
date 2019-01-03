@@ -222,45 +222,6 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    kodi: # Media server
-        container_name: kodi
-        image: linuxserver/kodi-headless:Krypton
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        ports:
-            - "9090:9090/tcp"
-            - "9777:9777/udp"
-        volumes:
-            - ./config/kodi:/config/.kodi
-            - /media/nuc/WD2To:/config/.kodi/media
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:kodi.shokohsc"
-            - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=8080"
-
-    mariadb: # Kodi requirement
-        image: mariadb
-        container_name: mariadb
-        restart: ${RESTART_MODE}
-        environment:
-            MYSQL_ROOT_PASSWORD: ${GLOBAL_PASSWORD}
-            MYSQL_DATABASE: kodi
-            MYSQL_USER: kodi
-            MYSQL_PASSWORD: kodi
-        volumes:
-            - ./config/mariadb:/var/lib/mysql
-        networks:
-            - hidden
-
     grafana: # Monitoring tool connected server
         container_name: grafana
         image: grafana/grafana:5.2.4

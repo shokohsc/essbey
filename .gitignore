@@ -15,5 +15,3 @@ config/plex/
 config/transmission/
 config/mongo
 config/heimdall
-config/mariadb
-config/kodi
