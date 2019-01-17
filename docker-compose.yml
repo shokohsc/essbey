@@ -222,12 +222,17 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    mstream: # Mstream streams music
-        image: markgaj/mstream-docker
-        container_name: mstream
+    libresonic: # Mstream streams music
+        image: linuxserver/libresonic
+        container_name: libresonic
         restart: ${RESTART_MODE}
+        environment:
+            CONTEXT_PATH: ${LIBRESONIC_URL}
+            TZ: ${TIMEZONE}
+            PGID: ${PGID}
+            PUID: ${PUID}
         volumes:
-            - ./config/mstream:/beets.db
+            - ./config/libresonic:/config
             - /media/nuc/WD2To/music:/music
         networks:
             - connected
@@ -235,9 +240,9 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:mstream.shokohsc"
+            - "traefik.frontend.rule=Host:libresonic.shokohsc"
             - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=3000"
+            - "traefik.port=4040"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
