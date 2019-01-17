@@ -222,6 +222,23 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
+    mstream: # Mstream streams music
+        image: markgaj/mstream-docker
+        container_name: mstream
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/mstream:/beets.db
+            - /media/nuc/WD2To/media/music:/music
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:mstream.shokohsc"
+            - "traefik.docker.network=seedbox_connected"
+            - "traefik.port=3000"
+
     grafana: # Monitoring tool connected server
         container_name: grafana
         image: grafana/grafana:5.2.4
