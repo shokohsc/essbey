@@ -228,7 +228,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - ./config/mstream:/beets.db
-            - /media/nuc/WD2To/media/music:/music
+            - /media/nuc/WD2To/music:/music
         networks:
             - connected
         depends_on:
