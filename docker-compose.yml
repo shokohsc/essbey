@@ -222,23 +222,6 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    music: # Soundscape music streaming
-        image: soundscapecloud/soundscape
-        container_name: music
-        restart: ${RESTART_MODE}
-        command: "--http-host music.shokohsc --http-username admin"
-        volumes:
-            - /media/nuc/WD2To/music:/data
-        networks:
-            - connected
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:music.shokohsc"
-            - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=80"
-
     grafana: # Monitoring tool connected server
         container_name: grafana
         image: grafana/grafana:5.2.4
