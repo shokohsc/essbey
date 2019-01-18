@@ -222,27 +222,22 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    libresonic: # Mstream streams music
-        image: linuxserver/libresonic
-        container_name: libresonic
+    music: # Soundscape music streaming
+        image: soundscapecloud/soundscape
+        container_name: music
         restart: ${RESTART_MODE}
-        environment:
-            CONTEXT_PATH: ${LIBRESONIC_URL}
-            TZ: ${TIMEZONE}
-            PGID: ${PGID}
-            PUID: ${PUID}
+        command: "--http-host music.shokohsc --http-username admin"
         volumes:
-            - ./config/libresonic:/config
-            - /media/nuc/WD2To/music:/music
+            - /media/nuc/WD2To/music:/data
         networks:
             - connected
         depends_on:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:libresonic.shokohsc"
+            - "traefik.frontend.rule=Host:music.shokohsc"
             - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=4040"
+            - "traefik.port=80"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
