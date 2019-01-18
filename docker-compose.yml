@@ -229,7 +229,7 @@ services:
         ports:
             - "8072:8072/tcp"
         volumes:
-            - /media/nuc/WD2To:/mnt/host:ro
+            - /media/nuc/WD2To/music:/mnt/host:ro
         networks:
             - connected
         depends_on:
