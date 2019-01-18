@@ -222,6 +222,24 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
+    music: # Music server
+        container_name: music
+        image: docmarty84/koozic
+        restart: ${RESTART_MODE}
+        ports:
+            - "8072:8072/tcp"
+        volumes:
+            - /media/nuc/WD2To:/mnt/host:ro
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:music.shokohsc"
+            - "traefik.port=8069"
+
+
     grafana: # Monitoring tool connected server
         container_name: grafana
         image: grafana/grafana:5.2.4
