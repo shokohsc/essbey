@@ -242,6 +242,25 @@ services:
             - "traefik.frontend.rule=Host:music.shokohsc"
             - "traefik.port=4040"
 
+    beets: # Music manager
+        container_name: beets
+        image: linuxserver/beets
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+        volumes:
+            - ./config/beets:/config
+            - /media/nuc/WD2To/music:/downloads
+            - /media/nuc/WD2To/beets-music:/music
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:beets.shokohsc"
+            - "traefik.port=8337"
 
     grafana: # Monitoring tool connected server
         container_name: grafana

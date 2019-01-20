@@ -16,3 +16,4 @@ config/transmission/
 config/mongo
 config/heimdall
 config/airsonic
+config/beets
