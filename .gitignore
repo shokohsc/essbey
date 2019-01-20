@@ -15,3 +15,4 @@ config/plex/
 config/transmission/
 config/mongo
 config/heimdall
+config/airsonic

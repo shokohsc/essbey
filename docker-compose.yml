@@ -224,12 +224,15 @@ services:
 
     music: # Music server
         container_name: music
-        image: docmarty84/koozic
+        image: linuxserver/airsonic
         restart: ${RESTART_MODE}
-        ports:
-            - "8072:8072/tcp"
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
         volumes:
-            - /media/nuc/WD2To/music:/mnt/host:ro
+            - ./config/airsonic:/config
+            - /media/nuc/WD2To/music:/music
         networks:
             - connected
         depends_on:
@@ -237,7 +240,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:music.shokohsc"
-            - "traefik.port=8069"
+            - "traefik.port=4040"
 
 
     grafana: # Monitoring tool connected server
