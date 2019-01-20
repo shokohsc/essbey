@@ -251,8 +251,8 @@ services:
             PUID: ${PUID}
         volumes:
             - ./config/beets:/config
-            - /media/nuc/WD2To/music:/downloads
-            - /media/nuc/WD2To/beets-music:/music
+            - /media/nuc/WD2To/music:/music
+            - /media/nuc/WD2To/beets-music:/downloads
         networks:
             - connected
         depends_on:
