@@ -431,7 +431,7 @@ services:
         container_name: wekan
         restart: ${RESTART_MODE}
         environment:
-            ROOT_URL: ${RC_ROOT_URL}
+            ROOT_URL: ${WK_ROOT_URL}
             MONGO_URL: ${MONGO_URL}/wekan
         networks:
             - connected
