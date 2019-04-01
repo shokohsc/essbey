@@ -192,22 +192,23 @@ services:
 
     plex: # Media server
         container_name: plex
-        image: plexinc/pms-docker
+        image: linuxserver/plex
         restart: ${RESTART_MODE}
         environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
             PLEX_CLAIM: ${PLEX_CLAIM}
             ADVERTISE_IP: ${PLEX_ROOT_URL}
             TZ: ${TIMEZONE}
         ports:
-            - "32769:32400/tcp"
-            - "3005:3005/tcp"
-            - "8324:8324/tcp"
+            - "32400:32400/tcp"
+            - "32400:32400/udp"
             - "32469:32469/tcp"
+            - "32469:32469/udp"
+            - "5353:5353/tcp"
             - "1900:1900/udp"
-            - "32410:32410/udp"
-            - "32412:32412/udp"
-            - "32413:32413/udp"
-            - "32414:32414/udp"
+        devices:
+            - "/dev/dri:/dev/dri"
         volumes:
             - ./config/plex:/config
             - ./work/plex:/transcode
@@ -222,167 +223,167 @@ services:
             - "traefik.frontend.rule=Host:plex.shokohsc"
             - "traefik.port=32400"
 
-    music: # Music server
-        container_name: music
-        image: linuxserver/airsonic
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/airsonic:/config
-            - /media/nuc/WD2To1/music:/music
-        networks:
-            - connected
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:music.shokohsc"
-            - "traefik.port=4040"
+    # music: # Music server
+    #     container_name: music
+    #     image: linuxserver/airsonic
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes:
+    #         - ./config/airsonic:/config
+    #         - /media/nuc/WD2To1/music:/music
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - traefik
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:music.shokohsc"
+    #         - "traefik.port=4040"
 
-    beets: # Music manager
-        container_name: beets
-        image: linuxserver/beets
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-        volumes:
-            - ./config/beets:/config
-            - /media/nuc/WD2To1/music:/music
-            - /media/nuc/WD2To1/beets-music:/downloads
-        networks:
-            - connected
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:beets.shokohsc"
-            - "traefik.port=8337"
+    # beets: # Music manager
+    #     container_name: beets
+    #     image: linuxserver/beets
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #     volumes:
+    #         - ./config/beets:/config
+    #         - /media/nuc/WD2To1/music:/music
+    #         - /media/nuc/WD2To1/beets-music:/downloads
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - traefik
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:beets.shokohsc"
+    #         - "traefik.port=8337"
 
-    grafana: # Monitoring tool connected server
-        container_name: grafana
-        image: grafana/grafana:5.2.4
-        restart: ${RESTART_MODE}
-        environment:
-            GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-            GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-        volumes:
-            - grafana_data:/var/lib/grafana
-            - ./config/grafana/datasources:/etc/grafana/datasources
-            - ./config/grafana/dashboards:/etc/grafana/dashboards
-            - ./config/grafana/setup.sh:/setup.sh
-        entrypoint: /setup.sh
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-            - prometheus
-            - pushgateway
-            - nodeexporter
-            - cadvisor
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:grafana.shokohsc"
-            - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=3000"
+    # grafana: # Monitoring tool connected server
+    #     container_name: grafana
+    #     image: grafana/grafana:5.2.4
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+    #     volumes:
+    #         - grafana_data:/var/lib/grafana
+    #         - ./config/grafana/datasources:/etc/grafana/datasources
+    #         - ./config/grafana/dashboards:/etc/grafana/dashboards
+    #         - ./config/grafana/setup.sh:/setup.sh
+    #     entrypoint: /setup.sh
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - traefik
+    #         - prometheus
+    #         - pushgateway
+    #         - nodeexporter
+    #         - cadvisor
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:grafana.shokohsc"
+    #         - "traefik.docker.network=seedbox_connected"
+    #         - "traefik.port=3000"
 
-    prometheus: # Database, grafana requirement
-        image: prom/prometheus:v2.4.3
-        container_name: prometheus
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/prometheus/:/etc/prometheus/
-            - prometheus_data:/prometheus
-        command:
-            - '--config.file=/etc/prometheus/prometheus.yml'
-            - '--storage.tsdb.path=/prometheus'
-            - '--web.console.libraries=/etc/prometheus/console_libraries'
-            - '--web.console.templates=/etc/prometheus/consoles'
-            - '--storage.tsdb.retention=200h'
-            - '--web.enable-lifecycle'
-        networks:
-            - hidden
+    # prometheus: # Database, grafana requirement
+    #     image: prom/prometheus:v2.4.3
+    #     container_name: prometheus
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/prometheus/:/etc/prometheus/
+    #         - prometheus_data:/prometheus
+    #     command:
+    #         - '--config.file=/etc/prometheus/prometheus.yml'
+    #         - '--storage.tsdb.path=/prometheus'
+    #         - '--web.console.libraries=/etc/prometheus/console_libraries'
+    #         - '--web.console.templates=/etc/prometheus/consoles'
+    #         - '--storage.tsdb.retention=200h'
+    #         - '--web.enable-lifecycle'
+    #     networks:
+    #         - hidden
 
-    alertmanager: # Grafana requirement
-        image: prom/alertmanager:v0.15.2
-        container_name: alertmanager
-        volumes:
-            - ./config/alertmanager/:/etc/alertmanager/
-        command:
-            - '--config.file=/etc/alertmanager/config.yml'
-            - '--storage.path=/alertmanager'
-        restart: ${RESTART_MODE}
-        networks:
-            - hidden
+    # alertmanager: # Grafana requirement
+    #     image: prom/alertmanager:v0.15.2
+    #     container_name: alertmanager
+    #     volumes:
+    #         - ./config/alertmanager/:/etc/alertmanager/
+    #     command:
+    #         - '--config.file=/etc/alertmanager/config.yml'
+    #         - '--storage.path=/alertmanager'
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
 
-    nodeexporter: # Grafana requirement
-        image: prom/node-exporter:v0.16.0
-        container_name: nodeexporter
-        restart: ${RESTART_MODE}
-        user: root
-        privileged: true
-        volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
-            - /:/rootfs:ro
-        command:
-            - '--path.procfs=/host/proc'
-            - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-        networks:
-            - hidden
+    # nodeexporter: # Grafana requirement
+    #     image: prom/node-exporter:v0.16.0
+    #     container_name: nodeexporter
+    #     restart: ${RESTART_MODE}
+    #     user: root
+    #     privileged: true
+    #     volumes:
+    #         - /proc:/host/proc:ro
+    #         - /sys:/host/sys:ro
+    #         - /:/rootfs:ro
+    #     command:
+    #         - '--path.procfs=/host/proc'
+    #         - '--path.sysfs=/host/sys'
+    #         - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    #     networks:
+    #         - hidden
 
-    cadvisor: # Grafana requirement
-        image: google/cadvisor:v0.31.0
-        container_name: cadvisor
-        restart: ${RESTART_MODE}
-        volumes:
-            - /:/rootfs:ro
-            - /var/run:/var/run:rw
-            - /sys:/sys:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-            - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
-        networks:
-            - hidden
+    # cadvisor: # Grafana requirement
+    #     image: google/cadvisor:v0.31.0
+    #     container_name: cadvisor
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /:/rootfs:ro
+    #         - /var/run:/var/run:rw
+    #         - /sys:/sys:ro
+    #         - /var/lib/docker/:/var/lib/docker:ro
+    #         - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    #     networks:
+    #         - hidden
 
-    pushgateway: # Grafana requirement
-        image: prom/pushgateway
-        container_name: pushgateway
-        restart: ${RESTART_MODE}
-        networks:
-            - hidden
+    # pushgateway: # Grafana requirement
+    #     image: prom/pushgateway
+    #     container_name: pushgateway
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
 
-    rocketchat: # Rocketchat
-        image: rocket.chat
-        container_name: rocketchat
-        restart: ${RESTART_MODE}
-        environment:
-            ROOT_URL: ${RC_ROOT_URL}
-            MONGO_URL: ${MONGO_URL}/rocketchat
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-            - mongo
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:rocketchat.shokohsc"
-            - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=3000"
+    # rocketchat: # Rocketchat
+    #     image: rocket.chat
+    #     container_name: rocketchat
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         ROOT_URL: ${RC_ROOT_URL}
+    #         MONGO_URL: ${MONGO_URL}/rocketchat
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - traefik
+    #         - mongo
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:rocketchat.shokohsc"
+    #         - "traefik.docker.network=seedbox_connected"
+    #         - "traefik.port=3000"
 
-    mongo: # Rocketchat requirement
-        image: mongo
-        container_name: mongo
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/mongo:/data/db
-        networks:
-            - hidden
+    # mongo: # Rocketchat requirement
+    #     image: mongo
+    #     container_name: mongo
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/mongo:/data/db
+    #     networks:
+    #         - hidden
 
     heimdall: # Heimdall
         image: linuxserver/heimdall
@@ -426,21 +427,21 @@ services:
             - "traefik.frontend.rule=Host:monitor.shokohsc"
             - "traefik.port=80"
 
-    wekan: # Wekan
-        image: quay.io/wekan/wekan
-        container_name: wekan
-        restart: ${RESTART_MODE}
-        environment:
-            ROOT_URL: ${WK_ROOT_URL}
-            MONGO_URL: ${MONGO_URL}/wekan
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-            - mongo
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wekan.shokohsc"
-            - "traefik.docker.network=seedbox_connected"
-            - "traefik.port=8080"
+    # wekan: # Wekan
+    #     image: quay.io/wekan/wekan
+    #     container_name: wekan
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         ROOT_URL: ${WK_ROOT_URL}
+    #         MONGO_URL: ${MONGO_URL}/wekan
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - traefik
+    #         - mongo
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:wekan.shokohsc"
+    #         - "traefik.docker.network=seedbox_connected"
+    #         - "traefik.port=8080"
