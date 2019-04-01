@@ -1,0 +1,40 @@
+#!/usr/bin/with-contenv bash
+
+# pre steps
+echo 'pre steps' && \
+pip3 install --upgrade pip && \
+pip3 install virtualenv && \
+virtualenv -p python3 /virt && \
+source /virt/bin/activate
+
+# clone repository
+echo 'cloning bamf' && \
+git clone https://github.com/bpepple/bamf.git
+
+# put it inside /virt
+echo 'copying repository to working directory' && \
+cp -r /bamf/* /virt && \
+cd /virt && \
+bin/pip3 install redis && \
+bin/pip3 install -r requirements.txt
+
+# edit database config
+echo 'editing postgres connection settings' && \
+sed -i "s/'ENGINE': 'django.db.backends.postgresql',/'ENGINE': 'django.db.backends.sqlite3',/g" bamf/settings.py && \
+sed -i "s/'NAME': 'bamfproject',/'NAME': 'bamf',/g" bamf/settings.py && \
+sed -i "s/'USER': 'bpepple',/'USER': 'bamf',/g" bamf/settings.py && \
+sed -i "s/'PASSWORD': 'bamfpassword',/'PASSWORD': 'bamf',/g" bamf/settings.py && \
+sed -i "s/'HOST': '',/'HOST': 'postgres',/g" bamf/settings.py && \
+sed -i "/psycopg2/d" requirements.txt
+
+echo 'setting database up' && \
+bin/python3 manage.py generatesecretkey && \
+bin/python3 manage.py migrate && \
+bin/python3 manage.py createsuperuser && \
+source /virt/bin/activate
+
+# permissions
+chown -R gamestream:gamestream \
+	/virt
+chmod -R g+w \
+    /virt

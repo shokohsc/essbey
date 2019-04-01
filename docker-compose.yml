@@ -7,9 +7,9 @@ networks:
         ipam:
             driver: default
             config: # http://www.subnet-calculator.com/subnet.php?net_class=B
-            - subnet: 172.16.0.0/25 # 172.16.0.1 - 172.16.0.126
-              gateway: 172.16.0.126
-              ip_range: 172.16.0.0/26 # 172.16.0.1 - 172.16.0.62
+            - subnet: 172.1.0.0/25 # 172.1.0.1 - 172.1.0.126
+              gateway: 172.1.0.126
+              ip_range: 172.1.0.0/26 # 172.16.0.1 - 172.16.0.62
 
     hidden:
         internal: true
@@ -152,6 +152,37 @@ services:
         network_mode: "service:gateway"
         depends_on:
             - gateway
+
+    # postgres: # SQL Database
+    #     container_name: postgres
+    #     image: postgres:alpine
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         POSTGRES_PASSWORD: bamf
+    #     networks:
+    #         - hidden
+    #
+    # bamf: # Comics server
+    #     container_name: bamf
+    #     build:
+    #         context: bamf
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #     # volumes:
+    #     #     - ./config/gazee:/config
+    #     #     - ./shared/gazee:/comics
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     # depends_on:
+    #     #     - postgres
+    #     #     - traefik
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:bamf.shokohsc"
+    #         - "traefik.port=8000"
 
     gazee: # Comics connected server
         container_name: gazee
