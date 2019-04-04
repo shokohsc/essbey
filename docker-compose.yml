@@ -163,7 +163,7 @@ services:
             PUID: ${PUID}
         volumes:
             - ./config/bamf:/virt/media
-            # - ./shared/gazee:/virt/files
+            - ./shared/gazee:/virt/files
         networks:
             - connected
             - hidden

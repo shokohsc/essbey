@@ -21,7 +21,8 @@ sed -i "s/requests-cache/requests_cache/g" bamf/settings.py && \
 bin/pip3 install -r requirements.txt
 
 # edit database config
-echo 'editing postgres connection settings' && \
+echo 'editing settings' && \
+sed -i "s/'ALLOWED_HOSTS': [],/'ALLOWED_HOSTS': ['*'],/g" bamf/settings.py && \
 sed -i "s/'ENGINE': 'django.db.backends.postgresql',/'ENGINE': 'django.db.backends.sqlite3',/g" bamf/settings.py && \
 sed -i "s/'NAME': 'bamfproject',/'NAME': '/virt/sqlite.db',/g" bamf/settings.py && \
 grep -qxF "/'USER': 'bpepple'" || sed -i "/'USER': 'bpepple'/d" bamf/settings.py && \
