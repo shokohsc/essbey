@@ -27,12 +27,14 @@ sed -i "s/'ENGINE': 'django.db.backends.postgresql',/'ENGINE': 'django.db.backen
 sed -i "s/'NAME': 'bamfproject',/'NAME': '/virt/sqlite.db',/g" bamf/settings.py && \
 grep -qxF "/'USER': 'bpepple'" || sed -i "/'USER': 'bpepple'/d" bamf/settings.py && \
 grep -qxF "/'PASSWORD': 'bamfpassword'" || sed -i "/'PASSWORD': 'bamfpassword'/d" bamf/settings.py && \
-grep -qxF "/'HOST': ''" || sed -i "/'HOST': ''/d" bamf/settings.py && \
+grep -qxF "/'HOST': ''" || sed -i "/'HOST': ''/d" bamf/settings.py
 
-echo 'setting database up' && \
-bin/python3 manage.py generatesecretkey && \
-bin/python3 manage.py migrate && \
-bin/python3 manage.py createsuperuser --noinput --username admin --email no-reply@gmail.com && \
+[[ ! -f /virt/sqlite.db ]] && \
+    echo 'setting database up' && \
+    bin/python3 manage.py generatesecretkey && \
+    bin/python3 manage.py migrate && \
+    bin/python3 manage.py createsuperuser --noinput --username admin --email no-reply@gmail.com
+
 source /virt/bin/activate
 
 # permissions
