@@ -14,9 +14,9 @@ networks:
     hidden:
         internal: true
 
-volumes:
-    prometheus_data: {}
-    grafana_data: {}
+# volumes:
+#     prometheus_data: {}
+#     grafana_data: {}
 
 services:
 
@@ -153,36 +153,26 @@ services:
         depends_on:
             - gateway
 
-    # postgres: # SQL Database
-    #     container_name: postgres
-    #     image: postgres:alpine
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         POSTGRES_PASSWORD: bamf
-    #     networks:
-    #         - hidden
-    #
-    # bamf: # Comics server
-    #     container_name: bamf
-    #     build:
-    #         context: bamf
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #     # volumes:
-    #     #     - ./config/gazee:/config
-    #     #     - ./shared/gazee:/comics
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     # depends_on:
-    #     #     - postgres
-    #     #     - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:bamf.shokohsc"
-    #         - "traefik.port=8000"
+    bamf: # Comics server
+        container_name: bamf
+        build:
+            context: bamf
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+        volumes:
+            - ./config/bamf:/virt/media
+            # - ./shared/gazee:/virt/files
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:bamf.shokohsc"
+            - "traefik.port=8000"
 
     gazee: # Comics connected server
         container_name: gazee

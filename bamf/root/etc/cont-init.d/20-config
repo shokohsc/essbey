@@ -15,22 +15,23 @@ git clone https://github.com/bpepple/bamf.git
 echo 'copying repository to working directory' && \
 cp -r /bamf/* /virt && \
 cd /virt && \
-bin/pip3 install redis && \
+bin/pip3 install redis Pillow PyPDF2 && \
+sed -i "/psycopg2/d" requirements.txt
+sed -i "s/requests-cache/requests_cache/g" bamf/settings.py && \
 bin/pip3 install -r requirements.txt
 
 # edit database config
 echo 'editing postgres connection settings' && \
 sed -i "s/'ENGINE': 'django.db.backends.postgresql',/'ENGINE': 'django.db.backends.sqlite3',/g" bamf/settings.py && \
-sed -i "s/'NAME': 'bamfproject',/'NAME': 'bamf',/g" bamf/settings.py && \
-sed -i "s/'USER': 'bpepple',/'USER': 'bamf',/g" bamf/settings.py && \
-sed -i "s/'PASSWORD': 'bamfpassword',/'PASSWORD': 'bamf',/g" bamf/settings.py && \
-sed -i "s/'HOST': '',/'HOST': 'postgres',/g" bamf/settings.py && \
-sed -i "/psycopg2/d" requirements.txt
+sed -i "s/'NAME': 'bamfproject',/'NAME': '/virt/sqlite.db',/g" bamf/settings.py && \
+grep -qxF "/'USER': 'bpepple'" || sed -i "/'USER': 'bpepple'/d" bamf/settings.py && \
+grep -qxF "/'PASSWORD': 'bamfpassword'" || sed -i "/'PASSWORD': 'bamfpassword'/d" bamf/settings.py && \
+grep -qxF "/'HOST': ''" || sed -i "/'HOST': ''/d" bamf/settings.py && \
 
 echo 'setting database up' && \
 bin/python3 manage.py generatesecretkey && \
 bin/python3 manage.py migrate && \
-bin/python3 manage.py createsuperuser && \
+bin/python3 manage.py createsuperuser --noinput --username admin --email no-reply@gmail.com && \
 source /virt/bin/activate
 
 # permissions
