@@ -29,6 +29,9 @@ grep -qxF "/'USER': 'bpepple'" || sed -i "/'USER': 'bpepple'/d" bamf/settings.py
 grep -qxF "/'PASSWORD': 'bamfpassword'" || sed -i "/'PASSWORD': 'bamfpassword'/d" bamf/settings.py && \
 grep -qxF "/'HOST': ''" || sed -i "/'HOST': ''/d" bamf/settings.py
 
+[[ ! -f /virt/redis.conf ]] && \
+cp /defaults/redis.conf /virt/redis.conf
+
 [[ ! -f /virt/sqlite.db ]] && \
     echo 'setting database up' && \
     bin/python3 manage.py generatesecretkey && \

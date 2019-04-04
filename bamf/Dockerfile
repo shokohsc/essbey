@@ -14,6 +14,7 @@ RUN \
     sqlite \
     musl-dev \
     sqlite \
+    redis \
 	git
 
 # add local files
