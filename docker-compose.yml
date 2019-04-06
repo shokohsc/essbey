@@ -153,26 +153,26 @@ services:
         depends_on:
             - gateway
 
-    bamf: # Comics server
-        container_name: bamf
-        build:
-            context: bamf
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-        volumes:
-            - ./config/bamf:/virt/media
-            - ./shared/gazee:/virt/files
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:bamf.shokohsc"
-            - "traefik.port=8000"
+    # bamf: # Comics server
+    #     container_name: bamf
+    #     build:
+    #         context: bamf
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #     volumes:
+    #         - ./config/bamf:/virt/media
+    #         - ./shared/gazee:/virt/files
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - traefik
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:bamf.shokohsc"
+    #         - "traefik.port=8000"
 
     gazee: # Comics connected server
         container_name: gazee
