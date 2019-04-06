@@ -11,8 +11,8 @@ networks:
               gateway: 172.1.0.126
               ip_range: 172.1.0.0/26 # 172.16.0.1 - 172.16.0.62
 
-    hidden:
-        internal: true
+    # hidden:
+    #     internal: true
 
 # volumes:
 #     prometheus_data: {}
