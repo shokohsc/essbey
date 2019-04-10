@@ -31,7 +31,7 @@ services:
         volumes:
             - ./download/complete:/mount/downloads
             - ./shared:/mount/shared
-            - /media/nuc/WD2To1:/mount/media
+            - /media/nuc/WD2To:/mount/media
         networks:
             - connected
         labels:
@@ -47,7 +47,7 @@ services:
         volumes:
             - ./download/complete:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
-            - /media/nuc/WD2To1:/home/shokohsc/upload/media
+            - /media/nuc/WD2To:/home/shokohsc/upload/media
         networks:
             - connected
         labels:
@@ -201,7 +201,7 @@ services:
             - /:/mnt/fs
             - ./download/complete:/root/downloads
             - ./shared:/root/shared
-            - /media/nuc/WD2To1:/root/media
+            - /media/nuc/WD2To:/root/media
         networks:
             - connected
         depends_on:
@@ -239,7 +239,7 @@ services:
         volumes:
             - ./config/plex:/config
             - ./work/plex:/transcode
-            - /media/nuc/WD2To1:/data/media
+            - /media/nuc/WD2To:/data/media
         networks:
             - connected
         depends_on:
@@ -260,7 +260,7 @@ services:
     #         TZ: ${TIMEZONE}
     #     volumes:
     #         - ./config/airsonic:/config
-    #         - /media/nuc/WD2To1/music:/music
+    #         - /media/nuc/WD2To/music:/music
     #     networks:
     #         - connected
     #     depends_on:
@@ -279,8 +279,8 @@ services:
     #         PUID: ${PUID}
     #     volumes:
     #         - ./config/beets:/config
-    #         - /media/nuc/WD2To1/music:/music
-    #         - /media/nuc/WD2To1/beets-music:/downloads
+    #         - /media/nuc/WD2To/music:/music
+    #         - /media/nuc/WD2To/beets-music:/downloads
     #     networks:
     #         - connected
     #     depends_on:
