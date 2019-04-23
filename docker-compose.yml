@@ -257,6 +257,7 @@ services:
             - ./config/plex:/config
             - ./work/plex:/transcode
             - /media/nuc/WD2To:/data/media
+            - ./download/complete:/data/downloads
         networks:
             - connected
         depends_on:
