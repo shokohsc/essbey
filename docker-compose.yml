@@ -205,24 +205,24 @@ services:
     #         - "traefik.frontend.rule=Host:bamf.shokohsc"
     #         - "traefik.port=8000"
 
-    gazee: # Comics connected server
-        container_name: gazee
-        image: linuxserver/gazee
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-        volumes:
-            - ./config/gazee:/config
-            - ./shared/gazee:/comics
-        networks:
-            - connected
-        depends_on:
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:gazee.shokohsc"
-            - "traefik.port=4242"
+    # gazee: # Comics connected server
+    #     container_name: gazee
+    #     image: linuxserver/gazee
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #     volumes:
+    #         - ./config/gazee:/config
+    #         - ./shared/gazee:/comics
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - traefik
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:gazee.shokohsc"
+    #         - "traefik.port=4242"
 
     commander: # Web ui server admin
         container_name: commander
@@ -504,3 +504,59 @@ services:
     #         - "traefik.frontend.rule=Host:wekan.shokohsc"
     #         - "traefik.docker.network=seedbox_connected"
     #         - "traefik.port=8080"
+
+    comic-reader:
+        container_name: comic-reader
+        image: shokohsc/server-comic-reader
+        tty: true
+        volumes:
+            - /var/www/symfony
+            - ./shared/gazee:/var/www/symfony/public/files
+        networks:
+            - connected
+
+    php-fpm:
+        container_name: php-fpm
+        image: shokohsc/alpine-php-fpm
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes_from:
+            - comic-reader
+        networks:
+            - connected
+        depends_on:
+            - comic-reader
+
+    nginx:
+        container_name: nginx
+        image: shokohsc/alpine-nginx
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes_from:
+            - comic-reader
+        networks:
+            - connected
+        depends_on:
+            - php-fpm
+            - comic-reader
+
+    varnish:
+        container_name: varnish
+        image: shokohsc/alpine-varnish
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        networks:
+            - connected
+        depends_on:
+            - nginx
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:comics.shokohsc"
+            - "traefik.port=80"
