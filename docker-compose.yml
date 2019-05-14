@@ -512,7 +512,7 @@ services:
         volumes:
             - /var/www/symfony
             - ./shared/gazee:/var/www/symfony/public/files/weekly
-            - /media/nuc/WD2To/media/comics:/var/www/symfony/public/files/all
+            - /media/nuc/WD2To/comics:/var/www/symfony/public/files/all
         networks:
             - connected
 
