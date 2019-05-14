@@ -511,7 +511,8 @@ services:
         tty: true
         volumes:
             - /var/www/symfony
-            - ./shared/gazee:/var/www/symfony/public/files
+            - ./shared/gazee:/var/www/symfony/public/files/weekly
+            - /media/nuc/WD2To/media/comics:/var/www/symfony/public/files/all
         networks:
             - connected
 
