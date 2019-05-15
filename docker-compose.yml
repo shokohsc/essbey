@@ -20,19 +20,19 @@ networks:
 
 services:
 
-    ouroboros: # Auto update container images and cleanup
-        container_name: ouroboros
-        hostname: ouroboros
-        image: pyouroboros/ouroboros
-        environment:
-            - CLEANUP=true
-            - INTERVAL=300
-            - LOG_LEVEL=error
-            - SELF_UPDATE=true
-            - TZ=Europe/Paris
-        restart: ${RESTART_MODE}
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
+    # ouroboros: # Auto update container images and cleanup
+    #     container_name: ouroboros
+    #     hostname: ouroboros
+    #     image: pyouroboros/ouroboros
+    #     environment:
+    #         - CLEANUP=true
+    #         - INTERVAL=300
+    #         - LOG_LEVEL=error
+    #         - SELF_UPDATE=true
+    #         - TZ=Europe/Paris
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
 
     samba: # SMB server
         container_name: samba
