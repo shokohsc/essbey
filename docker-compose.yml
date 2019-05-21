@@ -541,6 +541,8 @@ services:
             - comic-reader
         networks:
             - connected
+        links:
+            - "php-fpm-comic:php-fpm"
         depends_on:
             - php-fpm-comic
             - comic-reader
@@ -554,6 +556,8 @@ services:
             TZ: ${TIMEZONE}
         networks:
             - connected
+        links:
+            - "nginx-comic:nginx"
         depends_on:
             - nginx-comic
             - traefik
@@ -597,6 +601,8 @@ services:
             - wol-web
         networks:
             - connected
+        links:
+            - "php-fpm-wol:php-fpm"
         depends_on:
             - php-fpm-wol
             - wol-web
@@ -610,6 +616,8 @@ services:
             TZ: ${TIMEZONE}
         networks:
             - connected
+        links:
+            - "nginx-wol:nginx"
         depends_on:
             - nginx-wol
             - traefik
