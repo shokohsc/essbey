@@ -508,6 +508,7 @@ services:
     comic-reader:
         container_name: comic-reader
         image: shokohsc/server-comic-reader
+        restart: ${RESTART_MODE}
         tty: true
         volumes:
             - /var/www/symfony
@@ -519,6 +520,7 @@ services:
     php-fpm-comic:
         container_name: php-fpm-comic
         image: shokohsc/alpine-php-fpm
+        restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
@@ -533,6 +535,7 @@ services:
     nginx-comic:
         container_name: nginx-comic
         image: shokohsc/alpine-nginx
+        restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
@@ -556,6 +559,7 @@ services:
     wol-web:
         container_name: wol-web
         image: shokohsc/server-wol
+        restart: ${RESTART_MODE}
         tty: true
         volumes:
             - /var/www/symfony
@@ -565,6 +569,7 @@ services:
     php-fpm-wol:
         container_name: php-fpm-wol
         image: shokohsc/alpine-php-fpm
+        restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
@@ -581,6 +586,7 @@ services:
     nginx-wol:
         container_name: nginx-wol
         image: shokohsc/alpine-nginx
+        restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
