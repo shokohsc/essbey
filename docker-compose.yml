@@ -516,7 +516,7 @@ services:
         networks:
             - connected
 
-    php-fpm:
+    php-fpm-comic:
         container_name: php-fpm
         image: shokohsc/alpine-php-fpm
         environment:
@@ -530,7 +530,7 @@ services:
         depends_on:
             - comic-reader
 
-    nginx:
+    nginx-comic:
         container_name: nginx
         image: shokohsc/alpine-nginx
         environment:
@@ -541,11 +541,61 @@ services:
             - comic-reader
         networks:
             - connected
+        links:
+            - "php-fpm-comic:php-fpm"
         depends_on:
-            - php-fpm
+            - php-fpm-comic
             - comic-reader
             - traefik
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:comics.shokohsc"
+            - "traefik.port=80"
+
+
+    wol-web:
+        container_name: wol-web
+        image: shokohsc/server-wol
+        tty: true
+        volumes:
+            - /var/www/symfony
+        networks:
+            - connected
+
+    php-fpm-wol:
+        container_name: php-fpm
+        image: shokohsc/alpine-php-fpm
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        volumes_from:
+            - wol-web
+        networks:
+            - connected
+        depends_on:
+            - wol-web
+
+    nginx-wol:
+        container_name: nginx
+        image: shokohsc/alpine-nginx
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes_from:
+            - wol-web
+        networks:
+            - connected
+        links:
+            - "php-fpm-wol:php-fpm"
+        depends_on:
+            - php-fpm-wol
+            - wol-web
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:wol.shokohsc"
             - "traefik.port=80"
