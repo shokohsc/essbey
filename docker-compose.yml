@@ -516,8 +516,8 @@ services:
         networks:
             - connected
 
-    php-fpm-comic:
-        container_name: php-fpm-comic
+    php-fpm:
+        container_name: php-fpm
         image: shokohsc/alpine-php-fpm
         environment:
             PGID: ${PGID}
@@ -530,8 +530,8 @@ services:
         depends_on:
             - comic-reader
 
-    nginx-comic:
-        container_name: nginx-comic
+    nginx:
+        container_name: nginx
         image: shokohsc/alpine-nginx
         environment:
             PGID: ${PGID}
@@ -541,87 +541,11 @@ services:
             - comic-reader
         networks:
             - connected
-        links:
-            - "php-fpm-comic:php-fpm"
         depends_on:
-            - php-fpm-comic
+            - php-fpm
             - comic-reader
-
-    varnish-comic:
-        container_name: varnish-comic
-        image: shokohsc/alpine-varnish
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        networks:
-            - connected
-        links:
-            - "nginx-comic:nginx"
-        depends_on:
-            - nginx-comic
             - traefik
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:comics.shokohsc"
-            - "traefik.port=80"
-
-
-    wol-web:
-        container_name: wol-web
-        image: shokohsc/server-wol
-        tty: true
-        volumes:
-            - /var/www/symfony
-        networks:
-            - connected
-
-    php-fpm-wol:
-        container_name: php-fpm-wol
-        image: shokohsc/alpine-php-fpm
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes_from:
-            - wol-web
-        networks:
-            - connected
-        depends_on:
-            - wol-web
-
-    nginx-wol:
-        container_name: nginx-wol
-        image: shokohsc/alpine-nginx
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes_from:
-            - wol-web
-        networks:
-            - connected
-        links:
-            - "php-fpm-wol:php-fpm"
-        depends_on:
-            - php-fpm-wol
-            - wol-web
-
-    varnish-wol:
-        container_name: varnish-wol
-        image: shokohsc/alpine-varnish
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        networks:
-            - connected
-        links:
-            - "nginx-wol:nginx"
-        depends_on:
-            - nginx-wol
-            - traefik
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wol.shokohsc"
             - "traefik.port=80"
