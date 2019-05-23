@@ -517,7 +517,7 @@ services:
             - connected
 
     php-fpm-comic:
-        container_name: php-fpm
+        container_name: php-fpm-comic
         image: shokohsc/alpine-php-fpm
         environment:
             PGID: ${PGID}
@@ -531,7 +531,7 @@ services:
             - comic-reader
 
     nginx-comic:
-        container_name: nginx
+        container_name: nginx-comic
         image: shokohsc/alpine-nginx
         environment:
             PGID: ${PGID}
@@ -563,7 +563,7 @@ services:
             - connected
 
     php-fpm-wol:
-        container_name: php-fpm
+        container_name: php-fpm-wol
         image: shokohsc/alpine-php-fpm
         environment:
             PGID: ${PGID}
@@ -579,7 +579,7 @@ services:
             - wol-web
 
     nginx-wol:
-        container_name: nginx
+        container_name: nginx-wol
         image: shokohsc/alpine-nginx
         environment:
             PGID: ${PGID}
