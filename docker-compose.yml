@@ -333,8 +333,8 @@ services:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/datasources:/etc/grafana/datasources
             - ./config/grafana/dashboards:/etc/grafana/dashboards
-            - ./config/grafana/setup.sh:/etc/grafana/setup.sh
-        entrypoint: /etc/grafana/setup.sh
+            - ./config/grafana/setup.sh:/setup.sh
+        entrypoint: /setup.sh
         networks:
             - connected
             - hidden
