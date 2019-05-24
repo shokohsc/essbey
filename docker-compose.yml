@@ -605,3 +605,20 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:wol.shokohsc"
             - "traefik.port=80"
+
+    paint-web:
+        container_name: paint-web
+        image: shokohsc/mini-paint
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        networks:
+            - connected
+        depends_on:
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:paint.shokohsc"
+            - "traefik.port=80"
