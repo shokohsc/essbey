@@ -578,6 +578,8 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         volumes_from:
             - wol-web
+        security_opt:
+            - apparmor:unconfined
         networks:
             - connected
         depends_on:
