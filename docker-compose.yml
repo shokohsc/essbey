@@ -249,6 +249,7 @@ services:
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
+            VERSION: latest
             PLEX_CLAIM: ${PLEX_CLAIM}
             ADVERTISE_IP: ${PLEX_ROOT_URL}
             TZ: ${TIMEZONE}
