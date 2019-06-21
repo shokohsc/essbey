@@ -103,14 +103,14 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        # command: "-r 192.168.1.0/24 -p 9091"
-        command: "-r 192.168.1.0/24 -p 9091 -v swe1.freevpn4you.net;freevpn4you;6443078;16977"
+        command: "-r 192.168.1.0/24 -p 9091"
+        # command: "-r 192.168.1.0/24 -p 9091 -v 118.47.140.42;freevpn4you;6443078;1195"
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
         volumes:
-            # - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
-            - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
+            - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
+            # - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
         environment:
             TZ: ${TIMEZONE}
         devices:
