@@ -104,7 +104,7 @@ services:
             - net_admin
         restart: ${RESTART_MODE}
         # command: "-r 192.168.1.0/24 -p 9091"
-        command: "-r 192.168.1.0/24 -p 9091 -v de4.vpnbook.com;vpnbook;6C9NUxcT;25000"
+        command: "-r 192.168.1.0/24 -p 9091 -v pl226.vpnbook.com;vpnbook;6C9NUxcT;25000"
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
