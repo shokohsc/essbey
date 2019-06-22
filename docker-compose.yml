@@ -111,7 +111,6 @@ services:
             - "9443"
         ports:
             - "32767:1194/udp"
-            - "943:943/udp"
         volumes:
             - ./config/openvpn-as:/config
         networks:
