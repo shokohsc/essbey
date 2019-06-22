@@ -80,22 +80,46 @@ services:
         labels:
             - "traefik.enable=false"
 
+    # openvpn: # Internal vpn
+    #     container_name: openvpn
+    #     image: kylemanna/openvpn
+    #     cap_add:
+    #         - net_admin
+    #     restart: ${RESTART_MODE}
+    #     expose:
+    #         - "5555"
+    #     ports:
+    #         - "32767:1194/udp"
+    #     volumes:
+    #         - ./config/openvpn:/etc/openvpn
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
+
     openvpn: # Internal vpn
         container_name: openvpn
-        image: kylemanna/openvpn
+        image: linuxserver/openvpn-as
         cap_add:
-            - net_admin
+            - NET_ADMIN
         restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
         expose:
-            - "5555"
+            - "9443"
         ports:
             - "32767:1194/udp"
+            - "943:943/udp"
         volumes:
-            - ./config/openvpn:/etc/openvpn
+            - ./config/openvpn-as:/config
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:openvpn.shokohsc"
+            - "traefik.port=943"
 
     gateway: # Torrenting vpn
         container_name: gateway
