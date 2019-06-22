@@ -99,27 +99,28 @@ services:
 
     openvpn: # Internal vpn
         container_name: openvpn
-        image: linuxserver/openvpn-as
+        image: mace/openvpn-as
         cap_add:
             - NET_ADMIN
         restart: ${RESTART_MODE}
         environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
+        #     PGID: ${PGID}
+        #     PUID: ${PUID}
+            # TZ: ${TIMEZONE}
+            INTERFACE: wlp58s0
         expose:
             - "5555" # for monitor container
         ports:
             - "32767:1194/udp"
         volumes:
             - ./config/openvpn-as:/config
+            - /etc/localtime:/etc/localtime:ro
         networks:
             - connected
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:openvpn.shokohsc"
             - "traefik.port=943"
-            - "traefik.protocol=https"
 
     gateway: # Torrenting vpn
         container_name: gateway
