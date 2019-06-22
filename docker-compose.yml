@@ -119,6 +119,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:openvpn.shokohsc"
             - "traefik.port=943"
+            - "traefik.protocol=https"
 
     gateway: # Torrenting vpn
         container_name: gateway
