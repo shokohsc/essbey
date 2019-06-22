@@ -108,7 +108,7 @@ services:
             PUID: ${PUID}
             TZ: ${TIMEZONE}
         expose:
-            - "9443"
+            - "5555" # for monitor container
         ports:
             - "32767:1194/udp"
         volumes:
