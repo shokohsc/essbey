@@ -20,20 +20,6 @@ volumes:
 
 services:
 
-    # ouroboros: # Auto update container images and cleanup
-    #     container_name: ouroboros
-    #     hostname: ouroboros
-    #     image: pyouroboros/ouroboros
-    #     environment:
-    #         - CLEANUP=true
-    #         - INTERVAL=300
-    #         - LOG_LEVEL=error
-    #         - SELF_UPDATE=true
-    #         - TZ=Europe/Paris
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - /var/run/docker.sock:/var/run/docker.sock
-
     samba: # SMB server
         container_name: samba
         image: dperson/samba
@@ -97,6 +83,20 @@ services:
         labels:
             - "traefik.enable=false"
 
+    adminvpn: # Admin openvpn
+        container_name: adminvpn
+        image: awalach/openvpn-web-ui
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/openvpn:/etc/openvpn
+            - ./config/adminvpn:/opt/openvpn-gui/db
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
+            - "traefik.port=8080"
+
     gateway: # Torrenting vpn
         container_name: gateway
         image: dperson/openvpn-client
@@ -120,7 +120,7 @@ services:
         dns: 8.8.8.8
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:transmission.shokohsc"
+            - "traefik.frontend.rule=Host:transmission.${DOMAIN}"
             - "traefik.port=9091"
 
     traefik: # Reverse proxy
@@ -139,7 +139,7 @@ services:
             - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:traefik.shokohsc"
+            - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
             - "traefik.port=8080"
 
     portainer: # Docker management
@@ -154,7 +154,7 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:portainer.shokohsc"
+            - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
             - "traefik.port=9000"
 
     transmission: # Torrent client
@@ -168,63 +168,6 @@ services:
         network_mode: "service:gateway"
         depends_on:
             - gateway
-
-    # bamf: # Comics server
-    #     container_name: bamf
-    #     build:
-    #         context: bamf
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #     volumes:
-    #         - ./config/bamf:/virt/media
-    #         - ./shared/gazee:/virt/files
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:bamf.shokohsc"
-    #         - "traefik.port=8000"
-
-    # bamf: # Comics server
-    #     container_name: bamf
-    #     image: hmhrex/tenma
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #     volumes:
-    #         - ./shared/gazee:/tenma/files
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:bamf.shokohsc"
-    #         - "traefik.port=8000"
-
-    # gazee: # Comics connected server
-    #     container_name: gazee
-    #     image: linuxserver/gazee
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #     volumes:
-    #         - ./config/gazee:/config
-    #         - ./shared/gazee:/comics
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:gazee.shokohsc"
-    #         - "traefik.port=4242"
 
     commander: # Web ui server admin
         container_name: commander
@@ -241,7 +184,7 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:commander.shokohsc"
+            - "traefik.frontend.rule=Host:commander.${DOMAIN}"
             - "traefik.port=8000"
 
     plex: # Media server
@@ -282,48 +225,8 @@ services:
         hostname: "plex"
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:plex.shokohsc"
+            - "traefik.frontend.rule=Host:plex.${DOMAIN}"
             - "traefik.port=32400"
-
-    # music: # Music server
-    #     container_name: music
-    #     image: linuxserver/airsonic
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         TZ: ${TIMEZONE}
-    #     volumes:
-    #         - ./config/airsonic:/config
-    #         - /media/nuc/WD2To/music:/music
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:music.shokohsc"
-    #         - "traefik.port=4040"
-
-    # beets: # Music manager
-    #     container_name: beets
-    #     image: linuxserver/beets
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #     volumes:
-    #         - ./config/beets:/config
-    #         - /media/nuc/WD2To/music:/music
-    #         - /media/nuc/WD2To/beets-music:/downloads
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - traefik
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:beets.shokohsc"
-    #         - "traefik.port=8337"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
@@ -349,7 +252,7 @@ services:
             - cadvisor
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:grafana.shokohsc"
+            - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
             - "traefik.docker.network=seedbox_connected"
             - "traefik.port=3000"
 
@@ -419,34 +322,6 @@ services:
         networks:
             - hidden
 
-    # rocketchat: # Rocketchat
-    #     image: rocket.chat
-    #     container_name: rocketchat
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         ROOT_URL: ${RC_ROOT_URL}
-    #         MONGO_URL: ${MONGO_URL}/rocketchat
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - traefik
-    #         - mongo
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:rocketchat.shokohsc"
-    #         - "traefik.docker.network=seedbox_connected"
-    #         - "traefik.port=3000"
-
-    # mongo: # Rocketchat requirement
-    #     image: mongo
-    #     container_name: mongo
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - ./config/mongo:/data/db
-    #     networks:
-    #         - hidden
-
     heimdall: # Heimdall
         image: linuxserver/heimdall
         container_name: heimdall
@@ -463,7 +338,7 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:heimdall.shokohsc"
+            - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
             - "traefik.port=80"
 
     monitor: # Openvpn monitor
@@ -486,27 +361,8 @@ services:
             - openvpn
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:monitor.shokohsc"
+            - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
             - "traefik.port=80"
-
-    # wekan: # Wekan
-    #     image: quay.io/wekan/wekan
-    #     container_name: wekan
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         ROOT_URL: ${WK_ROOT_URL}
-    #         MONGO_URL: ${MONGO_URL}/wekan
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - traefik
-    #         - mongo
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:wekan.shokohsc"
-    #         - "traefik.docker.network=seedbox_connected"
-    #         - "traefik.port=8080"
 
     comic-reader:
         container_name: comic-reader
@@ -518,7 +374,7 @@ services:
             - ./shared/gazee:/var/www/symfony/public/files/weekly
             - /media/nuc/WD2To/comics:/var/www/symfony/public/files/all
         networks:
-            - connected
+            - hidden
 
     php-fpm-comic:
         container_name: php-fpm-comic
@@ -531,7 +387,7 @@ services:
         volumes_from:
             - comic-reader
         networks:
-            - connected
+            - hidden
         depends_on:
             - comic-reader
 
@@ -546,6 +402,7 @@ services:
         volumes_from:
             - comic-reader
         networks:
+            - hidden
             - connected
         links:
             - "php-fpm-comic:php-fpm"
@@ -555,7 +412,7 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:comics.shokohsc"
+            - "traefik.frontend.rule=Host:comics.${DOMAIN}"
             - "traefik.port=80"
 
 
@@ -567,7 +424,7 @@ services:
         volumes:
             - /var/www/symfony
         networks:
-            - connected
+            - hidden
 
     php-fpm-wol:
         container_name: php-fpm-wol
@@ -582,7 +439,7 @@ services:
         volumes_from:
             - wol-web
         networks:
-            - connected
+            - hidden
         depends_on:
             - wol-web
 
@@ -597,6 +454,7 @@ services:
         volumes_from:
             - wol-web
         networks:
+            - hidden
             - connected
         links:
             - "php-fpm-wol:php-fpm"
@@ -606,7 +464,7 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wol.shokohsc"
+            - "traefik.frontend.rule=Host:wol.${DOMAIN}"
             - "traefik.port=80"
 
     paint-web:
@@ -623,5 +481,5 @@ services:
             - traefik
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:paint.shokohsc"
+            - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
