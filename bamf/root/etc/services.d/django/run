@@ -1,3 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-exec /virt/bin/python3 /virt/manage.py runserver 0.0.0.0:8000
