@@ -83,20 +83,6 @@ services:
         labels:
             - "traefik.enable=false"
 
-    adminvpn: # Admin openvpn
-        container_name: adminvpn
-        image: awalach/openvpn-web-ui
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-            - ./config/adminvpn:/opt/openvpn-gui/db
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
-            - "traefik.port=8080"
-
     gateway: # Torrenting vpn
         container_name: gateway
         image: dperson/openvpn-client
