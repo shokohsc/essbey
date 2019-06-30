@@ -31,7 +31,7 @@ services:
         volumes:
             - ./download/complete:/mount/downloads
             - ./shared:/mount/shared
-            - /media/nuc/WD2To:/mount/media
+            - /media/nuc:/mount/media
         networks:
             - connected
         labels:
@@ -47,7 +47,7 @@ services:
         volumes:
             - ./download/complete:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
-            - /media/nuc/WD2To:/home/shokohsc/upload/media
+            - /media/nuc:/home/shokohsc/upload/media
         networks:
             - connected
         labels:
@@ -163,7 +163,7 @@ services:
             - /:/mnt/fs
             - ./download/complete:/root/downloads
             - ./shared:/root/shared
-            - /media/nuc/WD2To:/root/media
+            - /media/nuc:/root/media
         networks:
             - connected
         depends_on:
@@ -202,7 +202,7 @@ services:
         volumes:
             - ./config/plex:/config
             - ./work/plex:/transcode
-            - /media/nuc/WD2To:/data/media
+            - /media/nuc:/data/media
             - ./download/complete:/data/downloads
         networks:
             - connected
