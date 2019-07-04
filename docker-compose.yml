@@ -69,6 +69,7 @@ services:
     openvpn: # Internal vpn
         container_name: openvpn
         image: kylemanna/openvpn
+        tty: true
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
@@ -76,6 +77,8 @@ services:
             - "5555"
         ports:
             - "32767:1194/udp"
+        logging:
+            driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
         networks:
