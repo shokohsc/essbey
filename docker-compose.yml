@@ -402,6 +402,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=80"
 
 
@@ -454,6 +455,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:wol.${DOMAIN}"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=80"
 
     paint-web:
