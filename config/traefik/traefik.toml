@@ -41,8 +41,38 @@ defaultEntryPoints = ["http", "https"]
   address = ":443"
     [entryPoints.https.tls]
       [[entryPoints.https.tls.certificates]]
-      certFile = "/etc/traefik/certs/cert.pem"
-      keyFile = "/etc/traefik/certs/key.pem"
+      certFile = "/etc/traefik/certs/comics.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/comics.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/commander.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/commander.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/grafana.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/grafana.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/heimdall.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/heimdall.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/monitor.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/monitor.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/paint.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/paint.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/plex.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/plex.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/portainer.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/portainer.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/traefik.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/traefik.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/transmission.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/transmission.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/wol.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/wol.shokohsc-key.pem"
 
 ################################################################
 # Traefik logs configuration
