@@ -220,6 +220,24 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    gateway-sidekick:
+        container_name: gateway-sidekick
+        image: shokohsc/gateway-sidekick
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            HOST_TARGET: 'http://gateway:9091'
+            VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
+        volumes:
+            - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - connected
+        depends_on:
+            - gateway
+
     traefik: # Reverse proxy
         container_name: traefik
         image: traefik:1.7.16-alpine
