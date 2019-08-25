@@ -481,6 +481,8 @@ services:
         container_name: influxdb
         image: influxdb
         restart: ${RESTART_MODE}
+        ports:
+            - "8086:8086/tcp"
         networks:
             - hidden
         volumes:
@@ -489,15 +491,12 @@ services:
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
         image: shokohsc/miflora-mqtt-daemon
-        privileged: true
         cap_add:
             - net_admin
             - sys_admin
         restart: ${RESTART_MODE}
         volumes:
             - ./config/miflora/config.ini:/config/config.ini
-        networks:
-            - connected
-            - hidden
+        network: host
         depends_on:
             - influxdb
