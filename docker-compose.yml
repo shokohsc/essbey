@@ -484,7 +484,7 @@ services:
         ports:
             - "8086:8086/tcp"
         networks:
-            - hidden
+            - connected
         volumes:
             - influx_data:/var/lib/influxdb
 
