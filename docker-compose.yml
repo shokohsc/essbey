@@ -497,6 +497,6 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - ./config/miflora/config.ini:/config/config.ini
-        network: host
+        net: host
         depends_on:
             - influxdb
