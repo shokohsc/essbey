@@ -484,7 +484,7 @@ services:
         networks:
             - hidden
         volumes:
-            - influxdb_data:/var/lib/influxdb
+            - influx_data:/var/lib/influxdb
 
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
