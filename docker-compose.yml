@@ -488,7 +488,7 @@ services:
 
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
-        image: shokohsc/miflora-mqtt-daemnon
+        image: shokohsc/miflora-mqtt-daemon
         cap_add:
             - net_admin
             - sys_admin
