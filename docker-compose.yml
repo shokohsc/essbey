@@ -240,6 +240,7 @@ services:
             - pushgateway
             - nodeexporter
             - cadvisor
+            - influxdb
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
@@ -476,6 +477,15 @@ services:
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
 
+    influxdb: # InfluxDB
+        container_name: influxdb
+        image: influxdb
+        restart: ${RESTART_MODE}
+        networks:
+            - hidden
+        volumes:
+            - influxdb_data:/var/lib/influxdb
+
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
         image: shokohsc/miflora-mqtt-daemnon
@@ -488,12 +498,5 @@ services:
         networks:
             - connected
             - hidden
-
-    influxdb: # InfluxDB
-        container_name: influxdb
-        image: influxdb
-        restart: ${RESTART_MODE}
-        networks:
-            - hidden
-        volumes:
-            - influxdb_data:/var/lib/influxdb
+        depends_on:
+            - influxdb
