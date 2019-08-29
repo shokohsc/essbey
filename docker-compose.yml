@@ -16,7 +16,6 @@ networks:
 
 volumes:
     influx_data: {}
-    mosquitto_data: {}
     prometheus_data: {}
     grafana_data: {}
 
@@ -484,26 +483,14 @@ services:
         restart: ${RESTART_MODE}
         environment:
             INFLUXDB_DB: miflora
+            INFLUXDB_USER: miflora
+            INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
         ports:
             - "8086:8086/tcp"
         networks:
             - connected
         volumes:
             - influx_data:/var/lib/influxdb
-            - ./config/miflora/influxdb.conf:/etc/influxdb/influxdb.conf
-        depends_on:
-            - mosquitto
-
-    mosquitto:
-        container_name: mosquitto
-        image: eclipse-mosquitto
-        ports:
-            - "1883:1883/tcp"
-            - "9001:9001/tcp"
-        networks:
-            - connected
-        volumes:
-            - mosquitto_data:/mosquitto/data
 
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
@@ -513,7 +500,7 @@ services:
             - sys_admin
         restart: ${RESTART_MODE}
         volumes:
-            - ./config/miflora/config.ini:/config/config.ini
+            - ./config/miflora/config.py:/var/www/app/config.py
         network_mode: host
         depends_on:
-            - mosquitto
+            - influxdb
