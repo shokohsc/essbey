@@ -225,6 +225,10 @@ services:
         environment:
             GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
             GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+            GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
+            GF_SMTP_HOST: ${GF_SMTP_HOST}
+            GF_SMTP_USER: ${GF_SMTP_USER}
+            GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/datasources:/etc/grafana/datasources
