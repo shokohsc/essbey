@@ -6,6 +6,7 @@ This script receives MQTT data and saves those to InfluxDB.
 
 import re
 import os
+import json
 import datetime
 from typing import NamedTuple
 
@@ -18,10 +19,7 @@ INFLUXDB_PASSWORD = os.environ['INFLUXDB_PASSWORD']
 INFLUXDB_DATABASE = os.environ['INFLUXDB_DB']
 
 MQTT_ADDRESS = os.environ['MQTT_HOST']
-# MQTT_USER = os.environ['MQTT_USER']
-# MQTT_PASSWORD = os.environ['MQTT_PASSWORD']
-MQTT_TOPIC = os.environ['MQTT_TOPIC']  # [bme280|mijia]/[temperature|humidity|battery|status]
-MQTT_REGEX = 'miflora/([^/]+)/([^/]+)'
+MQTT_TOPIC = os.environ['MQTT_TOPIC']
 MQTT_CLIENT_ID = 'MQTTInfluxDBBridge'
 
 influxdb_client = InfluxDBClient(INFLUXDB_ADDRESS, 8086, INFLUXDB_USER, INFLUXDB_PASSWORD, None)
@@ -45,18 +43,14 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     print(msg.topic + ' ' + str(msg.payload))
-    sensor_data = _parse_mqtt_message(msg.payload.decode('utf-8'))
-    if sensor_data is not None:
-        _send_sensor_data_to_influxdb(sensor_data)
-
-
-def _parse_mqtt_message(payload):
-    light = payload.light
-    temperature = payload.temperature
-    moisture = payload.moisture
-    conductivity = payload.conductivity
-    battery = payload.battery
-    return SensorData(battery, temperature, moisture, light, conductivity)
+    sensor_data = SensorData(
+        msg.payload.battery,
+        msg.payload.temperature,
+        msg.payload.moisture,
+        msg.payload.light,
+        msg.payload.conductivity
+    )
+    _send_sensor_data_to_influxdb(sensor_data)
 
 
 def _send_sensor_data_to_influxdb(sensor_data):
@@ -64,7 +58,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
         {
             "measurement": "monitor_reading",
             "tags": {
-                "monitor": MQTT_REGEX
+                "monitor": MQTT_TOPIC
             },
             "time": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
             "fields": {
@@ -90,7 +84,6 @@ def main():
     _init_influxdb_database()
 
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
-    # mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
 
