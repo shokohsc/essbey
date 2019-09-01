@@ -506,12 +506,13 @@ services:
         networks:
             - connected
         volumes:
-            - ./config/miflora/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
             - mosquitto_data:/mosquitto/data
 
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
-        image: shokohsc/miflora-mqtt-daemon
+        build:
+            context: miflora-mqtt-daemon
         cap_add:
             - net_admin
             - sys_admin
