@@ -45,22 +45,18 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     print(msg.topic + ' ' + str(msg.payload))
-    sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
+    sensor_data = _parse_mqtt_message(msg.payload.decode('utf-8'))
     if sensor_data is not None:
         _send_sensor_data_to_influxdb(sensor_data)
 
 
-def _parse_mqtt_message(topic, payload):
-    match = re.match(MQTT_REGEX, topic)
-    if match:
-        light = match.group(1)
-        temperature = match.group(2)
-        moisture = match.group(3)
-        conductivity = match.group(4)
-        battery = match.group(5)
-        return SensorData(battery, temperature, moisture, light, conductivity)
-    else:
-        return None
+def _parse_mqtt_message(payload):
+    light = payload.light
+    temperature = payload.temperature
+    moisture = payload.moisture
+    conductivity = payload.conductivity
+    battery = payload.battery
+    return SensorData(battery, temperature, moisture, light, conductivity)
 
 
 def _send_sensor_data_to_influxdb(sensor_data):
