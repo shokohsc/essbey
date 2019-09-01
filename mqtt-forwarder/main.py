@@ -6,6 +6,7 @@ This script receives MQTT data and saves those to InfluxDB.
 
 import re
 import os
+import datetime
 from typing import NamedTuple
 
 import paho.mqtt.client as mqtt
@@ -27,9 +28,12 @@ influxdb_client = InfluxDBClient(INFLUXDB_ADDRESS, 8086, INFLUXDB_USER, INFLUXDB
 
 
 class SensorData(NamedTuple):
-    location: str
-    measurement: str
-    value: float
+    battery: int
+    temperature: float
+    moisture: int
+    light: int
+    conductivity: int
+
 
 
 def on_connect(client, userdata, flags, rc):
@@ -49,11 +53,12 @@ def on_message(client, userdata, msg):
 def _parse_mqtt_message(topic, payload):
     match = re.match(MQTT_REGEX, topic)
     if match:
-        location = match.group(1)
-        measurement = match.group(2)
-        if measurement == 'status':
-            return None
-        return SensorData(location, measurement, float(payload))
+        light = match.group(1)
+        temperature = match.group(2)
+        moisture = match.group(3)
+        conductivity = match.group(4)
+        battery = match.group(5)
+        return SensorData(battery, temperature, moisture, light, conductivity)
     else:
         return None
 
@@ -61,12 +66,17 @@ def _parse_mqtt_message(topic, payload):
 def _send_sensor_data_to_influxdb(sensor_data):
     json_body = [
         {
-            'measurement': sensor_data.measurement,
-            'tags': {
-                'location': sensor_data.location
+            "measurement": "monitor_reading",
+            "tags": {
+                "monitor": MQTT_REGEX
             },
-            'fields': {
-                'value': sensor_data.value
+            "time": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "fields": {
+                "battery": sensor_data.battery,
+                "temperature": sensor_data.temp,
+                "moisture": sensor_data.moisture,
+                "light": sensor_data.light,
+                "conductivity": sensor_data.conductivity
             }
         }
     ]
