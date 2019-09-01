@@ -1,13 +1,12 @@
-FROM python:2-alpine
+FROM python:3.7-alpine
 
-ENV WORKDIR "/app"
+LABEL maintainer="Nilhcem" \
+      description="MQTT to InfluxDB Bridge"
 
-ADD requirements.txt /app/requirements.txt
-ADD forwarder.py /app/forwarder.py
-ADD password /app/password
+COPY requirements.txt /
+RUN pip install -r /requirements.txt
 
-RUN pip install -r /app/requirements.txt
+COPY . /app
+WORKDIR /app
 
-WORKDIR ${WORKDIR}
-
-ENTRYPOINT ["python", "/app/forwarder.py", "--mqtt-host", "mosquitto", "--influx-host", "influxdb", "--influx-user", "miflora", "--influx-pass-file", "/app/password", "--influx-db", "miflora", "--node-name", "miflora", "--verbose"]
+CMD ["python3", "-u", "main.py"]
