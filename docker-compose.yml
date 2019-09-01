@@ -519,3 +519,14 @@ services:
         network_mode: host
         depends_on:
             - mosquitto
+
+    mqtt-forwarder:
+        container: mqtt-forwarder
+        build:
+            context: mqtt-forwarder
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        depends_on:
+            - influxdb
+            - mosquitto
