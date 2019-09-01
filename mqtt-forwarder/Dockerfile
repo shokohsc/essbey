@@ -6,7 +6,7 @@ ADD requirements.txt /app/requirements.txt
 ADD forwarder.py /app/forwarder.py
 ADD password /app/password
 
-RUN pip3 install -r /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
 WORKDIR ${WORKDIR}
 
