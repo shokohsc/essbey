@@ -37,18 +37,21 @@ class SensorData(NamedTuple):
 def on_connect(client, userdata, flags, rc):
     """ The callback for when the client receives a CONNACK response from the server."""
     print('Connected with result code ' + str(rc))
+
     client.subscribe(MQTT_TOPIC)
 
 
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
     print(msg.topic + ' ' + str(msg.payload))
+
+    parsed_json = json.loads(msg.payload)
     sensor_data = SensorData(
-        msg.payload.battery,
-        msg.payload.temperature,
-        msg.payload.moisture,
-        msg.payload.light,
-        msg.payload.conductivity
+        parsed_json['battery'],
+        parsed_json['temperature'],
+        parsed_json['moisture'],
+        parsed_json['light'],
+        parsed_json['conductivity']
     )
     _send_sensor_data_to_influxdb(sensor_data)
 
@@ -63,7 +66,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
             "time": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
             "fields": {
                 "battery": sensor_data.battery,
-                "temperature": sensor_data.temp,
+                "temperature": sensor_data.temperature,
                 "moisture": sensor_data.moisture,
                 "light": sensor_data.light,
                 "conductivity": sensor_data.conductivity
