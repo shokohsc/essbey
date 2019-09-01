@@ -515,7 +515,7 @@ services:
             - sys_admin
         restart: ${RESTART_MODE}
         volumes:
-            - ./config/miflora/config.py:/app/config.py
+            - ./config/miflora/config.ini:/app/config.ini
         network_mode: host
         depends_on:
             - mosquitto
