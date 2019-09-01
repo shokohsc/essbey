@@ -521,7 +521,7 @@ services:
             - mosquitto
 
     mqtt-forwarder:
-        container: mqtt-forwarder
+        container_name: mqtt-forwarder
         build:
             context: mqtt-forwarder
         restart: ${RESTART_MODE}
