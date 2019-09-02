@@ -45,7 +45,7 @@ def on_message(client, userdata, msg):
     parsed_json = json.loads(msg.payload.decode('utf-8'))
     sensor_data = SensorData(
         battery=parsed_json['battery'],
-        float(temperature=parsed_json['temperature']),
+        temperature=float(parsed_json['temperature']),
         moisture=parsed_json['moisture'],
         light=parsed_json['light'],
         conductivity=parsed_json['conductivity']
