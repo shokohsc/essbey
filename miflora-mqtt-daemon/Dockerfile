@@ -12,6 +12,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 ADD requirements.txt /app/requirements.txt
 ADD miflora-mqtt-daemon.py /app/miflora-mqtt-daemon.py
-ADD config.ini /app/config.ini
 
 CMD [ "python3", "./miflora-mqtt-daemon.py" ]
