@@ -60,7 +60,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
             "tags": {
                 "monitor": MQTT_TOPIC
             },
-            "time": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "time": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
             "fields": {
                 "battery": sensor_data.battery,
                 "temperature": sensor_data.temperature,
