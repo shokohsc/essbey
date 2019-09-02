@@ -15,6 +15,8 @@ networks:
         internal: true
 
 volumes:
+    influx_data: {}
+    mosquitto_data: {}
     prometheus_data: {}
     grafana_data: {}
 
@@ -224,6 +226,12 @@ services:
         environment:
             GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
             GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+            GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
+            GF_SMTP_HOST: ${GF_SMTP_HOST}
+            GF_SMTP_USER: ${GF_SMTP_USER}
+            GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
+            GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
+            GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/datasources:/etc/grafana/datasources
@@ -239,6 +247,7 @@ services:
             - pushgateway
             - nodeexporter
             - cadvisor
+            - influxdb
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
@@ -474,3 +483,60 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
+
+    influxdb: # InfluxDB
+        container_name: influxdb
+        image: influxdb
+        restart: ${RESTART_MODE}
+        environment:
+            INFLUXDB_DB: miflora
+            INFLUXDB_USER: miflora
+            INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+        networks:
+            - connected
+        volumes:
+            - influx_data:/var/lib/influxdb
+
+    mosquitto: # Mosquitto mqtt broker
+        container_name: mosquitto
+        image: eclipse-mosquitto
+        restart: ${RESTART_MODE}
+        ports:
+            - "1883:1883/tcp"
+        networks:
+            - connected
+        volumes:
+            - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            - mosquitto_data:/mosquitto/data
+
+    miflora-daemon: # Miflora daemon
+        container_name: miflora-daemon
+        build:
+            context: miflora-mqtt-daemon
+        cap_add:
+            - net_admin
+            - sys_admin
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/miflora/config.ini:/app/config.ini
+        network_mode: host
+        depends_on:
+            - mosquitto
+
+    mqtt-forwarder:
+        container_name: mqtt-forwarder
+        build:
+            context: mqtt-forwarder
+        restart: ${RESTART_MODE}
+        environment:
+            INFLUXDB_HOST: influxdb
+            INFLUXDB_DB: miflora
+            INFLUXDB_USER: miflora
+            INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+            MQTT_HOST: mosquitto
+            MQTT_TOPIC: ${MQTT_TOPIC}
+        networks:
+            - connected
+        depends_on:
+            - influxdb
+            - mosquitto
