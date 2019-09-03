@@ -118,7 +118,7 @@ services:
         container_name: traefik
         image: traefik
         restart: ${RESTART_MODE}
-        command: --api --docker
+        command: --api --docker --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0"
         ports:
             - "80:80"
             - "443:443"
