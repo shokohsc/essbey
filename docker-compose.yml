@@ -118,7 +118,7 @@ services:
         container_name: traefik
         image: traefik
         restart: ${RESTART_MODE}
-        command: --api --docker --web.metrics.prometheus --web.metrics.prometheus.buckets="0.1,0.3,1.2,5.0"
+        command: --api --docker --metrics.prometheus --metrics.prometheus.buckets="0.1,0.3,1.2,5.0"
         ports:
             - "80:80"
             - "443:443"
@@ -269,6 +269,7 @@ services:
             - '--storage.tsdb.retention=24h'
             - '--web.enable-lifecycle'
         networks:
+            - connected
             - hidden
 
     alertmanager: # Grafana requirement
