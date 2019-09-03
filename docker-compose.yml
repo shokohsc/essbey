@@ -118,7 +118,7 @@ services:
         container_name: traefik
         image: traefik
         restart: ${RESTART_MODE}
-        command: --api --docker --metrics --metrics.prometheus=true
+        command: --api --docker --metrics --metrics.prometheus
         ports:
             - "80:80"
             - "443:443"
