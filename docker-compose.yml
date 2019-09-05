@@ -107,7 +107,8 @@ services:
         devices:
             - "/dev/net/tun:/dev/net/tun"
         networks:
-            - connected
+            connected:
+                ipv4_address: 172.16.0.63
         dns: 8.8.8.8
         labels:
             - "traefik.enable=true"
