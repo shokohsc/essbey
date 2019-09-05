@@ -233,6 +233,7 @@ services:
             GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
             GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
             GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
+            GF_INSTALL_PLUGINS: grafana-piechart-panel
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/datasources:/etc/grafana/datasources
