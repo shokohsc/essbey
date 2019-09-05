@@ -485,6 +485,17 @@ services:
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
 
+    telegraf: # Telegraf
+        container_name: telegraf
+        image: telegraf
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        volumes:
+            - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+        depends_on:
+            - influxdb
+
     influxdb: # InfluxDB
         container_name: influxdb
         image: influxdb
