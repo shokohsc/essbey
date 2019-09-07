@@ -511,6 +511,20 @@ services:
         volumes:
             - influx_data:/var/lib/influxdb
 
+    chronograf: # InfluxDB Admin UI
+        image: chronograf
+        container_name: chronograf
+        restart: ${RESTART_MODE}
+        command: --influxdb-url=http://influxdb:8086
+        networks:
+            - connected
+        depends_on:
+            - influxdb
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
+            - "traefik.port=8888"
+
     mosquitto: # Mosquitto mqtt broker
         container_name: mosquitto
         image: eclipse-mosquitto
