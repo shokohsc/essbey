@@ -19,6 +19,7 @@ volumes:
     mosquitto_data: {}
     prometheus_data: {}
     grafana_data: {}
+    minecraft_data: {}
     minecraft_adventure_data: {}
     minecraft_creative_data: {}
     minecraft_survival_data: {}
@@ -571,9 +572,28 @@ services:
             - influxdb
             - mosquitto
 
+    minecraft:
+        container_name: minecraft
+        image: itzg/minecraft-server
+        restart: ${RESTART_MODE}
+        environment:
+            EULA: 'TRUE'
+            SERVER_NAME: 'minecraft'
+            DIFFICULTY: normal
+            ONLINE_MODE: 'false'
+            PLAYER_IDLE_TIMEOUT: 10
+        ports:
+            - "25565:25565/tcp"
+        volumes:
+            - minecraft_data:/data
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
     minecraft-adventure:
         container_name: minecraft-adventure
-        image: itzg/minecraft-server
+        image: itzg/minecraft-bedrock-server
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
@@ -583,7 +603,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "25565:25565/tcp"
+            - "19131:19132/udp"
         volumes:
             - minecraft_adventure_data:/data
         networks:
@@ -593,7 +613,7 @@ services:
 
     minecraft-creative:
         container_name: minecraft-creative
-        image: itzg/minecraft-server
+        image: itzg/minecraft-bedrock-server
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
@@ -603,7 +623,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "25566:25565/tcp"
+            - "19132:19132/udp"
         volumes:
             - minecraft_creative_data:/data
         networks:
@@ -613,7 +633,7 @@ services:
 
     minecraft-survival:
         container_name: minecraft-survival
-        image: itzg/minecraft-server
+        image: itzg/minecraft-bedrock-server
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
@@ -623,7 +643,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "25567:25565/tcp"
+            - "19133:19132/udp"
         volumes:
             - minecraft_survival_data:/data
         networks:
