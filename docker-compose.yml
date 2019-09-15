@@ -19,6 +19,9 @@ volumes:
     mosquitto_data: {}
     prometheus_data: {}
     grafana_data: {}
+    minecraft_adventure_data: {}
+    minecraft_creative_data: {}
+    minecraft_survival_data: {}
 
 services:
 
@@ -567,3 +570,63 @@ services:
         depends_on:
             - influxdb
             - mosquitto
+
+    minecraft-adventure:
+        container_name: minecraft-adventure
+        image: itzg/minecraft-bedrock-server
+        restart: ${RESTART_MODE}
+        environment:
+            EULA: 'TRUE'
+            SERVER_NAME: 'adventure'
+            GAMEMODE: adventure
+            DIFFICULTY: normal
+            ONLINE_MODE: 'false'
+            PLAYER_IDLE_TIMEOUT: 10
+        ports:
+            - "19131:19132/udp"
+        volumes:
+            - minecraft_adventure_data:/data
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
+    minecraft-creative:
+        container_name: minecraft-creative
+        image: itzg/minecraft-bedrock-server
+        restart: ${RESTART_MODE}
+        environment:
+            EULA: 'TRUE'
+            SERVER_NAME: 'creative'
+            GAMEMODE: creative
+            DIFFICULTY: normal
+            ONLINE_MODE: 'false'
+            PLAYER_IDLE_TIMEOUT: 10
+        ports:
+            - "19132:19132/udp"
+        volumes:
+            - minecraft_creative_data:/data
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
+    minecraft-survival:
+        container_name: minecraft-survival
+        image: itzg/minecraft-bedrock-server
+        restart: ${RESTART_MODE}
+        environment:
+            EULA: 'TRUE'
+            SERVER_NAME: 'survival'
+            GAMEMODE: survival
+            DIFFICULTY: normal
+            ONLINE_MODE: 'false'
+            PLAYER_IDLE_TIMEOUT: 10
+        ports:
+            - "19133:19132/udp"
+        volumes:
+            - minecraft_survival_data:/data
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
