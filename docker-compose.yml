@@ -603,7 +603,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "19131:25565"
+            - "19131:19132"
         volumes:
             - minecraft_adventure_data:/data
         networks:
@@ -623,7 +623,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "19132:25565"
+            - "19132:19132"
         volumes:
             - minecraft_creative_data:/data
         networks:
@@ -643,7 +643,7 @@ services:
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
         ports:
-            - "19133:25565"
+            - "19133:19132"
         volumes:
             - minecraft_survival_data:/data
         networks:
