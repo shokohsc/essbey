@@ -20,9 +20,6 @@ volumes:
     prometheus_data: {}
     grafana_data: {}
     minecraft_data: {}
-    minecraft_adventure_data: {}
-    minecraft_creative_data: {}
-    minecraft_survival_data: {}
 
 services:
 
