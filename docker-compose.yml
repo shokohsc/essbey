@@ -579,11 +579,11 @@ services:
             DIFFICULTY: normal
             ONLINE_MODE: 'false'
             PLAYER_IDLE_TIMEOUT: 10
-            LEVEL_SEED: ${MINECRAFT_SEED}
         ports:
             - "25565:25565/tcp"
         volumes:
             - minecraft_data:/data
+            - ./config/minecraft/server.properties:/data/server.properties
         networks:
             - connected
         labels:
