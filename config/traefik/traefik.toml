@@ -56,6 +56,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/heimdall.shokohsc.pem"
       keyFile = "/etc/traefik/certs/heimdall.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/kibana.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/kibana.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/monitor.shokohsc.pem"
       keyFile = "/etc/traefik/certs/monitor.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
