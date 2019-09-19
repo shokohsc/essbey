@@ -48,6 +48,8 @@ services:
         networks:
             - connected
             - hidden
+        depends_on:
+            - elasticsearch
         labels:
             - "kibana.enable=true"
             - "kibana.frontend.rule=Host:kibana.${DOMAIN}"
@@ -69,10 +71,9 @@ services:
             - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
         networks:
             - hidden
-        labels:
-            - "kibana.enable=true"
-            - "kibana.frontend.rule=Host:kibana.${DOMAIN}"
-            - "traefik.port=5601"
+        depends_on:
+            - elasticsearch
+            - kibana
         logging:
             options:
                 max-size: "100k"
