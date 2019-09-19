@@ -12,4 +12,7 @@ processors:
 - add_cloud_metadata: ~
 
 output.elasticsearch:
-  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+  hosts: 'elasticsearch:9200'
+
+setup.kibana:
+  host: "kibana:5601"
