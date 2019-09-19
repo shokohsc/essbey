@@ -561,12 +561,12 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "frequency": "5m",
         "handler": 1,
         "message": "Miflora battery level low !\nJacob.",
         "name": "Battery alert",
-        "noDataState": "no_data",
+        "noDataState": "keep_state",
         "notifications": []
       },
       "aliasColors": {},
@@ -731,11 +731,11 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
-        "frequency": "60s",
+        "executionErrorState": "keep_state",
+        "frequency": "5m",
         "handler": 1,
         "name": "Moisture alert",
-        "noDataState": "no_data",
+        "noDataState": "keep_state",
         "notifications": []
       },
       "aliasColors": {},
@@ -1297,5 +1297,5 @@
   "timezone": "",
   "title": "Miflora",
   "uid": "_SeoNrKWk",
-  "version": 3
+  "version": 4
 }
