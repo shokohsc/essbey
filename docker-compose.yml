@@ -70,6 +70,7 @@ services:
         image: docker.elastic.co/beats/filebeat:7.3.2
         restart: ${RESTART_MODE}
         command: filebeat -e -strict.perms=false
+        user: root
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - /var/lib/docker/containers:/var/lib/docker/containers:ro
