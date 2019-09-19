@@ -42,8 +42,8 @@ services:
             - hidden
         logging:
             options:
-                max-size: "100k"
-                max-file: "5"
+                max-size: "50k"
+                max-file: "2"
 
     kibana: # Elasticsearch data UI
         container_name: kibana
@@ -62,8 +62,8 @@ services:
             - "traefik.port=5601"
         logging:
             options:
-                max-size: "100k"
-                max-file: "5"
+                max-size: "50k"
+                max-file: "2"
 
     filebeat: # Logs watcher
         container_name: filebeat
@@ -82,8 +82,8 @@ services:
             - kibana
         logging:
             options:
-                max-size: "100k"
-                max-file: "5"
+                max-size: "50k"
+                max-file: "2"
 
     samba: # SMB server
         container_name: samba
@@ -101,6 +101,10 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     sftp: # Sftp server
         container_name: sftp
@@ -117,6 +121,10 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
@@ -130,6 +138,10 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     openvpn: # Internal vpn
         container_name: openvpn
@@ -177,6 +189,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:transmission.${DOMAIN}"
             - "traefik.port=9091"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     traefik: # Reverse proxy
         container_name: traefik
@@ -209,6 +225,10 @@ services:
             - paint-web
             - chronograf
             - kibana
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     portainer: # Docker management
         container_name: portainer
@@ -222,6 +242,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
             - "traefik.port=9000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     transmission: # Torrent client
         container_name: transmission
@@ -241,6 +265,10 @@ services:
             interval: 1m30s
             timeout: 10s
             retries: 2
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     autoheal: # Service looking for container to restart
         container_name: autoheal
@@ -252,6 +280,10 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     commander: # Web ui server admin
         container_name: commander
@@ -268,6 +300,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:commander.${DOMAIN}"
             - "traefik.port=8000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     plex: # Media server
         container_name: plex
@@ -307,6 +343,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:plex.${DOMAIN}"
             - "traefik.port=32400"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
@@ -342,6 +382,10 @@ services:
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
             - "traefik.docker.network=seedbox_connected"
             - "traefik.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     prometheus: # Database, grafana requirement
         image: prom/prometheus:v2.4.3
@@ -360,6 +404,10 @@ services:
         networks:
             - connected
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     alertmanager: # Grafana requirement
         image: prom/alertmanager:v0.15.2
@@ -372,6 +420,10 @@ services:
         restart: ${RESTART_MODE}
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     nodeexporter: # Grafana requirement
         image: prom/node-exporter:v0.16.0
@@ -389,6 +441,10 @@ services:
             - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     cadvisor: # Grafana requirement
         image: google/cadvisor:v0.31.0
@@ -402,6 +458,10 @@ services:
             - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     pushgateway: # Grafana requirement
         image: prom/pushgateway
@@ -409,6 +469,10 @@ services:
         restart: ${RESTART_MODE}
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     heimdall: # Heimdall
         image: linuxserver/heimdall
@@ -426,6 +490,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     monitor: # Openvpn monitor
         image: ruimarinho/openvpn-monitor
@@ -448,6 +516,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     comic-reader:
         container_name: comic-reader
@@ -460,6 +532,10 @@ services:
             - /media/nuc/WD2To/comics:/var/www/symfony/public/files/all
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     php-fpm-comic:
         container_name: php-fpm-comic
@@ -475,6 +551,10 @@ services:
             - hidden
         depends_on:
             - comic-reader
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     nginx-comic:
         container_name: nginx-comic
@@ -499,6 +579,10 @@ services:
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
             - "traefik.docker.network=seedbox_connected"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
 
     wol-web:
@@ -510,6 +594,10 @@ services:
             - /var/www/symfony
         networks:
             - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     php-fpm-wol:
         container_name: php-fpm-wol
@@ -527,6 +615,10 @@ services:
             - hidden
         depends_on:
             - wol-web
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     nginx-wol:
         container_name: nginx-wol
@@ -551,6 +643,10 @@ services:
             - "traefik.frontend.rule=Host:wol.${DOMAIN}"
             - "traefik.docker.network=seedbox_connected"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     paint-web:
         container_name: paint-web
@@ -566,6 +662,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     telegraf: # Telegraf
         container_name: telegraf
@@ -578,6 +678,10 @@ services:
         depends_on:
             - influxdb
             - mosquitto
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     influxdb: # InfluxDB
         container_name: influxdb
@@ -591,6 +695,10 @@ services:
             - connected
         volumes:
             - influx_data:/var/lib/influxdb
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     chronograf: # InfluxDB Admin UI
         image: chronograf
@@ -605,6 +713,10 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
             - "traefik.port=8888"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     mosquitto: # Mosquitto mqtt broker
         container_name: mosquitto
@@ -617,6 +729,10 @@ services:
         volumes:
             - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
             - mosquitto_data:/mosquitto/data
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     miflora-daemon: # Miflora daemon
         container_name: miflora-daemon
@@ -631,6 +747,10 @@ services:
         network_mode: host
         depends_on:
             - mosquitto
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     mqtt-forwarder:
         container_name: mqtt-forwarder
@@ -649,6 +769,10 @@ services:
         depends_on:
             - influxdb
             - mosquitto
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     minecraft:
         container_name: minecraft
@@ -665,3 +789,7 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
