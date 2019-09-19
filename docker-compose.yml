@@ -51,8 +51,8 @@ services:
         depends_on:
             - elasticsearch
         labels:
-            - "kibana.enable=true"
-            - "kibana.frontend.rule=Host:kibana.${DOMAIN}"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
             - "traefik.port=5601"
         logging:
             options:
