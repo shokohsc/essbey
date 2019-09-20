@@ -45,6 +45,24 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    curator: # Elasticsearch indices janitor
+        container_name: curator
+        image: itzg/elasticsearch-curator
+        restart: ${RESTART_MODE}
+        environment:
+            ES_HOST: elasticsearch
+            DELETE_AGE: 4
+        volumes:
+            - ./config/curator/actions.yml:/etc/curator/actions.yml
+        networks:
+            - hidden
+        depends_on:
+            - elasticsearch
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     kibana: # Elasticsearch data UI
         container_name: kibana
         image: docker.elastic.co/kibana/kibana:7.3.2

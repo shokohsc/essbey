@@ -1,0 +1,19 @@
+actions:
+  1:
+    action: delete_indices
+    description: >-
+      Delete indices older than $DELETE_AGE days (default is 45)
+      for logstash and metricbeat prefixed indices.
+    options:
+      ignore_empty_list: True
+      disable_action: False
+    filters:
+    - filtertype: pattern
+      kind: regex
+      value: "^(filebeat-|logstash-|metricbeat-).*$"
+    - filtertype: age
+      source: name
+      direction: older
+      timestring: '%Y.%m.%d'
+      unit: days
+      unit_count: ${DELETE_AGE:45}
