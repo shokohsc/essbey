@@ -3,7 +3,7 @@ actions:
     action: delete_indices
     description: >-
       Delete indices older than $DELETE_AGE days (default is 45)
-      for filebeat and metricbeat prefixed indices.
+      for filebeat prefixed indices.
     options:
       ignore_empty_list: True
       disable_action: False
@@ -11,6 +11,9 @@ actions:
     # - filtertype: pattern
     #   kind: regex
     #   value: "^(filebeat-|metricbeat-).*$"
+    - filtertype: pattern
+      kind: prefix
+      value: filebeat-
     - filtertype: age
       source: name
       direction: older
