@@ -11,9 +11,14 @@ actions:
     - filtertype: pattern
       kind: regex
       value: "^filebeat-|^logstash-|^metricbeat-"
+    # - filtertype: age
+    #   source: name
+    #   direction: older
+    #   timestring: '%Y.%m.%d'
+    #   unit: days
+    #   unit_count: 4
     - filtertype: age
-      source: name
-      direction: older
-      timestring: '%Y.%m.%d'
-      unit: days
-      unit_count: 4
+       source: creation_date
+       direction: older
+       unit: days
+       unit_count: 4
