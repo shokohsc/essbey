@@ -10,8 +10,7 @@ actions:
     filters:
     - filtertype: pattern
       kind: regex
-      value: "filebeat-"
-      # value: "^(filebeat-|metricbeat-).*$"
+      value: "^(filebeat-|metricbeat-).*$"
     - filtertype: age
       source: name
       direction: older
