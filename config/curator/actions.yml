@@ -8,9 +8,9 @@ actions:
       ignore_empty_list: 'True'
       disable_action: 'False'
     filters:
-    # - filtertype: pattern
-    #   kind: regex
-    #   value: "^(filebeat-|metricbeat-).*$"
+    - filtertype: pattern
+      kind: regex
+      value: "^(filebeat-|metricbeat-).*$"
     # - filtertype: age
     #   source: name
     #   direction: older

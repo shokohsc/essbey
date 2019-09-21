@@ -50,6 +50,7 @@ services:
         image: bobrik/curator
         restart: ${RESTART_MODE}
         # command: --config /etc/curator/config.yml /etc/curator/actions.yml
+        command: --config /etc/curator/config.yml /etc/curator/actions.yml
         volumes:
             - ./config/curator:/etc/curator
         networks:
