@@ -1,9 +1,11 @@
 actions:
   1:
     action: delete_indices
+    # description: >-
+    #   Delete indices older than $DELETE_AGE days (default is 45)
+    #   for filebeat prefixed indices.
     description: >-
-      Delete indices older than $DELETE_AGE days (default is 45)
-      for filebeat prefixed indices.
+      Delete indices by space occupied.
     options:
       ignore_empty_list: True
       disable_action: False
@@ -11,12 +13,14 @@ actions:
     # - filtertype: pattern
     #   kind: regex
     #   value: "^(filebeat-|logstash-|metricbeat-).*$"
-    - filtertype: pattern
-      kind: prefix
-      value: filebeat-7.3.2-
-    - filtertype: age
-      source: name
-      direction: older
-      timestring: '%Y.%m.%d'
-      unit: days
-      unit_count: 4
+    # - filtertype: pattern
+    #   kind: prefix
+    #   value: filebeat-7.3.2-
+    # - filtertype: age
+    #   source: name
+    #   direction: older
+    #   timestring: '%Y.%m.%d'
+    #   unit: days
+    #   unit_count: 4
+    - filtertype: space
+      disk_space: 1
