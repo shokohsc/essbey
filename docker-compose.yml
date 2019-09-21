@@ -49,7 +49,6 @@ services:
         container_name: curator
         image: bobrik/curator
         restart: ${RESTART_MODE}
-        # command: --config /etc/curator/config.yml /etc/curator/actions.yml
         command: --config /etc/curator/config.yml /etc/curator/actions.yml
         volumes:
             - ./config/curator:/etc/curator
@@ -66,8 +65,8 @@ services:
         container_name: kibana
         image: docker.elastic.co/kibana/kibana:7.3.2
         restart: ${RESTART_MODE}
-        volumes:
-            - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+        environment:
+            SERVER_NAME: kibana
         networks:
             - connected
             - hidden
