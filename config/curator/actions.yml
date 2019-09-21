@@ -5,8 +5,8 @@ actions:
       Delete indices older than $DELETE_AGE days (default is 45)
       for filebeat and metricbeat prefixed indices.
     options:
-      ignore_empty_list: 'True'
-      disable_action: 'False'
+      ignore_empty_list: True
+      disable_action: False
     filters:
     - filtertype: pattern
       kind: regex
