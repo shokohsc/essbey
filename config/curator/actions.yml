@@ -8,12 +8,9 @@ actions:
       ignore_empty_list: True
       disable_action: False
     filters:
-    # - filtertype: pattern
-    #   kind: regex
-    #   value: "^(filebeat-|logstash-|metricbeat-).*$"
     - filtertype: pattern
-      kind: prefix
-      value: filebeat-7.3.2-
+      kind: regex
+      value: "^filebeat-|^logstash-|^metricbeat-"
     - filtertype: age
       source: name
       direction: older
