@@ -1,4 +1,4 @@
-version: '2.1'
+version: '2.4'
 
 networks:
 
@@ -148,7 +148,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
             SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
-            TOKEN: ${PUID}
+            TOKEN: ${DUCKDNS_TOKEN}
             TZ: ${TIMEZONE}
         networks:
             - connected
