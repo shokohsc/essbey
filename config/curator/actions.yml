@@ -16,4 +16,4 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: ${DELETE_AGE:45}
+      unit_count: 4

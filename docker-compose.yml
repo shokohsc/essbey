@@ -50,9 +50,6 @@ services:
         image: bobrik/curator
         restart: ${RESTART_MODE}
         command: --config /etc/curator/config.yml /etc/curator/actions.yml
-        environment:
-            ES_HOST: elasticsearch
-            DELETE_AGE: 4
         volumes:
             - ./config/curator:/etc/curator
         networks:
