@@ -13,7 +13,7 @@ actions:
     filters:
     - filtertype: pattern
       kind: prefix
-      value: filebeat-
+      value: filebeat-7.3.2-
       exclude:
     - filtertype: age
       source: name
