@@ -18,7 +18,7 @@ actions:
     #   unit: days
     #   unit_count: 4
     - filtertype: age
-       source: creation_date
-       direction: older
-       unit: days
-       unit_count: 4
+      source: creation_date
+      direction: older
+      unit: days
+      unit_count: 4
