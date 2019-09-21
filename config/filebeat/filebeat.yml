@@ -1,6 +1,6 @@
 # filebeat.yml
 
-filebeat.prospectors:
+filebeat.inputs:
 - type: log
   json.keys_under_root: true
 # Json key name, which value contains a sub JSON document produced by our application Console Appender
