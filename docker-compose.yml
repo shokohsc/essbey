@@ -65,8 +65,8 @@ services:
         container_name: kibana
         image: docker.elastic.co/kibana/kibana:7.3.2
         restart: ${RESTART_MODE}
-        environment:
-            SERVER_NAME: kibana.${DOMAIN}
+        volumes:
+            - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
         networks:
             - connected
             - hidden
