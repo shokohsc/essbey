@@ -1,0 +1,10 @@
+client:
+  hosts:
+    - ${ES_HOST:master}
+  port: 9200
+
+logging:
+  loglevel: INFO
+  logfile:
+  logformat: default
+  blacklist: ['elasticsearch', 'urllib3']
