@@ -49,6 +49,7 @@ services:
         container_name: curator
         image: bobrik/curator
         restart: ${RESTART_MODE}
+        command: /etc/curator/actions.yml
         environment:
             ES_HOST: elasticsearch
             DELETE_AGE: 4
