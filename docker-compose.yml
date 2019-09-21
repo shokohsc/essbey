@@ -45,21 +45,21 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    # curator: # Elasticsearch indices janitor
-    #     container_name: curator
-    #     image: bobrik/curator
-    #     restart: ${RESTART_MODE}
-    #     command: --config /etc/curator/config.yml /etc/curator/actions.yml
-    #     volumes:
-    #         - ./config/curator:/etc/curator
-    #     networks:
-    #         - hidden
-    #     depends_on:
-    #         - elasticsearch
-    #     logging:
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
+    curator: # Elasticsearch indices janitor
+        container_name: curator
+        image: bobrik/curator
+        restart: ${RESTART_MODE}
+        # command: --config /etc/curator/config.yml /etc/curator/actions.yml
+        volumes:
+            - ./config/curator:/etc/curator
+        networks:
+            - hidden
+        depends_on:
+            - elasticsearch
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     kibana: # Elasticsearch data UI
         container_name: kibana
