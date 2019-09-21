@@ -49,7 +49,7 @@ services:
         container_name: curator
         image: bobrik/curator
         restart: ${RESTART_MODE}
-        command: curator --config /etc/curator/config.yml /etc/curator/actions.yml
+        command: --config /etc/curator/config.yml /etc/curator/actions.yml
         environment:
             ES_HOST: elasticsearch
             DELETE_AGE: 4
