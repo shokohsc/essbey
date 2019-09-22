@@ -3,6 +3,7 @@ version: '2.4'
 networks:
 
     connected:
+        name: seedbox_connected
         driver: bridge
         ipam:
             driver: default
@@ -12,6 +13,7 @@ networks:
               ip_range: 172.1.0.0/26 # 172.1.0.1 - 172.1.0.62
 
     hidden:
+        name: seedbox_hidden
         internal: true
 
 volumes:
