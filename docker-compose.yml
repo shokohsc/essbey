@@ -43,7 +43,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -67,7 +67,7 @@ services:
         depends_on:
             - elasticsearch
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -85,16 +85,14 @@ services:
         depends_on:
             - elasticsearch
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.kibana.rule=Host(`kibana.${DOMAIN}`)"
-            - "traefik.http.routers.kibana.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.kibana.rule=Host(`kibana.${DOMAIN}`)
             - traefik.http.routers.kibana.entrypoints=web
-            - traefik.http.routers.kibana.middlewares=redirect@file
             - traefik.http.routers.kibana-secured.rule=Host(`kibana.${DOMAIN}`)
             - traefik.http.routers.kibana-secured.entrypoints=web-secure
             - traefik.http.routers.kibana-secured.tls=true
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=5601"
+            - traefik.docker.network=${EXPOSED_NETWORK}
+            - traefik.port=5601
         logging:
             options:
                 max-size: "50k"
@@ -116,7 +114,7 @@ services:
             - elasticsearch
             - kibana
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -137,7 +135,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -157,7 +155,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -174,7 +172,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -198,7 +196,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
 
     gateway: # Torrenting vpn
         container_name: gateway
@@ -223,15 +221,13 @@ services:
                 ipv4_address: 172.1.0.63
         dns: 8.8.8.8
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
-            - "traefik.http.routers.transmission.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)
             - traefik.http.routers.transmission.entrypoints=web
-            - traefik.http.routers.transmission.middlewares=redirect@file
             - traefik.http.routers.transmission-secured.rule=Host(`transmission.${DOMAIN}`)
             - traefik.http.routers.transmission-secured.entrypoints=web-secure
             - traefik.http.routers.transmission-secured.tls=true
-            - "traefik.port=9091"
+            - traefik.port=9091
         logging:
             options:
                 max-size: "50k"
@@ -254,16 +250,14 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
-            - "traefik.http.routers.traefik.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
             - traefik.http.routers.traefik.entrypoints=web
-            - traefik.http.routers.traefik.middlewares=redirect@file
             - traefik.http.routers.traefik-secured.rule=Host(`traefik.${DOMAIN}`)
             - traefik.http.routers.traefik-secured.entrypoints=web-secure
             - traefik.http.routers.traefik-secured.tls=true
-            - "traefik.http.routers.traefik.service=api@internal"
-            - "traefik.port=8080"
+            - traefik.http.routers.traefik.service=api@internal
+            - traefik.port=8080
         depends_on:
             - gateway
             - portainer
@@ -291,15 +285,13 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)"
-            - "traefik.http.routers.portainer.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
             - traefik.http.routers.portainer.entrypoints=web
-            - traefik.http.routers.portainer.middlewares=redirect@file
             - traefik.http.routers.portainer-secured.rule=Host(`portainer.${DOMAIN}`)
             - traefik.http.routers.portainer-secured.entrypoints=web-secure
             - traefik.http.routers.portainer-secured.tls=true
-            - "traefik.port=9000"
+            - traefik.port=9000
         logging:
             options:
                 max-size: "50k"
@@ -337,7 +329,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -355,15 +347,13 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.commander.rule=Host(`commander.${DOMAIN}`)"
-            - "traefik.http.routers.commander.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.commander.rule=Host(`commander.${DOMAIN}`)
             - traefik.http.routers.commander.entrypoints=web
-            - traefik.http.routers.commander.middlewares=redirect@file
             - traefik.http.routers.commander-secured.rule=Host(`commander.${DOMAIN}`)
             - traefik.http.routers.commander-secured.entrypoints=web-secure
             - traefik.http.routers.commander-secured.tls=true
-            - "traefik.port=8000"
+            - traefik.port=8000
         logging:
             options:
                 max-size: "50k"
@@ -404,15 +394,13 @@ services:
             - connected
         hostname: "plex"
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)"
-            - "traefik.http.routers.plex.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
             - traefik.http.routers.plex.entrypoints=web
-            - traefik.http.routers.plex.middlewares=redirect@file
             - traefik.http.routers.plex-secured.rule=Host(`plex.${DOMAIN}`)
             - traefik.http.routers.plex-secured.entrypoints=web-secure
             - traefik.http.routers.plex-secured.tls=true
-            - "traefik.port=32400"
+            - traefik.port=32400
         logging:
             options:
                 max-size: "50k"
@@ -447,16 +435,14 @@ services:
             - cadvisor
             - influxdb
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN}`)"
-            - "traefik.http.routers.grafana.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN}`)
             - traefik.http.routers.grafana.entrypoints=web
-            - traefik.http.routers.grafana.middlewares=redirect@file
             - traefik.http.routers.grafana-secured.rule=Host(`grafana.${DOMAIN}`)
             - traefik.http.routers.grafana-secured.entrypoints=web-secure
             - traefik.http.routers.grafana-secured.tls=true
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
+            - traefik.docker.network=${EXPOSED_NETWORK}
+            - traefik.port=3000
         logging:
             options:
                 max-size: "50k"
@@ -480,7 +466,7 @@ services:
             - connected
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -498,7 +484,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -521,7 +507,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -540,7 +526,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -553,7 +539,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -572,15 +558,13 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.heimdall.rule=Host(`heimdall.${DOMAIN}`)"
-            - "traefik.http.routers.heimdall.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.heimdall.rule=Host(`heimdall.${DOMAIN}`)
             - traefik.http.routers.heimdall.entrypoints=web
-            - traefik.http.routers.heimdall.middlewares=redirect@file
             - traefik.http.routers.heimdall-secured.rule=Host(`heimdall.${DOMAIN}`)
             - traefik.http.routers.heimdall-secured.entrypoints=web-secure
             - traefik.http.routers.heimdall-secured.tls=true
-            - "traefik.port=80"
+            - traefik.port=80
         logging:
             options:
                 max-size: "50k"
@@ -604,15 +588,13 @@ services:
         depends_on:
             - openvpn
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.monitor.rule=Host(`monitor.${DOMAIN}`)"
-            - "traefik.http.routers.monitor.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.monitor.rule=Host(`monitor.${DOMAIN}`)
             - traefik.http.routers.monitor.entrypoints=web
-            - traefik.http.routers.monitor.middlewares=redirect@file
             - traefik.http.routers.monitor-secured.rule=Host(`monitor.${DOMAIN}`)
             - traefik.http.routers.monitor-secured.entrypoints=web-secure
             - traefik.http.routers.monitor-secured.tls=true
-            - "traefik.port=80"
+            - traefik.port=80
         logging:
             options:
                 max-size: "50k"
@@ -630,7 +612,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -651,7 +633,7 @@ services:
         depends_on:
             - comic-reader
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -676,16 +658,14 @@ services:
             - php-fpm-comic
             - comic-reader
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.comics.rule=Host(`comics.${DOMAIN}`)"
-            - "traefik.http.routers.comics.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.comics.rule=Host(`comics.${DOMAIN}`)
             - traefik.http.routers.comics.entrypoints=web
-            - traefik.http.routers.comics.middlewares=redirect@file
             - traefik.http.routers.comics-secured.rule=Host(`comics.${DOMAIN}`)
             - traefik.http.routers.comics-secured.entrypoints=web-secure
             - traefik.http.routers.comics-secured.tls=true
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=80"
+            - traefik.docker.network=${EXPOSED_NETWORK}
+            - traefik.port=80
         logging:
             options:
                 max-size: "50k"
@@ -702,7 +682,7 @@ services:
         networks:
             - hidden
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -725,7 +705,7 @@ services:
         depends_on:
             - wol-web
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -750,16 +730,14 @@ services:
             - php-fpm-wol
             - wol-web
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.wol.rule=Host(`wol.${DOMAIN}`)"
-            - "traefik.http.routers.wol.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.wol.rule=Host(`wol.${DOMAIN}`)
             - traefik.http.routers.wol.entrypoints=web
-            - traefik.http.routers.wol.middlewares=redirect@file
             - traefik.http.routers.wol-secured.rule=Host(`wol.${DOMAIN}`)
             - traefik.http.routers.wol-secured.entrypoints=web-secure
             - traefik.http.routers.wol-secured.tls=true
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=80"
+            - traefik.docker.network=${EXPOSED_NETWORK}
+            - traefik.port=80
         logging:
             options:
                 max-size: "50k"
@@ -776,15 +754,13 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.paint.rule=Host(`paint.${DOMAIN}`)"
-            - "traefik.http.routers.paint.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.paint.rule=Host(`paint.${DOMAIN}`)
             - traefik.http.routers.paint.entrypoints=web
-            - traefik.http.routers.paint.middlewares=redirect@file
             - traefik.http.routers.paint-secured.rule=Host(`paint.${DOMAIN}`)
             - traefik.http.routers.paint-secured.entrypoints=web-secure
             - traefik.http.routers.paint-secured.tls=true
-            - "traefik.port=80"
+            - traefik.port=80
         logging:
             options:
                 max-size: "50k"
@@ -803,7 +779,7 @@ services:
             - influxdb
             - mosquitto
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -822,7 +798,7 @@ services:
         volumes:
             - influx_data:/var/lib/influxdb
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -839,16 +815,14 @@ services:
         depends_on:
             - influxdb
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.chronograf.rule=Host(`chronograf.${DOMAIN}`)"
-            - "traefik.http.routers.chronograf.tls.options=myTLSOptions@file"
+            - traefik.enable=true
+            - traefik.http.routers.chronograf.rule=Host(`chronograf.${DOMAIN}`)
             - traefik.http.routers.chronograf.entrypoints=web
-            - traefik.http.routers.chronograf.middlewares=redirect@file
             - traefik.http.routers.chronograf-secured.rule=Host(`chronograf.${DOMAIN}`)
             - traefik.http.routers.chronograf-secured.entrypoints=web-secure
             - traefik.http.routers.chronograf-secured.tls=true
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8888"
+            - traefik.docker.network=${EXPOSED_NETWORK}
+            - traefik.port=8888
         logging:
             options:
                 max-size: "50k"
@@ -866,7 +840,7 @@ services:
             - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
             - mosquitto_data:/mosquitto/data
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -886,7 +860,7 @@ services:
         depends_on:
             - mosquitto
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -911,7 +885,7 @@ services:
             - influxdb
             - mosquitto
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
@@ -931,7 +905,7 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - traefik.enable=false
         logging:
             options:
                 max-size: "50k"
