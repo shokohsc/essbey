@@ -242,8 +242,14 @@ services:
         image: traefik:v2.0-alpine
         restart: ${RESTART_MODE}
         command:
+            - --providers.file.filename=/etc/traefik/traefik.toml
+            - --providers.file.watch=true
+            - --log.level=DEBUG
+            - --metrics.prometheus=true
             - --metrics.prometheus.buckets=[0.1,0.3,1.2,5.0]
-            - --metrics.prometheus.entrypoint="metrics"
+            - --metrics.prometheus.addEntryPointsLabels=true
+            - --metrics.prometheus.addServicesLabels=true
+            - --metrics.prometheus.entryPoint="metrics"
         ports:
             - "80:80"
             - "443:443"
