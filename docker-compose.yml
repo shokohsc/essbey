@@ -384,6 +384,7 @@ services:
             GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
             GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
             GF_INSTALL_PLUGINS: grafana-piechart-panel
+            GF_LOG_LEVEL: warn
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/setup.sh:/setup.sh
