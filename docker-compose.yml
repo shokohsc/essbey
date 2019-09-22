@@ -52,6 +52,8 @@ services:
         command:
             - '--host'
             - 'http://elasticsearch:9200'
+            - '--loglevel'
+            - 'WARN'
             - 'delete_indices'
             - '--ignore_empty_list'
             - '--filter_list'
