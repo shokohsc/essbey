@@ -55,7 +55,7 @@ services:
             - 'delete_indices'
             - '--ignore_empty_list'
             - '--filter_list'
-            - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-7.3.2-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":3}]'
+            - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":7}]'
         networks:
             - hidden
         depends_on:

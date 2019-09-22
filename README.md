@@ -10,23 +10,12 @@
     $> docker-compose run --rm openvpn easyrsa build-client-full $CLIENTNAME nopass
 
     $> docker-compose run --rm openvpn ovpn_otp_user $CLIENTNAME
-    $> google-authenticator --time-based --disallow-reuse --force --rate-limit=3 --rate-time=30 --window-size=3 -l "${1}@${OVPN_CN}" -s /etc/openvpn/otp/${1}.google_authenticator
 
     $> docker-compose run --rm openvpn ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn
 
 # Certificates
 
-    $ make name=certs
-    Country Name (2 letter code) [AU]: FR
-    State or Province Name (full name) [Some-State]:
-    Locality Name (eg, city) []:
-    Organization Name (eg, company) [Internet Widgits Pty Ltd]:
-    Organizational Unit Name (eg, section) []:
-    Common Name (e.g. server FQDN or YOUR name) []: mydomain.com or ip
-    Email Address []:
-    Please enter the following 'extra' attributes to be sent with your certificate request
-    A challenge password []:  !!NO PASSWORD!!
-    An optional company name []:
+    $ DOMAIN_CERT=you_domain sh config/traefik/create-website-cert.sh
 
 # Sftp
 
