@@ -81,6 +81,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
+            - "traefik.docker.network=seedbox_connected"
             - "traefik.port=5601"
         logging:
             options:
