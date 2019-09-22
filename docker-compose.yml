@@ -47,11 +47,15 @@ services:
 
     curator: # Elasticsearch indices janitor
         container_name: curator
-        image: bobrik/curator:5.7.6
+        image: miffyliye/curator-cli
         restart: ${RESTART_MODE}
-        command: --config /etc/curator/config.yml /etc/curator/actions.yml
-        volumes:
-            - ./config/curator:/etc/curator
+        command:
+            - '--host'
+            - '"http://elasticsearch:9200"'
+            - 'delete_indices'
+            - '--ignore_empty_list'
+            - '--filter_list'
+            - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-7.3.2-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":3}]'
         networks:
             - hidden
         depends_on:

@@ -18,3 +18,5 @@ actions:
       timestring: '%Y.%m.%d'
       unit: days
       unit_count: 3
+
+docker run --rm --network seedbox_hidden miffyliye/curator-cli --host "http://elasticsearch:9200" --dry-run delete_indices --ignore_empty_list --filter_list '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-7.3.2-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":3}]'
