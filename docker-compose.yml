@@ -428,6 +428,8 @@ services:
         networks:
             - connected
             - hidden
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
