@@ -92,6 +92,7 @@ services:
             - traefik.http.routers.kibana-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.kibana-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=5601
@@ -230,6 +231,7 @@ services:
             - traefik.http.routers.transmission-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.transmission-secured.tls=true
             - traefik.port=9091
         logging:
@@ -261,6 +263,7 @@ services:
             - traefik.http.routers.traefik-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.traefik-secured.tls=true
             - traefik.http.routers.traefik.service=api@internal
             - traefik.port=8080
@@ -298,6 +301,7 @@ services:
             - traefik.http.routers.portainer-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.portainer-secured.tls=true
             - traefik.port=9000
         logging:
@@ -363,6 +367,7 @@ services:
             - traefik.http.routers.commander-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.commander-secured.tls=true
             - traefik.port=8000
         logging:
@@ -412,6 +417,7 @@ services:
             - traefik.http.routers.plex-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.plex-secured.tls=true
             - traefik.port=32400
         logging:
@@ -455,6 +461,7 @@ services:
             - traefik.http.routers.grafana-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.grafana-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=3000
@@ -580,6 +587,7 @@ services:
             - traefik.http.routers.heimdall-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.heimdall-secured.tls=true
             - traefik.port=80
         logging:
@@ -612,6 +620,7 @@ services:
             - traefik.http.routers.monitor-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.monitor-secured.tls=true
             - traefik.port=80
         logging:
@@ -684,6 +693,7 @@ services:
             - traefik.http.routers.comics-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.comics-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=80
@@ -758,6 +768,7 @@ services:
             - traefik.http.routers.wol-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.wol-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=80
@@ -784,6 +795,7 @@ services:
             - traefik.http.routers.paint-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.paint-secured.tls=true
             - traefik.port=80
         logging:
@@ -847,6 +859,7 @@ services:
             - traefik.http.routers.chronograf-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
             - traefik.http.middlewares.redirect.redirectscheme.permanent=true
+            - traefik.http.middlewares.redirect.redirectscheme.port=443
             # - traefik.http.routers.chronograf-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=8888
