@@ -53,7 +53,7 @@ services:
             - '--host'
             - 'http://elasticsearch:9200'
             - '--loglevel'
-            - 'WARN'
+            - 'WARNING'
             - 'delete_indices'
             - '--ignore_empty_list'
             - '--filter_list'
