@@ -84,11 +84,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('kibana.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('kibana.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('kibana.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5601"
         logging:
@@ -220,11 +220,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('transmission.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('transmission.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('transmission.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=9091"
         logging:
             options:
@@ -251,11 +251,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('traefik.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('traefik.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('traefik.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.http.routers.web.service=api@internal"
             - "traefik.port=8080"
         depends_on:
@@ -288,11 +288,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('portainer.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('portainer.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('portainer.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=9000"
         logging:
             options:
@@ -352,11 +352,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('commander.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('commander.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('commander.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=8000"
         logging:
             options:
@@ -401,11 +401,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('plex.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('plex.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('plex.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=32400"
         logging:
             options:
@@ -444,11 +444,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('grafana.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('grafana.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('grafana.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
@@ -559,11 +559,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('heimdall.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('heimdall.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('heimdall.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=80"
         logging:
             options:
@@ -591,11 +591,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('monitor.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('monitor.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('monitor.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=80"
         logging:
             options:
@@ -659,11 +659,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('comics.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('comics.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('comics.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
@@ -729,11 +729,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('wol.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('wol.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('wol.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
@@ -755,11 +755,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('paint.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('paint.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('paint.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.port=80"
         logging:
             options:
@@ -816,11 +816,11 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.web.rule=Host('chronograf.${DOMAIN}')"
             - "traefik.http.routers.web.tls.options=myTLSOptions@file"
-            - traefik.http.routers.web.entrypoints=web
-            - traefik.http.routers.web.middlewares=redirect@file
-            - traefik.http.routers.web-secured.rule=Host('chronograf.${DOMAIN}')
-            - traefik.http.routers.web-secured.entrypoints=web-secure
-            - traefik.http.routers.web-secured.tls=true
+            # - traefik.http.routers.web.entrypoints=web
+            # - traefik.http.routers.web.middlewares=redirect@file
+            # - traefik.http.routers.web-secured.rule=Host('chronograf.${DOMAIN}')
+            # - traefik.http.routers.web-secured.entrypoints=web-secure
+            # - traefik.http.routers.web-secured.tls=true
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8888"
         logging:
