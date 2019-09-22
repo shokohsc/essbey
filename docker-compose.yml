@@ -91,7 +91,7 @@ services:
             - traefik.http.routers.kibana-secured.rule=Host(`kibana.${DOMAIN}`)
             - traefik.http.routers.kibana-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.kibana-secured.tls=true
+            # - traefik.http.routers.kibana-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=5601
         logging:
@@ -228,7 +228,7 @@ services:
             - traefik.http.routers.transmission-secured.rule=Host(`transmission.${DOMAIN}`)
             - traefik.http.routers.transmission-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.transmission-secured.tls=true
+            # - traefik.http.routers.transmission-secured.tls=true
             - traefik.port=9091
         logging:
             options:
@@ -258,7 +258,7 @@ services:
             - traefik.http.routers.traefik-secured.rule=Host(`traefik.${DOMAIN}`)
             - traefik.http.routers.traefik-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.traefik-secured.tls=true
+            # - traefik.http.routers.traefik-secured.tls=true
             - traefik.http.routers.traefik.service=api@internal
             - traefik.port=8080
         depends_on:
@@ -294,7 +294,7 @@ services:
             - traefik.http.routers.portainer-secured.rule=Host(`portainer.${DOMAIN}`)
             - traefik.http.routers.portainer-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.portainer-secured.tls=true
+            # - traefik.http.routers.portainer-secured.tls=true
             - traefik.port=9000
         logging:
             options:
@@ -358,7 +358,7 @@ services:
             - traefik.http.routers.commander-secured.rule=Host(`commander.${DOMAIN}`)
             - traefik.http.routers.commander-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.commander-secured.tls=true
+            # - traefik.http.routers.commander-secured.tls=true
             - traefik.port=8000
         logging:
             options:
@@ -406,7 +406,7 @@ services:
             - traefik.http.routers.plex-secured.rule=Host(`plex.${DOMAIN}`)
             - traefik.http.routers.plex-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.plex-secured.tls=true
+            # - traefik.http.routers.plex-secured.tls=true
             - traefik.port=32400
         logging:
             options:
@@ -448,7 +448,7 @@ services:
             - traefik.http.routers.grafana-secured.rule=Host(`grafana.${DOMAIN}`)
             - traefik.http.routers.grafana-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.grafana-secured.tls=true
+            # - traefik.http.routers.grafana-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=3000
         logging:
@@ -572,7 +572,7 @@ services:
             - traefik.http.routers.heimdall-secured.rule=Host(`heimdall.${DOMAIN}`)
             - traefik.http.routers.heimdall-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.heimdall-secured.tls=true
+            # - traefik.http.routers.heimdall-secured.tls=true
             - traefik.port=80
         logging:
             options:
@@ -603,7 +603,7 @@ services:
             - traefik.http.routers.monitor-secured.rule=Host(`monitor.${DOMAIN}`)
             - traefik.http.routers.monitor-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.monitor-secured.tls=true
+            # - traefik.http.routers.monitor-secured.tls=true
             - traefik.port=80
         logging:
             options:
@@ -674,7 +674,7 @@ services:
             - traefik.http.routers.comics-secured.rule=Host(`comics.${DOMAIN}`)
             - traefik.http.routers.comics-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.comics-secured.tls=true
+            # - traefik.http.routers.comics-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=80
         logging:
@@ -747,7 +747,7 @@ services:
             - traefik.http.routers.wol-secured.rule=Host(`wol.${DOMAIN}`)
             - traefik.http.routers.wol-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.wol-secured.tls=true
+            # - traefik.http.routers.wol-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=80
         logging:
@@ -772,7 +772,7 @@ services:
             - traefik.http.routers.paint-secured.rule=Host(`paint.${DOMAIN}`)
             - traefik.http.routers.paint-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.paint-secured.tls=true
+            # - traefik.http.routers.paint-secured.tls=true
             - traefik.port=80
         logging:
             options:
@@ -834,7 +834,7 @@ services:
             - traefik.http.routers.chronograf-secured.rule=Host(`chronograf.${DOMAIN}`)
             - traefik.http.routers.chronograf-secured.entrypoints=web-secure
             - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-            - traefik.http.routers.chronograf-secured.tls=true
+            # - traefik.http.routers.chronograf-secured.tls=true
             - traefik.docker.network=${EXPOSED_NETWORK}
             - traefik.port=8888
         logging:
