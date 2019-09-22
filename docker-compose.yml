@@ -236,10 +236,8 @@ services:
         image: traefik:v2.0
         restart: ${RESTART_MODE}
         command:
-            - --providers.docker
             - --metrics.prometheus.buckets=[0.1,0.3,1.2,5.0]
             - --metrics.prometheus.entrypoint="metrics"
-            - --entrypoints.web.address=:80
         ports:
             - "80:80"
             - "443:443"
