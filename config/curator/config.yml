@@ -4,7 +4,7 @@ client:
   port: 9200
 
 logging:
-  loglevel: WARN
+  loglevel: WARNING
   logfile:
   logformat: default
   blacklist: ['elasticsearch', 'urllib3']
