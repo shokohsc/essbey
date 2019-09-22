@@ -310,6 +310,7 @@ services:
             - gateway
         labels:
             - "autoheal=true"
+            - traefik.enable=false
         healthcheck:
             test: ["CMD", "curl", "-ILX", "GET", "http://gateway:9091"]
             interval: 1m30s
