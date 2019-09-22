@@ -47,7 +47,7 @@ services:
 
     curator: # Elasticsearch indices janitor
         container_name: curator
-        image: bobrik/curator:5.7.6
+        image: scrapinghub/elasticsearch-curator:4.2.4
         restart: ${RESTART_MODE}
         command: --config /etc/curator/config.yml /etc/curator/actions.yml
         volumes:
