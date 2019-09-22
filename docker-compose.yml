@@ -81,7 +81,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
-            - "traefik.docker.network=seedbox_connected"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5601"
         logging:
             options:
@@ -402,7 +402,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
-            - "traefik.docker.network=seedbox_connected"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
             options:
@@ -599,7 +599,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
-            - "traefik.docker.network=seedbox_connected"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
             options:
@@ -663,7 +663,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:wol.${DOMAIN}"
-            - "traefik.docker.network=seedbox_connected"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
             options:
@@ -695,11 +695,14 @@ services:
         restart: ${RESTART_MODE}
         networks:
             - connected
+            - hidden
         volumes:
             - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
         depends_on:
             - influxdb
             - mosquitto
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
@@ -714,7 +717,7 @@ services:
             INFLUXDB_USER: miflora
             INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
         networks:
-            - connected
+            - hidden
         volumes:
             - influx_data:/var/lib/influxdb
         logging:
@@ -729,11 +732,13 @@ services:
         command: --influxdb-url=http://influxdb:8086
         networks:
             - connected
+            - hidden
         depends_on:
             - influxdb
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8888"
         logging:
             options:
@@ -751,6 +756,8 @@ services:
         volumes:
             - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
             - mosquitto_data:/mosquitto/data
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
@@ -788,9 +795,12 @@ services:
             MQTT_TOPIC: ${MQTT_TOPIC}
         networks:
             - connected
+            - hidden
         depends_on:
             - influxdb
             - mosquitto
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
