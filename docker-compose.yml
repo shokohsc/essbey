@@ -75,6 +75,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
             SERVER_NAME: kibana
+            LOGGING_QUIET: 'true'
         networks:
             - connected
             - hidden

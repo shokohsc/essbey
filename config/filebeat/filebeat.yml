@@ -19,3 +19,4 @@ output.elasticsearch:
 
 logging.json: true
 logging.metrics.enabled: false
+logging.level: warning
