@@ -768,48 +768,48 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    miflora-daemon: # Miflora daemon
-        container_name: miflora-daemon
-        build:
-            context: miflora-mqtt-daemon
-        cap_add:
-            - net_admin
-            - sys_admin
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/miflora/config.ini:/app/config.ini
-        network_mode: host
-        depends_on:
-            - mosquitto
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    mqtt-forwarder:
-        container_name: mqtt-forwarder
-        build:
-            context: mqtt-forwarder
-        restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_HOST: influxdb
-            INFLUXDB_DB: miflora
-            INFLUXDB_USER: miflora
-            INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-            MQTT_HOST: mosquitto
-            MQTT_TOPIC: ${MQTT_TOPIC}
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - influxdb
-            - mosquitto
-        labels:
-            - "traefik.enable=false"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # miflora-daemon: # Miflora daemon
+    #     container_name: miflora-daemon
+    #     build:
+    #         context: miflora-mqtt-daemon
+    #     cap_add:
+    #         - net_admin
+    #         - sys_admin
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/miflora/config.ini:/app/config.ini
+    #     network_mode: host
+    #     depends_on:
+    #         - mosquitto
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # mqtt-forwarder:
+    #     container_name: mqtt-forwarder
+    #     build:
+    #         context: mqtt-forwarder
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         INFLUXDB_HOST: influxdb
+    #         INFLUXDB_DB: miflora
+    #         INFLUXDB_USER: miflora
+    #         INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    #         MQTT_HOST: mosquitto
+    #         MQTT_TOPIC: ${MQTT_TOPIC}
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - influxdb
+    #         - mosquitto
+    #     labels:
+    #         - "traefik.enable=false"
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
     minecraft:
         container_name: minecraft
