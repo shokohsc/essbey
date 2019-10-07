@@ -26,90 +26,90 @@ volumes:
 
 services:
 
-    elasticsearch: # Json database
-        container_name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
-        restart: ${RESTART_MODE}
-        environment:
-          discovery.type: single-node
-          bootstrap.memory_lock: 'true'
-          ES_JAVA_OPTS: -Xms512m -Xmx512m
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-        volumes:
-            - elasticsearch_data:/usr/share/elasticsearch/data
-        networks:
-            - hidden
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    curator: # Elasticsearch indices janitor
-        container_name: curator
-        image: miffyliye/curator-cli
-        restart: ${RESTART_MODE}
-        command:
-            - '--host'
-            - 'http://elasticsearch:9200'
-            - '--loglevel'
-            - 'WARNING'
-            - 'delete_indices'
-            - '--ignore_empty_list'
-            - '--filter_list'
-            - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":7}]'
-        networks:
-            - hidden
-        depends_on:
-            - elasticsearch
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    kibana: # Elasticsearch data UI
-        container_name: kibana
-        image: docker.elastic.co/kibana/kibana:7.3.2
-        restart: ${RESTART_MODE}
-        environment:
-            SERVER_NAME: kibana
-            LOGGING_QUIET: 'true'
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - elasticsearch
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=5601"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    filebeat: # Logs watcher
-        container_name: filebeat
-        image: docker.elastic.co/beats/filebeat:7.3.2
-        restart: ${RESTART_MODE}
-        command: filebeat -e -strict.perms=false
-        user: root
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - /var/lib/docker:/var/lib/docker:ro
-            - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-        networks:
-            - hidden
-        depends_on:
-            - elasticsearch
-            - kibana
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # elasticsearch: # Json database
+    #     container_name: elasticsearch
+    #     image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #       discovery.type: single-node
+    #       bootstrap.memory_lock: 'true'
+    #       ES_JAVA_OPTS: -Xms512m -Xmx512m
+    #     ulimits:
+    #         memlock:
+    #             soft: -1
+    #             hard: -1
+    #     volumes:
+    #         - elasticsearch_data:/usr/share/elasticsearch/data
+    #     networks:
+    #         - hidden
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # curator: # Elasticsearch indices janitor
+    #     container_name: curator
+    #     image: miffyliye/curator-cli
+    #     restart: ${RESTART_MODE}
+    #     command:
+    #         - '--host'
+    #         - 'http://elasticsearch:9200'
+    #         - '--loglevel'
+    #         - 'WARNING'
+    #         - 'delete_indices'
+    #         - '--ignore_empty_list'
+    #         - '--filter_list'
+    #         - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":7}]'
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - elasticsearch
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # kibana: # Elasticsearch data UI
+    #     container_name: kibana
+    #     image: docker.elastic.co/kibana/kibana:7.3.2
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         SERVER_NAME: kibana
+    #         LOGGING_QUIET: 'true'
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - elasticsearch
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=5601"
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # filebeat: # Logs watcher
+    #     container_name: filebeat
+    #     image: docker.elastic.co/beats/filebeat:7.3.2
+    #     restart: ${RESTART_MODE}
+    #     command: filebeat -e -strict.perms=false
+    #     user: root
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #         - /var/lib/docker:/var/lib/docker:ro
+    #         - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - elasticsearch
+    #         - kibana
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
     samba: # SMB server
         container_name: samba
@@ -694,79 +694,79 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    telegraf: # Telegraf
-        container_name: telegraf
-        image: telegraf
-        restart: ${RESTART_MODE}
-        networks:
-            - connected
-            - hidden
-        volumes:
-            - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-        depends_on:
-            - influxdb
-            - mosquitto
-        labels:
-            - "traefik.enable=false"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    influxdb: # InfluxDB
-        container_name: influxdb
-        image: influxdb
-        restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_DB: miflora
-            INFLUXDB_USER: miflora
-            INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-        networks:
-            - hidden
-        volumes:
-            - influx_data:/var/lib/influxdb
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    chronograf: # InfluxDB Admin UI
-        image: chronograf
-        container_name: chronograf
-        restart: ${RESTART_MODE}
-        command: --influxdb-url=http://influxdb:8086
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - influxdb
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8888"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    mosquitto: # Mosquitto mqtt broker
-        container_name: mosquitto
-        image: eclipse-mosquitto
-        restart: ${RESTART_MODE}
-        ports:
-            - "1883:1883/tcp"
-        networks:
-            - connected
-        volumes:
-            - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-            - mosquitto_data:/mosquitto/data
-        labels:
-            - "traefik.enable=false"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # telegraf: # Telegraf
+    #     container_name: telegraf
+    #     image: telegraf
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     volumes:
+    #         - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    #     depends_on:
+    #         - influxdb
+    #         - mosquitto
+    #     labels:
+    #         - "traefik.enable=false"
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # influxdb: # InfluxDB
+    #     container_name: influxdb
+    #     image: influxdb
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         INFLUXDB_DB: miflora
+    #         INFLUXDB_USER: miflora
+    #         INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    #     networks:
+    #         - hidden
+    #     volumes:
+    #         - influx_data:/var/lib/influxdb
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # chronograf: # InfluxDB Admin UI
+    #     image: chronograf
+    #     container_name: chronograf
+    #     restart: ${RESTART_MODE}
+    #     command: --influxdb-url=http://influxdb:8086
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - influxdb
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=8888"
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # mosquitto: # Mosquitto mqtt broker
+    #     container_name: mosquitto
+    #     image: eclipse-mosquitto
+    #     restart: ${RESTART_MODE}
+    #     ports:
+    #         - "1883:1883/tcp"
+    #     networks:
+    #         - connected
+    #     volumes:
+    #         - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    #         - mosquitto_data:/mosquitto/data
+    #     labels:
+    #         - "traefik.enable=false"
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
     # miflora-daemon: # Miflora daemon
     #     container_name: miflora-daemon
