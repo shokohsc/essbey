@@ -238,19 +238,19 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
             - "traefik.port=8080"
-        depends_on:
-            - gateway
-            - portainer
-            - commander
-            - plex
-            - grafana
-            - heimdall
-            - monitor
-            - nginx-comic
-            - nginx-wol
-            - paint-web
-            - chronograf
-            - kibana
+        # depends_on:
+        #     - gateway
+        #     - portainer
+        #     - commander
+        #     - plex
+        #     - grafana
+        #     - heimdall
+        #     - monitor
+        #     - nginx-comic
+        #     - nginx-wol
+        #     - paint-web
+            # - chronograf
+            # - kibana
         logging:
             options:
                 max-size: "50k"
