@@ -21,7 +21,7 @@ volumes:
     grafana_data: {}
     influx_data: {}
     minecraft_data: {}
-    mosquitto_data: {}
+    # mosquitto_data: {}
     prometheus_data: {}
 
 services:
