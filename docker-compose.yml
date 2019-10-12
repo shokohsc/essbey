@@ -626,6 +626,7 @@ services:
         volumes_from:
             - wol-web
         networks:
+            - connected
             - hidden
         depends_on:
             - wol-web
