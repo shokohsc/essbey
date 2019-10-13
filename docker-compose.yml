@@ -274,7 +274,7 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-ILX", "GET", "http://gateway:9091"]
+            test: ["CMD", "curl", "-IkLX", "GET", "http://transmission.shokohsc"]
             interval: 1m30s
             timeout: 10s
             retries: 2
@@ -627,7 +627,6 @@ services:
             - wol-web
         networks:
             - connected
-            - hidden
         depends_on:
             - wol-web
         logging:
@@ -646,7 +645,6 @@ services:
         volumes_from:
             - wol-web
         networks:
-            - hidden
             - connected
         links:
             - "php-fpm-wol:php-fpm"
