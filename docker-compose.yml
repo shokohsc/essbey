@@ -244,7 +244,7 @@ services:
             TZ: ${TIMEZONE}
             HOST_TARGET: 'http://transmission.shokohsc'
             VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
-            WAIT_GATEWAY_TIME: 60
+            WAIT_GATEWAY_TIME: 180
         volumes:
             - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
             - /var/run/docker.sock:/var/run/docker.sock
