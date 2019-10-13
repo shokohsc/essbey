@@ -220,6 +220,45 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    gateway-sidekick:
+        container_name: gateway-sidekick
+        image: shokohsc/gateway-sidekick
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        depends_on:
+            - gateway
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    php-fpm-gateway-sidekick:
+        container_name: php-fpm-gateway-sidekick
+        image: shokohsc/alpine-php-fpm
+        restart: ${RESTART_MODE}
+        command: php index.php
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            HOST_TARGET: 'http://transmission.shokohsc'
+            VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
+            WAIT_GATEWAY_TIME: 360
+        volumes:
+            - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
+            - /var/run/docker.sock:/var/run/docker.sock
+        volumes_from:
+            - gateway-sidekick
+        networks:
+            - connected
+        depends_on:
+            - gateway-sidekick
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     traefik: # Reverse proxy
         container_name: traefik
         image: traefik:1.7.16-alpine
