@@ -316,7 +316,7 @@ services:
             test: ["CMD", "curl", "-IkLX", "GET", "http://transmission.shokohsc"]
             interval: 1m30s
             timeout: 10s
-            retries: 2
+            retries: 5
         logging:
             options:
                 max-size: "50k"
@@ -462,21 +462,21 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    alertmanager: # Grafana requirement
-        image: prom/alertmanager:v0.15.2
-        container_name: alertmanager
-        volumes:
-            - ./config/alertmanager/:/etc/alertmanager/
-        command:
-            - '--config.file=/etc/alertmanager/config.yml'
-            - '--storage.path=/alertmanager'
-        restart: ${RESTART_MODE}
-        networks:
-            - hidden
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # alertmanager: # Grafana requirement
+    #     image: prom/alertmanager:v0.15.2
+    #     container_name: alertmanager
+    #     volumes:
+    #         - ./config/alertmanager/:/etc/alertmanager/
+    #     command:
+    #         - '--config.file=/etc/alertmanager/config.yml'
+    #         - '--storage.path=/alertmanager'
+    #     restart: ${RESTART_MODE}
+    #     networks:
+    #         - hidden
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
     nodeexporter: # Grafana requirement
         image: prom/node-exporter:v0.16.0
