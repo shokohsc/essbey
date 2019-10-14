@@ -225,9 +225,7 @@ services:
         image: shokohsc/gateway-sidekick
         restart: ${RESTART_MODE}
         networks:
-            - connected
-        depends_on:
-            - gateway
+            - hidden
         logging:
             options:
                 max-size: "50k"
@@ -242,17 +240,17 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
-            HOST_TARGET: 'http://transmission.shokohsc'
+            HOST_TARGET: 'https://ifconfig.co'
             VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
-            WAIT_GATEWAY_TIME: 360
+            WAIT_GATEWAY_TIME: 180
         volumes:
             - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
             - /var/run/docker.sock:/var/run/docker.sock
         volumes_from:
             - gateway-sidekick
-        networks:
-            - connected
+        network_mode: "service:gateway"
         depends_on:
+            - gateway
             - gateway-sidekick
         logging:
             options:
