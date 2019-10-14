@@ -240,15 +240,16 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
-            HOST_TARGET: 'https://ifconfig.co'
+            HOST_TARGET: "https://transmission.${DOMAIN}"
             VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
-            WAIT_GATEWAY_TIME: 180
+            WAIT_GATEWAY_TIME: 300
         volumes:
             - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
             - /var/run/docker.sock:/var/run/docker.sock
         volumes_from:
             - gateway-sidekick
-        network_mode: "service:gateway"
+        networks:
+            - connected
         depends_on:
             - gateway
             - gateway-sidekick
