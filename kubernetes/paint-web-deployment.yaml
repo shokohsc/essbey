@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:paint.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: paint-web
+  name: paint-web
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:paint.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: paint-web
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: shokohsc/mini-paint
+        name: paint-web
+        resources: {}
+      restartPolicy: Always
+status: {}

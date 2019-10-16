@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: comic-reader
+  name: comic-reader
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: comic-reader
+    spec:
+      containers:
+      - image: shokohsc/server-comic-reader
+        name: comic-reader
+        resources: {}
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www/symfony
+          name: comic-reader-claim0
+        - mountPath: /var/www/symfony/public/files/weekly
+          name: comic-reader-claim1
+        - mountPath: /var/www/symfony/public/files/all
+          name: comic-reader-claim2
+      restartPolicy: Always
+      volumes:
+      - name: comic-reader-claim0
+        persistentVolumeClaim:
+          claimName: comic-reader-claim0
+      - name: comic-reader-claim1
+        persistentVolumeClaim:
+          claimName: comic-reader-claim1
+      - name: comic-reader-claim2
+        persistentVolumeClaim:
+          claimName: comic-reader-claim2
+status: {}

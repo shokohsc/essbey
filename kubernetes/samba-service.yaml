@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: samba
+  name: samba
+spec:
+  ports:
+  - name: "139"
+    port: 139
+    targetPort: 139
+  - name: "445"
+    port: 445
+    targetPort: 445
+  selector:
+    io.kompose.service: samba
+status:
+  loadBalancer: {}

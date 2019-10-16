@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:monitor.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: monitor
+  name: monitor
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:monitor.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: monitor
+    spec:
+      containers:
+      - env:
+        - name: OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT
+        - name: OPENVPNMONITOR_DEFAULT_LATITUDE
+        - name: OPENVPNMONITOR_DEFAULT_LONGITUDE
+        - name: OPENVPNMONITOR_DEFAULT_MAPS
+          value: "True"
+        - name: OPENVPNMONITOR_DEFAULT_SITE
+        - name: OPENVPNMONITOR_SITES_0_HOST
+        - name: OPENVPNMONITOR_SITES_0_NAME
+        - name: OPENVPNMONITOR_SITES_0_PORT
+        image: ruimarinho/openvpn-monitor
+        name: monitor
+        resources: {}
+      restartPolicy: Always
+status: {}

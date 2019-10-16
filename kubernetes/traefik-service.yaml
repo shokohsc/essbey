@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:traefik.
+    traefik.port: "8080"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: traefik
+  name: traefik
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+  - name: "443"
+    port: 443
+    targetPort: 443
+  selector:
+    io.kompose.service: traefik
+status:
+  loadBalancer: {}

@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:wol.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-wol
+  name: nginx-wol
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:wol.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nginx-wol
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: shokohsc/alpine-nginx
+        name: nginx-wol
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/symfony
+          name: wol-web-claim0
+      restartPolicy: Always
+      volumes:
+      - name: wol-web-claim0
+        persistentVolumeClaim:
+          claimName: wol-web-claim0
+status: {}

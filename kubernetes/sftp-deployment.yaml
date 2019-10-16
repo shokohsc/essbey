@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sftp
+  name: sftp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sftp
+    spec:
+      containers:
+      - image: atmoz/sftp
+        name: sftp
+        ports:
+        - containerPort: 22
+        resources: {}
+        volumeMounts:
+        - mountPath: /home/shokohsc/upload/downloads
+          name: sftp-claim0
+        - mountPath: /home/shokohsc/upload/shared
+          name: sftp-claim1
+        - mountPath: /home/shokohsc/upload/media
+          name: sftp-claim2
+      restartPolicy: Always
+      volumes:
+      - name: sftp-claim0
+        persistentVolumeClaim:
+          claimName: sftp-claim0
+      - name: sftp-claim1
+        persistentVolumeClaim:
+          claimName: sftp-claim1
+      - name: sftp-claim2
+        persistentVolumeClaim:
+          claimName: sftp-claim2
+status: {}

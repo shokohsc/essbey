@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: prometheus
+  name: prometheus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: prometheus
+    spec:
+      containers:
+      - args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus
+        - --web.console.libraries=/etc/prometheus/console_libraries
+        - --web.console.templates=/etc/prometheus/consoles
+        - --storage.tsdb.retention=24h
+        - --web.enable-lifecycle
+        image: prom/prometheus:v2.4.3
+        name: prometheus
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/prometheus/
+          name: prometheus-claim0
+        - mountPath: /prometheus
+          name: app-prometheus-data
+      restartPolicy: Always
+      volumes:
+      - name: prometheus-claim0
+        persistentVolumeClaim:
+          claimName: prometheus-claim0
+      - name: app-prometheus-data
+        persistentVolumeClaim:
+          claimName: app-prometheus-data
+status: {}

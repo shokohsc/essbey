@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php-fpm-comic
+  name: php-fpm-comic
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php-fpm-comic
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: shokohsc/alpine-php-fpm
+        name: php-fpm-comic
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/symfony
+          name: comic-reader-claim0
+        - mountPath: /var/www/symfony/public/files/weekly
+          name: comic-reader-claim1
+        - mountPath: /var/www/symfony/public/files/all
+          name: comic-reader-claim2
+      restartPolicy: Always
+      volumes:
+      - name: comic-reader-claim0
+        persistentVolumeClaim:
+          claimName: comic-reader-claim0
+      - name: comic-reader-claim1
+        persistentVolumeClaim:
+          claimName: comic-reader-claim1
+      - name: comic-reader-claim2
+        persistentVolumeClaim:
+          claimName: comic-reader-claim2
+status: {}

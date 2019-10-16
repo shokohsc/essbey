@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:portainer.
+    traefik.port: "9000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: portainer
+  name: portainer
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:portainer.
+        traefik.port: "9000"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: portainer
+    spec:
+      containers:
+      - image: portainer/portainer
+        name: portainer
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: portainer-claim0
+      restartPolicy: Always
+      volumes:
+      - name: portainer-claim0
+        persistentVolumeClaim:
+          claimName: portainer-claim0
+status: {}

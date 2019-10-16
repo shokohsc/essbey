@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php-fpm-gateway-sidekick
+  name: php-fpm-gateway-sidekick
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php-fpm-gateway-sidekick
+    spec:
+      containers:
+      - args:
+        - php
+        - index.php
+        env:
+        - name: HOST_TARGET
+          value: https://transmission.
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        - name: VPN_FILE_PATH
+          value: /var/www/symfony/vpn_conf.ovpn
+        - name: WAIT_GATEWAY_TIME
+          value: "300"
+        image: shokohsc/alpine-php-fpm
+        name: php-fpm-gateway-sidekick
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/symfony/vpn-conf.ovpn
+          name: php-fpm-gateway-sidekick-claim0
+        - mountPath: /var/run/docker.sock
+          name: php-fpm-gateway-sidekick-claim1
+      restartPolicy: Always
+      volumes:
+      - name: php-fpm-gateway-sidekick-claim0
+        persistentVolumeClaim:
+          claimName: php-fpm-gateway-sidekick-claim0
+      - name: php-fpm-gateway-sidekick-claim1
+        persistentVolumeClaim:
+          claimName: php-fpm-gateway-sidekick-claim1
+status: {}

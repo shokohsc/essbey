@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:transmission.
+    traefik.port: "9091"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gateway
+  name: gateway
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:transmission.
+        traefik.port: "9091"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gateway
+    spec:
+      containers:
+      - args:
+        - -r
+        - 192.168.1.0/24
+        - -p
+        - "9091"
+        env:
+        - name: TZ
+        image: dperson/openvpn-client
+        name: gateway
+        ports:
+        - containerPort: 51413
+        - containerPort: 51413
+          protocol: UDP
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - net_admin
+        volumeMounts:
+        - mountPath: /vpn/vpn-conf.ovpn
+          name: gateway-claim0
+      restartPolicy: Always
+      volumes:
+      - name: gateway-claim0
+        persistentVolumeClaim:
+          claimName: gateway-claim0
+status: {}

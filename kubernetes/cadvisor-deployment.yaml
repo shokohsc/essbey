@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cadvisor
+  name: cadvisor
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cadvisor
+    spec:
+      containers:
+      - image: google/cadvisor:v0.31.0
+        name: cadvisor
+        resources: {}
+        volumeMounts:
+        - mountPath: /rootfs
+          name: cadvisor-claim0
+          readOnly: true
+        - mountPath: /var/run
+          name: cadvisor-claim1
+        - mountPath: /sys
+          name: cadvisor-claim2
+          readOnly: true
+        - mountPath: /var/lib/docker
+          name: cadvisor-claim3
+          readOnly: true
+        - mountPath: /cgroup
+          name: cadvisor-claim4
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: cadvisor-claim0
+        persistentVolumeClaim:
+          claimName: cadvisor-claim0
+          readOnly: true
+      - name: cadvisor-claim1
+        persistentVolumeClaim:
+          claimName: cadvisor-claim1
+      - name: cadvisor-claim2
+        persistentVolumeClaim:
+          claimName: cadvisor-claim2
+          readOnly: true
+      - name: cadvisor-claim3
+        persistentVolumeClaim:
+          claimName: cadvisor-claim3
+          readOnly: true
+      - name: cadvisor-claim4
+        persistentVolumeClaim:
+          claimName: cadvisor-claim4
+          readOnly: true
+status: {}

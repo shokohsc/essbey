@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sftp
+  name: sftp
+spec:
+  ports:
+  - name: "32768"
+    port: 32768
+    targetPort: 22
+  selector:
+    io.kompose.service: sftp
+status:
+  loadBalancer: {}

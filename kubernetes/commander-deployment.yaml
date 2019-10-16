@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:commander.
+    traefik.port: "8000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: commander
+  name: commander
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:commander.
+        traefik.port: "8000"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: commander
+    spec:
+      containers:
+      - image: coderaiser/cloudcmd
+        name: commander
+        resources: {}
+        volumeMounts:
+        - mountPath: /mnt/fs
+          name: commander-claim0
+        - mountPath: /root/downloads
+          name: commander-claim1
+        - mountPath: /root/shared
+          name: commander-claim2
+        - mountPath: /root/media
+          name: commander-claim3
+      restartPolicy: Always
+      volumes:
+      - name: commander-claim0
+        persistentVolumeClaim:
+          claimName: commander-claim0
+      - name: commander-claim1
+        persistentVolumeClaim:
+          claimName: commander-claim1
+      - name: commander-claim2
+        persistentVolumeClaim:
+          claimName: commander-claim2
+      - name: commander-claim3
+        persistentVolumeClaim:
+          claimName: commander-claim3
+status: {}

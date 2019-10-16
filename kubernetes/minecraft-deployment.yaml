@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: minecraft
+  name: minecraft
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: minecraft
+    spec:
+      containers:
+      - env:
+        - name: EULA
+          value: "TRUE"
+        image: itzg/minecraft-server
+        name: minecraft
+        ports:
+        - containerPort: 25565
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: app-minecraft-data
+        - mountPath: /data/server.properties
+          name: minecraft-claim1
+      restartPolicy: Always
+      volumes:
+      - name: app-minecraft-data
+        persistentVolumeClaim:
+          claimName: app-minecraft-data
+      - name: minecraft-claim1
+        persistentVolumeClaim:
+          claimName: minecraft-claim1
+status: {}

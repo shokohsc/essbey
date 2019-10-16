@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: samba
+  name: samba
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: samba
+    spec:
+      containers:
+      - args:
+        - -s
+        - shared;/mount;yes;no;yes;all;none
+        image: dperson/samba
+        name: samba
+        ports:
+        - containerPort: 139
+        - containerPort: 445
+        resources: {}
+        volumeMounts:
+        - mountPath: /mount/downloads
+          name: samba-claim0
+        - mountPath: /mount/shared
+          name: samba-claim1
+        - mountPath: /mount/media
+          name: samba-claim2
+      restartPolicy: Always
+      volumes:
+      - name: samba-claim0
+        persistentVolumeClaim:
+          claimName: samba-claim0
+      - name: samba-claim1
+        persistentVolumeClaim:
+          claimName: samba-claim1
+      - name: samba-claim2
+        persistentVolumeClaim:
+          claimName: samba-claim2
+status: {}

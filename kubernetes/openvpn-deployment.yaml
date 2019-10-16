@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: openvpn
+  name: openvpn
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: openvpn
+    spec:
+      containers:
+      - image: kylemanna/openvpn
+        name: openvpn
+        ports:
+        - containerPort: 1194
+          protocol: UDP
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - net_admin
+        tty: true
+        volumeMounts:
+        - mountPath: /etc/openvpn
+          name: openvpn-claim0
+      restartPolicy: Always
+      volumes:
+      - name: openvpn-claim0
+        persistentVolumeClaim:
+          claimName: openvpn-claim0
+status: {}

@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: wol-web
+  name: wol-web
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: wol-web
+    spec:
+      containers:
+      - image: shokohsc/server-wol
+        name: wol-web
+        resources: {}
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www/symfony
+          name: wol-web-claim0
+      restartPolicy: Always
+      volumes:
+      - name: wol-web-claim0
+        persistentVolumeClaim:
+          claimName: wol-web-claim0
+status: {}

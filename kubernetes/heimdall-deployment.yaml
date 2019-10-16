@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:heimdall.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: heimdall
+  name: heimdall
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:heimdall.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: heimdall
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: linuxserver/heimdall
+        name: heimdall
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: heimdall-claim0
+      restartPolicy: Always
+      volumes:
+      - name: heimdall-claim0
+        persistentVolumeClaim:
+          claimName: heimdall-claim0
+status: {}

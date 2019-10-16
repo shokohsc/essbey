@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: influxdb
+  name: influxdb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: influxdb
+    spec:
+      containers:
+      - env:
+        - name: INFLUXDB_DB
+          value: miflora
+        - name: INFLUXDB_USER
+          value: miflora
+        - name: INFLUXDB_USER_PASSWORD
+        image: influxdb
+        name: influxdb
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: app-influx-data
+      restartPolicy: Always
+      volumes:
+      - name: app-influx-data
+        persistentVolumeClaim:
+          claimName: app-influx-data
+status: {}

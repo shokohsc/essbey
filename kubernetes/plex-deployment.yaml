@@ -1,0 +1,86 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:plex.
+    traefik.port: "32400"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: plex
+  name: plex
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:plex.
+        traefik.port: "32400"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: plex
+    spec:
+      containers:
+      - env:
+        - name: ADVERTISE_IP
+        - name: PGID
+        - name: PLEX_CLAIM
+        - name: PUID
+        - name: TZ
+        - name: VERSION
+          value: latest
+        image: linuxserver/plex
+        name: plex
+        ports:
+        - containerPort: 32400
+        - containerPort: 3005
+        - containerPort: 8324
+        - containerPort: 32469
+        - containerPort: 1900
+          protocol: UDP
+        - containerPort: 32410
+          protocol: UDP
+        - containerPort: 32412
+          protocol: UDP
+        - containerPort: 32413
+          protocol: UDP
+        - containerPort: 32414
+          protocol: UDP
+        - containerPort: 32400
+          protocol: UDP
+        - containerPort: 32469
+          protocol: UDP
+        - containerPort: 5353
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: plex-claim0
+        - mountPath: /transcode
+          name: plex-claim1
+        - mountPath: /data/media
+          name: plex-claim2
+        - mountPath: /data/downloads
+          name: plex-claim3
+      hostname: plex
+      restartPolicy: Always
+      volumes:
+      - name: plex-claim0
+        persistentVolumeClaim:
+          claimName: plex-claim0
+      - name: plex-claim1
+        persistentVolumeClaim:
+          claimName: plex-claim1
+      - name: plex-claim2
+        persistentVolumeClaim:
+          claimName: plex-claim2
+      - name: plex-claim3
+        persistentVolumeClaim:
+          claimName: plex-claim3
+status: {}

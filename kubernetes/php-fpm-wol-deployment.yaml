@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php-fpm-wol
+  name: php-fpm-wol
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php-fpm-wol
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: shokohsc/alpine-php-fpm
+        name: php-fpm-wol
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: php-fpm-wol-claim0
+        - mountPath: /var/www/symfony
+          name: wol-web-claim0
+      restartPolicy: Always
+      volumes:
+      - name: php-fpm-wol-claim0
+        persistentVolumeClaim:
+          claimName: php-fpm-wol-claim0
+      - name: wol-web-claim0
+        persistentVolumeClaim:
+          claimName: wol-web-claim0
+status: {}

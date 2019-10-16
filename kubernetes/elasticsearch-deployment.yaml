@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: elasticsearch
+    spec:
+      containers:
+      - env:
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+        - name: bootstrap.memory_lock
+          value: "true"
+        - name: discovery.type
+          value: single-node
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
+        name: elasticsearch
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: app-elasticsearch-data
+      restartPolicy: Always
+      volumes:
+      - name: app-elasticsearch-data
+        persistentVolumeClaim:
+          claimName: app-elasticsearch-data
+status: {}

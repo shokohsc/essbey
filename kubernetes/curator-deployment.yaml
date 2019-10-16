@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: curator
+  name: curator
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: curator
+    spec:
+      containers:
+      - args:
+        - --host
+        - http://elasticsearch:9200
+        - --loglevel
+        - WARNING
+        - delete_indices
+        - --ignore_empty_list
+        - --filter_list
+        - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":7}]'
+        image: miffyliye/curator-cli
+        name: curator
+        resources: {}
+      restartPolicy: Always
+status: {}

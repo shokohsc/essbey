@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:grafana.
+    traefik.port: "3000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grafana
+  name: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:grafana.
+        traefik.port: "3000"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grafana
+    spec:
+      containers:
+      - command:
+        - /setup.sh
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-piechart-panel
+        - name: GF_LOG_LEVEL
+          value: warn
+        - name: GF_SECURITY_ADMIN_PASSWORD
+        - name: GF_SERVER_ROOT_URL
+        - name: GF_SMTP_ENABLED
+        - name: GF_SMTP_FROM_ADDRESS
+        - name: GF_SMTP_FROM_NAME
+        - name: GF_SMTP_HOST
+        - name: GF_SMTP_PASSWORD
+        - name: GF_SMTP_USER
+        image: grafana/grafana:5.2.4
+        name: grafana
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: app-grafana-data
+        - mountPath: /setup.sh
+          name: grafana-claim1
+      restartPolicy: Always
+      volumes:
+      - name: app-grafana-data
+        persistentVolumeClaim:
+          claimName: app-grafana-data
+      - name: grafana-claim1
+        persistentVolumeClaim:
+          claimName: grafana-claim1
+status: {}

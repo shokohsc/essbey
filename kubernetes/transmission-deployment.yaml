@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    autoheal: "true"
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: transmission
+  name: transmission
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        autoheal: "true"
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: transmission
+    spec:
+      containers:
+      - image: linuxserver/transmission
+        name: transmission
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: transmission-claim0
+        - mountPath: /downloads
+          name: transmission-claim1
+        - mountPath: /watch
+          name: transmission-claim2
+      restartPolicy: Always
+      volumes:
+      - name: transmission-claim0
+        persistentVolumeClaim:
+          claimName: transmission-claim0
+      - name: transmission-claim1
+        persistentVolumeClaim:
+          claimName: transmission-claim1
+      - name: transmission-claim2
+        persistentVolumeClaim:
+          claimName: transmission-claim2
+status: {}

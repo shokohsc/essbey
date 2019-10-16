@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -v -f docker-compose.yml
+    kompose.version: 1.19.0 (f63a961c)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:kibana.
+    traefik.port: "5601"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kibana
+  name: kibana
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -v -f docker-compose.yml
+        kompose.version: 1.19.0 (f63a961c)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:kibana.
+        traefik.port: "5601"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kibana
+    spec:
+      containers:
+      - env:
+        - name: LOGGING_QUIET
+          value: "true"
+        - name: SERVER_NAME
+          value: kibana
+        image: docker.elastic.co/kibana/kibana:7.3.2
+        name: kibana
+        resources: {}
+      restartPolicy: Always
+status: {}
