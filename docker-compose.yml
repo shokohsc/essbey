@@ -23,6 +23,7 @@ volumes:
     minecraft_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
+    redis_data: {}
 
 services:
 
@@ -253,6 +254,8 @@ services:
         depends_on:
             - gateway
             - gateway-sidekick
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
@@ -667,6 +670,8 @@ services:
             - connected
         depends_on:
             - wol-web
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
@@ -848,6 +853,57 @@ services:
             - ./config/minecraft/server.properties:/data/server.properties
         networks:
             - connected
+        labels:
+            - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    diskover:
+        image: linuxserver/diskover
+        container_name: diskover
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
+            RUN_ON_START: true
+            USE_CRON: true
+        volumes:
+            - ./config/diskover:/config
+            - /:/data
+        ports:
+            - 9999:9999
+        mem_limit: 4096m
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:diskover.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=80"
+        networks:
+            - connected
+            - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+        depends_on:
+            - elasticsearch
+            - redis
+
+    redis:
+        container_name: redis
+        image: redis:alpine
+        restart: ${RESTART_MODE}
+        volumes:
+            - redis_data:/data
+        networks:
+            - hidden
         labels:
             - "traefik.enable=false"
         logging:
