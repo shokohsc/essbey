@@ -50,6 +50,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/chronograf.shokohsc.pem"
       keyFile = "/etc/traefik/certs/chronograf.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/diskover.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/diskover.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/grafana.shokohsc.pem"
       keyFile = "/etc/traefik/certs/grafana.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
