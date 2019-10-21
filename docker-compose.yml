@@ -23,7 +23,6 @@ volumes:
     minecraft_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
-    redis_data: {}
 
 services:
 
