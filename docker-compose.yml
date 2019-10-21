@@ -32,12 +32,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
           discovery.type: single-node
-          bootstrap.memory_lock: 'true'
-          ES_JAVA_OPTS: -Xms512m -Xmx512m
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
+          ES_JAVA_OPTS: "-Xmx512m -Xms512m"
         volumes:
             - elasticsearch_data:/usr/share/elasticsearch/data
         networks:
