@@ -47,18 +47,16 @@ services:
         image: praseodym/elasticsearch-curator
         restart: ${RESTART_MODE}
         command:
-            - '--host'
-            - 'http://elasticsearch:9200'
-            - '--loglevel'
-            - 'WARNING'
-            - 'delete_indices'
-            - '--ignore_empty_list'
-            - '--filter_list'
-            - '[{"filtertype":"pattern","kind":"prefix","value":"filebeat-"},{"filtertype":"age","source":"name","direction":"older","timestring":"%Y.%m.%d","unit":"days","unit_count":7}]'
+            - '--config'
+            - 'config.yml'
+            - 'action.yml'
         networks:
             - hidden
         depends_on:
             - elasticsearch
+        volumes:
+            - ./config/curator/config.yml:/curator/config.yml
+            - ./config/curator/action.yml:/curator/action.yml
         logging:
             options:
                 max-size: "50k"
