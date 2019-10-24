@@ -21,6 +21,7 @@ volumes:
     grafana_data: {}
     influx_data: {}
     minecraft_data: {}
+    mongo_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
 
@@ -851,3 +852,34 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
+
+    mongo: # Wekan requirement
+        image: mongo
+        container_name: mongo
+        restart: ${RESTART_MODE}
+        volumes:
+            - mongo_data:/data/db
+        networks:
+            - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    wekan: # Wekan
+        image: wekanteam/wekan
+        container_name: wekan
+        restart: ${RESTART_MODE}
+        environment:
+            ROOT_URL: ${WK_ROOT_URL}
+            MONGO_URL: ${MONGO_URL}/wekan
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - mongo
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:wekan.shokohsc"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
