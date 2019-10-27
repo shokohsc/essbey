@@ -13,6 +13,8 @@
 
     $> docker-compose run --rm openvpn ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn
 
+[link](https://github.com/kylemanna/docker-openvpn/issues/496) if cannot create client file
+
 # Certificates
 
     $ DOMAIN_CERT=you_domain sh config/traefik/create-website-cert.sh
