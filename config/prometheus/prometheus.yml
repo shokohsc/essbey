@@ -41,7 +41,7 @@ scrape_configs:
       - targets: ['traefik:8080']
 
 
-# alerting:
+alerting:
   alertmanagers:
   - scheme: http
     static_configs:
