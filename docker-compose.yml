@@ -183,6 +183,24 @@ services:
         labels:
             - "traefik.enable=false"
 
+    openvpn-tcp: # Internal vpn fallback tcp
+        container_name: openvpn-tcp
+        image: kylemanna/openvpn
+        command: ovpn_run --proto tcp
+        tty: true
+        privileged: true
+        restart: ${RESTART_MODE}
+        ports:
+            - "32767:1194/tcp"
+        logging:
+            driver: none
+        volumes:
+            - ./config/openvpn:/etc/openvpn
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
     gateway: # Torrenting vpn
         container_name: gateway
         image: dperson/openvpn-client
