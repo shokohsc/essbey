@@ -71,6 +71,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/portainer.shokohsc.pem"
       keyFile = "/etc/traefik/certs/portainer.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/openvpn.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/openvpn.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/traefik.shokohsc.pem"
       keyFile = "/etc/traefik/certs/traefik.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
