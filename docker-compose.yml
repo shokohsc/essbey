@@ -24,6 +24,7 @@ volumes:
     mongo_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
+    openvpn-ui_data: {}
 
 services:
 
@@ -198,6 +199,8 @@ services:
             - ./config/openvpn:/etc/openvpn
         networks:
             - connected
+        depends_on:
+            - openvpn
         labels:
             - "traefik.enable=false"
 
@@ -582,6 +585,27 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    openvpn-ui:
+        container_name: openvpn-ui
+        image: awalach/openvpn-web-ui
+        restart: ${RESTART_MODE}
+        restart: always
+        volumes:
+            - ./config/openvpn:/etc/openvpn
+            - openvpn-ui_data:/opt/openvpn-gui/db
+        networks:
+            - connected
+        depends_on:
+            - openvpn
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
+            - "traefik.port=8080"
         logging:
             options:
                 max-size: "50k"
