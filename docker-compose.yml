@@ -260,6 +260,7 @@ services:
             HOST_TARGET: "https://transmission.${DOMAIN}"
             VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
             WAIT_GATEWAY_TIME: 300
+            MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
         volumes:
             - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
             - /var/run/docker.sock:/var/run/docker.sock
