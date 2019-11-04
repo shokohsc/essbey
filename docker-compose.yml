@@ -244,6 +244,8 @@ services:
         image: shokohsc/gateway-sidekick
         restart: ${RESTART_MODE}
         tty: true
+        volumes:
+            - /var/www/symfony
         networks:
             - hidden
         logging:
