@@ -949,7 +949,7 @@ services:
         container_name: postgres
         restart: ${RESTART_MODE}
         volumes:
-            - postgres_data://var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql/data
         networks:
             - hidden
         environment:
@@ -977,8 +977,6 @@ services:
         networks:
             - connected
             - hidden
-        extra_hosts:
-            - dockerhost:127.0.0.1
         depends_on:
             - postgres
         labels:
