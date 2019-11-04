@@ -212,8 +212,8 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: "-r 192.168.1.0/24 -p 9091"
-        # command: "-r 192.168.1.0/24 -p 9091 -v server;username;password;port"
+        command: "-r 192.168.1.0/24 -p 9091 -p 3000"
+        # command: "-r 192.168.1.0/24 -p 9091 -p 3000 -v server;username;password;port"
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
@@ -230,8 +230,10 @@ services:
         dns: 8.8.8.8
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:transmission.${DOMAIN}"
-            - "traefik.port=9091"
+            - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
+            - "traefik.transmission.port=9091"
+            - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
+            - "traefik.torrent.port=3000"
         logging:
             options:
                 max-size: "50k"
@@ -1006,6 +1008,42 @@ services:
             - "traefik.frontend.rule=Host:adminer.shokohsc"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    stackedit:
+        image: benweet/stackedit
+        container_name: stackedit
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:stackedit.shokohsc"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    cloudtorrent:
+        image: jpillora/cloud-torrent
+        container_name: cloudtorrent
+        restart: ${RESTART_MODE}
+        network_mode: "service:gateway"
+        volumes:
+            - ./download:/downloads
+        depends_on:
+            - gateway
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IkLX", "GET", "https://ifconfig.co"]
+            interval: 5m
+            timeout: 20s
         logging:
             options:
                 max-size: "50k"

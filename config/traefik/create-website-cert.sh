@@ -1,5 +1,5 @@
 docker pull shokohsc/mkcert && \
-docker run -ti --rm \
+docker run -d -ti --rm \
  -e domain=$DOMAIN_CERT \
  --name mkcert \
  -v $(pwd):/root/.local/share/mkcert \
