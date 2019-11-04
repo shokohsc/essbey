@@ -41,6 +41,9 @@ defaultEntryPoints = ["http", "https"]
   address = ":443"
     [entryPoints.https.tls]
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/adminer.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/adminer.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/comics.shokohsc.pem"
       keyFile = "/etc/traefik/certs/comics.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -58,6 +61,12 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/kibana.shokohsc.pem"
       keyFile = "/etc/traefik/certs/kibana.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/mattermost.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/mattermost.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/mongo.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/mongo.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/monitor.shokohsc.pem"
       keyFile = "/etc/traefik/certs/monitor.shokohsc-key.pem"
