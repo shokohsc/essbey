@@ -962,7 +962,8 @@ services:
                 max-file: "2"
 
     mattermost:
-        image: mattermost/mattermost-team-edition
+        build:
+            context: mattermost
         container_name: mattermost
         restart: ${RESTART_MODE}
         environment:
