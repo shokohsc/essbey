@@ -964,6 +964,8 @@ services:
     mattermost:
         build:
             context: mattermost
+            args:
+                - edition=team
         container_name: mattermost
         restart: ${RESTART_MODE}
         environment:
