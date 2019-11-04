@@ -331,9 +331,11 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IkLX", "GET", "https://ifconfig.co"]
-            interval: 5m
-            timeout: 20s
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
         logging:
             options:
                 max-size: "50k"
@@ -1044,9 +1046,11 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IkLX", "GET", "https://ifconfig.co"]
-            interval: 5m
-            timeout: 20s
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
         logging:
             options:
                 max-size: "50k"
