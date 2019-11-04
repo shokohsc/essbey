@@ -984,7 +984,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:mattermost.shokohsc"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8065"
+            - "traefik.port=8000"
         logging:
             options:
                 max-size: "50k"
