@@ -965,11 +965,6 @@ services:
         image: mattermost/mattermost-team-edition
         container_name: mattermost
         restart: ${RESTART_MODE}
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - postgres
         environment:
             MM_USERNAME: ${POSTGRES_USER}
             MM_PASSWORD: ${POSTGRES_PASSWORD}
@@ -979,11 +974,18 @@ services:
         volumes:
             - mattermost_data:/mattermost
             - /etc/localtime:/etc/localtime:ro
+        networks:
+            - connected
+            - hidden
+        extra_hosts:
+            - dockerhost:127.0.0.1
+        depends_on:
+            - postgres
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:mattermost.shokohsc"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8000"
+            - "traefik.port=8065"
         logging:
             options:
                 max-size: "50k"
