@@ -343,6 +343,9 @@ services:
         container_name: autoheal
         image: willfarrell/autoheal
         restart: ${RESTART_MODE}
+        environment:
+            AUTOHEAL_INTERVAL: 300
+            AUTOHEAL_START_PERIOD: 60
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         networks:
