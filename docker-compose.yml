@@ -243,6 +243,7 @@ services:
         container_name: gateway-sidekick
         image: shokohsc/gateway-sidekick
         restart: ${RESTART_MODE}
+        tty: true
         networks:
             - hidden
         logging:
