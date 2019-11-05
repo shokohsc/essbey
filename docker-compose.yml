@@ -1007,6 +1007,8 @@ services:
         image: adminer
         container_name: adminer
         restart: ${RESTART_MODE}
+        environment:
+            ADMINER_DESIGN: konya
         networks:
             - connected
             - hidden
