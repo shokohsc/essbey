@@ -218,7 +218,7 @@ services:
             - "32766:51413/tcp"
             - "32766:51413/udp"
             - "6881:6881/tcp"
-            - "6881:6881/ucp"
+            - "6881:6881/udp"
         volumes:
             - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
             # - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
