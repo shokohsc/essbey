@@ -930,7 +930,7 @@ services:
             - mongo
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wekan.shokohsc"
+            - "traefik.frontend.rule=Host:wekan.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
@@ -949,7 +949,7 @@ services:
             - mongo
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:mongo.shokohsc"
+            - "traefik.frontend.rule=Host:mongo.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8081"
         logging:
@@ -997,7 +997,7 @@ services:
             - postgres
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:mattermost.shokohsc"
+            - "traefik.frontend.rule=Host:mattermost.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8000"
         logging:
@@ -1018,7 +1018,7 @@ services:
             - postgres
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:adminer.shokohsc"
+            - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
@@ -1034,7 +1034,7 @@ services:
             - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:stackedit.shokohsc"
+            - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
@@ -1095,6 +1095,7 @@ services:
             DB_USERNAME: koel
             DB_PASSWORD: koel
             DB_DATABASE: koel
+            APP_URL: https://music.${DOMAIN}
         networks:
             - connected
             - hidden
@@ -1102,7 +1103,7 @@ services:
             - mysql
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:music.shokohsc"
+            - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
