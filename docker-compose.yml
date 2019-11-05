@@ -1092,7 +1092,7 @@ services:
             TZ: ${TIMEZONE}
             USER: mstream
             PASSWORD: mstream
-            USE_JSON: 'true'
+            USE_JSON: 'false'
         networks:
             - connected
         labels:
