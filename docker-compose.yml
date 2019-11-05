@@ -1050,8 +1050,6 @@ services:
         container_name: peerflix
         restart: ${RESTART_MODE}
         network_mode: "service:gateway"
-        volumes:
-            - ./download:/downloads
         depends_on:
             - gateway
         labels:
