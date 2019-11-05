@@ -71,6 +71,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/monitor.shokohsc.pem"
       keyFile = "/etc/traefik/certs/monitor.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/music.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/music.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/paint.shokohsc.pem"
       keyFile = "/etc/traefik/certs/paint.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
