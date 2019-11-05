@@ -27,8 +27,6 @@ volumes:
     openvpn-ui_data: {}
     mattermost_data: {}
     postgres_data: {}
-    mysql_data: {}
-    koel_data: {}
 
 services:
 
@@ -1064,48 +1062,44 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    mysql:
-        image: mariadb
-        container_name: mysql
-        restart: ${RESTART_MODE}
-        volumes:
-            - mysql_data:/var/lib/mysql
-        networks:
-            - hidden
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: koel
-            MYSQL_USER: koel
-            MYSQL_PASSWORD: koel
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # mysql:
+    #     image: mariadb
+    #     container_name: mysql
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - mysql_data:/var/lib/mysql
+    #     networks:
+    #         - hidden
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    #         MYSQL_DATABASE: koel
+    #         MYSQL_USER: koel
+    #         MYSQL_PASSWORD: koel
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
-    koel:
-        image: hyzual/koel
-        container_name: koel
+    mstream:
+        image: linuxserver/mstream
+        container_name: mstream
         restart: ${RESTART_MODE}
         volumes:
             - /media/nuc/WD2To/music:/music
-            - koel_data:/var/www/html/public/img/covers
         environment:
-            DB_CONNECTION: mysql
-            DB_HOST: mysql
-            DB_USERNAME: koel
-            DB_PASSWORD: koel
-            DB_DATABASE: koel
-            APP_URL: https://music.${DOMAIN}
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            USER: mstream
+            PASSWORD: mstream
+            USE_JSON: 'true'
         networks:
             - connected
-            - hidden
-        depends_on:
-            - mysql
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=80"
+            - "traefik.port=3000"
         logging:
             options:
                 max-size: "50k"
