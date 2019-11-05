@@ -77,6 +77,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/paint.shokohsc.pem"
       keyFile = "/etc/traefik/certs/paint.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/peerflix.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/peerflix.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/plex.shokohsc.pem"
       keyFile = "/etc/traefik/certs/plex.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -91,9 +94,6 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/traefik.shokohsc.pem"
       keyFile = "/etc/traefik/certs/traefik.shokohsc-key.pem"
-      [[entryPoints.https.tls.certificates]]
-      certFile = "/etc/traefik/certs/torrent.shokohsc.pem"
-      keyFile = "/etc/traefik/certs/torrent.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/transmission.shokohsc.pem"
       keyFile = "/etc/traefik/certs/transmission.shokohsc-key.pem"
