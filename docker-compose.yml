@@ -987,7 +987,7 @@ services:
             MM_PASSWORD: mattermost
             MM_DBNAME: mattermost
             MM_SQLSETTINGS_DRIVERNAME: mysql
-            MM_SQLSETTINGS_DATASOURCE: ${MM_USERNAME}:${MM_PASSWORD}@tcp(${DB_HOST}:${DB_PORT_NUMBER})/${MM_DBNAME}?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+            MM_SQLSETTINGS_DATASOURCE: mattermost:mattermost@tcp(mysql:3306/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
             DB_HOST: mysql
             DB_PORT_NUMBER: 3306
         volumes:
