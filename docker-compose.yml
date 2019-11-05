@@ -217,6 +217,8 @@ services:
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
+            - "6881:6881/tcp"
+            - "6881:6881/ucp"
         volumes:
             - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
             # - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
@@ -232,8 +234,8 @@ services:
             - "traefik.enable=true"
             - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
             - "traefik.transmission.port=9091"
-            - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
-            - "traefik.torrent.port=3000"
+            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
+            - "traefik.peerflix.port=9000"
         logging:
             options:
                 max-size: "50k"
@@ -995,7 +997,7 @@ services:
             - connected
             - hidden
         depends_on:
-            - postgres
+            - mysql
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:mattermost.${DOMAIN}"
@@ -1043,9 +1045,9 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    cloudtorrent:
-        image: shokohsc/cloud-torrent
-        container_name: cloudtorrent
+    peerflix:
+        image: asapach/peerflix-server
+        container_name: peerflix
         restart: ${RESTART_MODE}
         network_mode: "service:gateway"
         volumes:
