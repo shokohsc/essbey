@@ -1083,7 +1083,7 @@ services:
                 max-file: "2"
 
     koel:
-        image: 0xcaff/koel
+        image: hyzual/koel
         container_name: koel
         restart: ${RESTART_MODE}
         volumes:
