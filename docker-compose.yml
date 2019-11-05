@@ -1018,7 +1018,7 @@ services:
             - connected
             - hidden
         depends_on:
-            - postgres
+            - mysql
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
