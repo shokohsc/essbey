@@ -28,6 +28,18 @@ defaultEntryPoints = ["http", "https"]
 # Entrypoints configuration
 ################################################################
 
+[frontends]
+  [frontends.pihole]
+  backend = "pihole"
+    [frontends.pihole.routes.test_1]
+    rule = "Host:pihole.shokohsc"
+
+[backends]
+  [backends.pihole]
+    [backends.pihole.servers.server1]
+    url = "http://192.168.1.50/admin"
+    weight = 1
+
 # Entrypoints definition
 #
 # Optional
