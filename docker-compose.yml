@@ -458,7 +458,7 @@ services:
             - pushgateway
             - nodeexporter
             - cadvisor
-            # - influxdb
+            - influxdb
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
