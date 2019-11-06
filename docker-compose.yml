@@ -27,7 +27,7 @@ volumes:
     openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
-    peerflix_data: {}
+    # peerflix_data: {}
 
 services:
 
@@ -213,7 +213,7 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: '-r 192.168.1.0/24 -f "" -p 9091 -p 3000 -p 9000'
+        command: '-r 192.168.1.0/24 -f "" -p 9091'
         # command: "-r 192.168.1.0/24 -f "" -p 9091 -p 3000 -p 9000 -v server;username;password;port"
         ports:
             - "32766:51413/tcp"
@@ -235,10 +235,10 @@ services:
             - "traefik.enable=true"
             - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
             - "traefik.transmission.port=9091"
-            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
-            - "traefik.peerflix.port=9000"
-            - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
-            - "traefik.torrent.port=3000"
+            # - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
+            # - "traefik.peerflix.port=9000"
+            # - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
+            # - "traefik.torrent.port=3000"
         logging:
             options:
                 max-size: "50k"
@@ -1048,49 +1048,49 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    peerflix:
-        image: shokohsc/peerflix-server
-        container_name: peerflix
-        restart: ${RESTART_MODE}
-        network_mode: "service:gateway"
-        volumes:
-            - peerflix_data:/tmp/torrent-stream
-        depends_on:
-            - gateway
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    cloudtorrent:
-        image: shokohsc/cloud-torrent
-        container_name: cloudtorrent
-        restart: ${RESTART_MODE}
-        network_mode: "service:gateway"
-        volumes:
-            - ./download/complete:/downloads
-        depends_on:
-            - gateway
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
+    # peerflix:
+    #     image: shokohsc/peerflix-server
+    #     container_name: peerflix
+    #     restart: ${RESTART_MODE}
+    #     network_mode: "service:gateway"
+    #     volumes:
+    #         - peerflix_data:/tmp/torrent-stream
+    #     depends_on:
+    #         - gateway
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
+    # cloudtorrent:
+    #     image: shokohsc/cloud-torrent
+    #     container_name: cloudtorrent
+    #     restart: ${RESTART_MODE}
+    #     network_mode: "service:gateway"
+    #     volumes:
+    #         - ./download/complete:/downloads
+    #     depends_on:
+    #         - gateway
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
+    #     logging:
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
 
     mstream:
         image: linuxserver/mstream
