@@ -218,8 +218,8 @@ services:
         ports:
             - "32766:51413/tcp"
             - "32766:51413/udp"
-            - "32769:6881/tcp"
-            - "32769:6881/udp"
+            # - "32769:6881/tcp"
+            # - "32769:6881/udp"
         volumes:
             - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
             # - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
