@@ -236,8 +236,6 @@ services:
             TZ: ${TIMEZONE}
             FIREWALL: ''
             SIDEKICK_URL: http://gateway:3000/ovpn
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
         depends_on:
             - gateway
         networks:
@@ -1030,8 +1028,6 @@ services:
             TZ: ${TIMEZONE}
             FIREWALL: ''
             SIDEKICK_URL: http://gateway:3000/ovpn
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
         depends_on:
             - gateway
         networks:
@@ -1081,8 +1077,6 @@ services:
             TZ: ${TIMEZONE}
             FIREWALL: ''
             SIDEKICK_URL: http://gateway:3000/ovpn
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
         depends_on:
             - gateway
         networks:
