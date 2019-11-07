@@ -225,6 +225,8 @@ services:
     vpn-transmission: # Torrenting vpn
         container_name: vpn-transmission
         image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
         restart: ${RESTART_MODE}
         command: '-r 192.168.1.0/24 -p 9091'
         ports:
@@ -236,6 +238,8 @@ services:
             SIDEKICK_URL: http://gateway:3000/ovpn
         depends_on:
             - gateway
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
         networks:
             connected:
                 ipv4_address: 172.1.0.63
@@ -1015,6 +1019,8 @@ services:
     vpn-peerflix: # Torrenting vpn
         container_name: vpn-peerflix
         image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
         restart: ${RESTART_MODE}
         command: '-r 192.168.1.0/24 -p 9000'
         ports:
@@ -1026,6 +1032,8 @@ services:
             SIDEKICK_URL: http://gateway:3000/ovpn
         depends_on:
             - gateway
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
         networks:
             connected:
                 ipv4_address: 172.1.0.64
@@ -1065,6 +1073,8 @@ services:
     vpn-cloudtorrent: # Torrenting vpn
         container_name: vpn-cloudtorrent
         image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
         restart: ${RESTART_MODE}
         command: '-r 192.168.1.0/24 -p 3000'
         environment:
@@ -1073,6 +1083,8 @@ services:
             SIDEKICK_URL: http://gateway:3000/ovpn
         depends_on:
             - gateway
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
         networks:
             connected:
                 ipv4_address: 172.1.0.65
