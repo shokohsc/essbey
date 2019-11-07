@@ -260,7 +260,7 @@ services:
             - ./config/transmission:/config
             - ./download:/downloads
             - ./shared/transmission:/watch
-        network_mode: "service:gateway"
+        network_mode: "service:vpn-transmission"
         depends_on:
             - vpn-transmission
         labels:
@@ -1048,7 +1048,7 @@ services:
         image: shokohsc/peerflix-server
         container_name: peerflix
         restart: ${RESTART_MODE}
-        network_mode: "service:gateway"
+        network_mode: "service:vpn-peerflix"
         volumes:
             - peerflix_data:/tmp/torrent-stream
         depends_on:
