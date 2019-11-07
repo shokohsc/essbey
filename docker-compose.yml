@@ -27,7 +27,7 @@ volumes:
     openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
-    # peerflix_data: {}
+    peerflix_data: {}
 
 services:
 
@@ -207,80 +207,71 @@ services:
         labels:
             - "traefik.enable=false"
 
-    gateway: # Torrenting vpn
+    gateway: # Vpn profile api
         container_name: gateway
-        image: dperson/openvpn-client
-        cap_add:
-            - net_admin
+        image: shokohsc/gateway-sidekick
         restart: ${RESTART_MODE}
-        command: '-r 192.168.1.0/24 -f "" -p 9091'
-        # command: "-r 192.168.1.0/24 -f "" -p 9091 -p 3000 -p 9000 -v server;username;password;port"
-        ports:
-            - "32766:51413/tcp"
-            - "32766:51413/udp"
-            # - "32769:6881/tcp"
-            # - "32769:6881/udp"
-        volumes:
-            - ./vpn_conf.ovpn:/vpn/vpn_conf.ovpn
-            # - ./vpn_conf.ovpn:/vpn/vpn-ca.crt
-        environment:
-            TZ: ${TIMEZONE}
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
         networks:
-            connected:
-                ipv4_address: 172.1.0.63
-        dns: 8.8.8.8
+            - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
-            - "traefik.transmission.port=9091"
-            # - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
-            # - "traefik.peerflix.port=9000"
-            # - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
-            # - "traefik.torrent.port=3000"
+            - "traefik.transmission.frontend.rule=Host:gateway.${DOMAIN}"
+            - "traefik.transmission.port=3000"
         logging:
             options:
                 max-size: "50k"
                 max-file: "2"
 
-    gateway-sidekick:
-        container_name: gateway-sidekick
-        image: shokohsc/gateway-sidekick
+    vpn-transmission: # Torrenting vpn
+        container_name: vpn-transmission
+        image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
         restart: ${RESTART_MODE}
-        tty: true
-        volumes:
-            - /var/www/symfony
-        networks:
-            - hidden
-        logging:
-            driver: none
-
-    php-fpm-gateway-sidekick:
-        container_name: php-fpm-gateway-sidekick
-        image: shokohsc/alpine-php-fpm
-        restart: ${RESTART_MODE}
-        command: php index.php
+        command: '-r 192.168.1.0/24 -f "" -p 9091'
+        ports:
+            - "32766:51413/tcp"
+            - "32766:51413/udp"
         environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
             TZ: ${TIMEZONE}
-            HOST_TARGET: "https://transmission.${DOMAIN}"
-            VPN_FILE_PATH: '/var/www/symfony/vpn_conf.ovpn'
-            RETRY_TIME: 60
-            MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
-        volumes:
-            - ./vpn_conf.ovpn:/var/www/symfony/vpn_conf.ovpn
-            - /var/run/docker.sock:/var/run/docker.sock
-        volumes_from:
-            - gateway-sidekick
-        networks:
-            - connected
+            SIDEKICK_URL: http://gateway:3000/ovpn
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
         depends_on:
             - gateway
-            - gateway-sidekick
+        networks:
+            connected:
+                ipv4_address: 172.1.0.63
+        dns: 8.8.8.8
         labels:
-            - "traefik.enable=false"
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
+            - "traefik.transmission.port=9091"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    transmission: # Torrent client
+        container_name: transmission
+        image: linuxserver/transmission
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/transmission:/config
+            - ./download:/downloads
+            - ./shared/transmission:/watch
+        network_mode: "service:gateway"
+        depends_on:
+            - vpn-transmission
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
         logging:
             options:
                 max-size: "50k"
@@ -321,30 +312,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
             - "traefik.port=9000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    transmission: # Torrent client
-        container_name: transmission
-        image: linuxserver/transmission
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/transmission:/config
-            - ./download:/downloads
-            - ./shared/transmission:/watch
-        network_mode: "service:gateway"
-        depends_on:
-            - gateway
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
         logging:
             options:
                 max-size: "50k"
@@ -1048,49 +1015,108 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    # peerflix:
-    #     image: shokohsc/peerflix-server
-    #     container_name: peerflix
-    #     restart: ${RESTART_MODE}
-    #     network_mode: "service:gateway"
-    #     volumes:
-    #         - peerflix_data:/tmp/torrent-stream
-    #     depends_on:
-    #         - gateway
-    #     labels:
-    #         - "autoheal=true"
-    #     healthcheck:
-    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-    #         interval: 30s
-    #         timeout: 30s
-    #         start_period: 60s
-    #         retries: 5
-    #     logging:
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
-    #
-    # cloudtorrent:
-    #     image: shokohsc/cloud-torrent
-    #     container_name: cloudtorrent
-    #     restart: ${RESTART_MODE}
-    #     network_mode: "service:gateway"
-    #     volumes:
-    #         - ./download/complete:/downloads
-    #     depends_on:
-    #         - gateway
-    #     labels:
-    #         - "autoheal=true"
-    #     healthcheck:
-    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-    #         interval: 30s
-    #         timeout: 30s
-    #         start_period: 60s
-    #         retries: 5
-    #     logging:
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
+    vpn-peerflix: # Torrenting vpn
+        container_name: vpn-peerflix
+        image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        command: '-r 192.168.1.0/24 -f "" -p 9000'
+        ports:
+            - "32769:6881/tcp"
+            - "32769:6881/udp"
+        environment:
+            TZ: ${TIMEZONE}
+            SIDEKICK_URL: http://gateway:3000/ovpn
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
+        depends_on:
+            - gateway
+        networks:
+            connected:
+                ipv4_address: 172.1.0.64
+        dns: 8.8.8.8
+        labels:
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
+            - "traefik.peerflix.port=9000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    peerflix:
+        image: shokohsc/peerflix-server
+        container_name: peerflix
+        restart: ${RESTART_MODE}
+        network_mode: "service:gateway"
+        volumes:
+            - peerflix_data:/tmp/torrent-stream
+        depends_on:
+            - vpn-peerflix
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    vpn-cloudtorrent: # Torrenting vpn
+        container_name: vpn-cloudtorrent
+        image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        command: '-r 192.168.1.0/24 -f "" -p 3000'
+        environment:
+            TZ: ${TIMEZONE}
+            SIDEKICK_URL: http://gateway:3000/ovpn
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
+        depends_on:
+            - gateway
+        networks:
+            connected:
+                ipv4_address: 172.1.0.65
+        dns: 8.8.8.8
+        labels:
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
+            - "traefik.torrent.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    cloudtorrent:
+        image: shokohsc/cloud-torrent
+        container_name: cloudtorrent
+        restart: ${RESTART_MODE}
+        network_mode: "service:vpn-cloudtorrent"
+        volumes:
+            - ./download/complete:/downloads
+        depends_on:
+            - vpn-cloudtorrent
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     mstream:
         image: linuxserver/mstream

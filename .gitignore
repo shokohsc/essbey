@@ -1,20 +1,14 @@
 .git
 .env
 
-vpn_conf.ovpn
-
-certs/
 download/
 work/
 shared/
 
-config/gazee/
-config/commander/
 config/openvpn/
 config/plex/
 config/transmission/
-config/mongo
 config/heimdall
-config/bamf
+config/traefik/certs/
 
 .DS_Store
