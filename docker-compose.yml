@@ -1139,3 +1139,21 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
+
+    h5ai:
+        image: corfr/h5ai
+        container_name: h5ai
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./:/var/www
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
