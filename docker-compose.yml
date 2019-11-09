@@ -28,6 +28,7 @@ volumes:
     mattermost_data: {}
     mysql_data: {}
     peerflix_data: {}
+    polaris_data: {}
 
 services:
 
@@ -1115,26 +1116,20 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    mstream:
-        image: linuxserver/mstream
-        container_name: mstream
+    polaris:
+        image: ogarcia/polaris
+        container_name: polaris
         restart: ${RESTART_MODE}
         volumes:
             - /media/nuc/WD2To/music:/music
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-            USER: mstream
-            PASSWORD: mstream
-            USE_JSON: 'false'
+            - polaris_data:/var/lib/polaris
         networks:
             - connected
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
+            - "traefik.port=5050"
         logging:
             options:
                 max-size: "50k"
