@@ -1120,6 +1120,7 @@ services:
         image: ogarcia/polaris
         container_name: polaris
         restart: ${RESTART_MODE}
+        tty: true
         volumes:
             - /media/nuc/WD2To/music:/music
             - polaris_data:/var/lib/polaris
