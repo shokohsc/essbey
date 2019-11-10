@@ -1116,21 +1116,17 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    mopidy:
-        image: wernight/mopidy
-        container_name: mopidy
-        command: mopidy -o soundcloud/auth_token=${SOUNDCLOUD_TOKEN}
+    cloudtunes:
+        image: armand1m/cloudtunes
+        container_name: cloudtunes
         restart: ${RESTART_MODE}
-        volumes:
-            - /media/nuc/WD2To/music:/var/lib/mopidy/media:ro
-            - mopidy_data:/var/lib/mopidy/local
         networks:
             - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:music.${DOMAIN}"
+            - "traefik.frontend.rule=Host:tunes.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=6680"
+            - "traefik.port=8000"
         logging:
             options:
                 max-size: "50k"

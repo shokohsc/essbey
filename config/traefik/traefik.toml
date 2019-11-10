@@ -104,6 +104,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/openvpn.shokohsc.pem"
       keyFile = "/etc/traefik/certs/openvpn.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/rabbitmq.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/rabbitmq.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/stackedit.shokohsc.pem"
       keyFile = "/etc/traefik/certs/stackedit.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -115,6 +118,9 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/transmission.shokohsc.pem"
       keyFile = "/etc/traefik/certs/transmission.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/tunes.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/tunes.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/wekan.shokohsc.pem"
       keyFile = "/etc/traefik/certs/wekan.shokohsc-key.pem"
