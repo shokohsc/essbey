@@ -28,7 +28,6 @@ volumes:
     mattermost_data: {}
     mysql_data: {}
     peerflix_data: {}
-    mopidy_data: {}
 
 services:
 
@@ -1134,22 +1133,6 @@ services:
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=4040"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    cloudtunes:
-        image: armand1m/cloudtunes
-        container_name: cloudtunes
-        restart: ${RESTART_MODE}
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:tunes.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8000"
         logging:
             options:
                 max-size: "50k"
