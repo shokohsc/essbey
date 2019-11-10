@@ -425,6 +425,7 @@ services:
             - nodeexporter
             - cadvisor
             - influxdb
+            - graphite
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
@@ -746,6 +747,7 @@ services:
             - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
         depends_on:
             - influxdb
+            - graphite
             # - mosquitto
         labels:
             - "traefik.enable=false"
