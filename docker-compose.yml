@@ -232,7 +232,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway/api/ovpn
+            SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
         devices:
@@ -1023,7 +1023,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway/api/ovpn
+            SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
         devices:
@@ -1074,7 +1074,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway/api/ovpn
+            SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
         devices:
