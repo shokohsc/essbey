@@ -211,12 +211,12 @@ services:
         container_name: gateway
         image: shokohsc/gateway-sidekick
         restart: ${RESTART_MODE}
+        environment:
+            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
         networks:
             - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.transmission.frontend.rule=Host:gateway.${DOMAIN}"
-            - "traefik.transmission.port=3000"
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
@@ -232,7 +232,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway:3000/ovpn
+            SIDEKICK_URL: http://gateway/api/ovpn
         depends_on:
             - gateway
         devices:
@@ -1023,7 +1023,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway:3000/ovpn
+            SIDEKICK_URL: http://gateway/api/ovpn
         depends_on:
             - gateway
         devices:
@@ -1074,7 +1074,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            SIDEKICK_URL: http://gateway:3000/ovpn
+            SIDEKICK_URL: http://gateway/api/ovpn
         depends_on:
             - gateway
         devices:
