@@ -1180,8 +1180,6 @@ services:
         image: rabbitmq:management-alpine
         container_name: rabbitmq
         restart: ${RESTART_MODE}
-        volumes:
-            - ./:/var/www
         networks:
             - connected
         labels:
@@ -1189,6 +1187,22 @@ services:
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=15672"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    riot:
+        image: bubuntux/riot-web
+        container_name: riot
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:riot.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=80"
         logging:
             options:
                 max-size: "50k"
