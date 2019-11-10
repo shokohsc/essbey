@@ -28,6 +28,7 @@ volumes:
     mattermost_data: {}
     mysql_data: {}
     peerflix_data: {}
+    graphite_data: {}
 
 services:
 
@@ -752,8 +753,26 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
-    #
-    influxdb: # InfluxDB
+
+    graphite: # Graphite database
+        container_name: graphite
+        image: graphiteapp/graphite-statsd
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        volumes:
+            - graphite_data:/opt/graphite/storage
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    influxdb: # Influx database
         container_name: influxdb
         image: influxdb
         restart: ${RESTART_MODE}

@@ -68,6 +68,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/grafana.shokohsc.pem"
       keyFile = "/etc/traefik/certs/grafana.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/graphite.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/graphite.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/h5ai.shokohsc.pem"
       keyFile = "/etc/traefik/certs/h5ai.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
