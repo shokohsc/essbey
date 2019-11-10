@@ -1116,6 +1116,29 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    airsonic:
+        image: linuxserver/airsonic
+        container_name: airsonic
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            CONTEXT_PATH: "music.${DOMAIN}"
+        volumes:
+            - /media/nuc/WD2To/music:/music:ro
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:music.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=4040"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     cloudtunes:
         image: armand1m/cloudtunes
         container_name: cloudtunes
