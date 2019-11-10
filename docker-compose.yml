@@ -1117,7 +1117,7 @@ services:
                 max-file: "2"
 
     polaris:
-        image: ogarcia/polaris
+        image: shokohsc/polaris
         container_name: polaris
         restart: ${RESTART_MODE}
         tty: true
