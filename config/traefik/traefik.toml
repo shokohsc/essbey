@@ -119,9 +119,6 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/transmission.shokohsc.pem"
       keyFile = "/etc/traefik/certs/transmission.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
-      certFile = "/etc/traefik/certs/tunes.shokohsc.pem"
-      keyFile = "/etc/traefik/certs/tunes.shokohsc-key.pem"
-      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/wekan.shokohsc.pem"
       keyFile = "/etc/traefik/certs/wekan.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
