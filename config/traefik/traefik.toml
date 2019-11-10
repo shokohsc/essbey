@@ -110,9 +110,6 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/rabbitmq.shokohsc.pem"
       keyFile = "/etc/traefik/certs/rabbitmq.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
-      certFile = "/etc/traefik/certs/riot.shokohsc.pem"
-      keyFile = "/etc/traefik/certs/riot.shokohsc-key.pem"
-      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/stackedit.shokohsc.pem"
       keyFile = "/etc/traefik/certs/stackedit.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
