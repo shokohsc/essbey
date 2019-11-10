@@ -28,7 +28,7 @@ volumes:
     mattermost_data: {}
     mysql_data: {}
     peerflix_data: {}
-    ampache_data: {}
+    mopidy_data: {}
 
 services:
 
@@ -1116,20 +1116,21 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    ampache:
-        image: ampache/ampache
-        container_name: ampache
+    mopidy:
+        image: wernight/mopidy
+        container_name: mopidy
+        command: mopidy -o soundcloud/auth_token=${SOUNDCLOUD_TOKEN}
         restart: ${RESTART_MODE}
         volumes:
-            - /media/nuc/WD2To/music:/media:ro
-            - ampache_data:/var/lib/mysql
+            - /media/nuc/WD2To/music:/var/lib/mopidy/media:ro
+            - mopidy_data:/var/lib/mopidy/local
         networks:
             - connected
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=80"
+            - "traefik.port=6680"
         logging:
             options:
                 max-size: "50k"
