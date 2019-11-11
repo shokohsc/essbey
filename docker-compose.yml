@@ -399,7 +399,7 @@ services:
 
     grafana: # Monitoring tool connected server
         container_name: grafana
-        image: grafana/grafana:6.0.0
+        image: grafana/grafana
         restart: ${RESTART_MODE}
         environment:
             GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
