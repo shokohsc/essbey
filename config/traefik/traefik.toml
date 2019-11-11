@@ -28,17 +28,20 @@ defaultEntryPoints = ["http", "https"]
 # Entrypoints configuration
 ################################################################
 
-[frontends]
-  [frontends.pihole]
-  backend = "pihole"
-    [frontends.pihole.routes.test_1]
-    rule = "Host:pihole.shokohsc"
-
 [backends]
   [backends.pihole]
-    [backends.pihole.servers.server1]
-    url = "http://192.168.1.50/admin"
-    weight = 1
+    [backends.pihole.servers]
+      [backends.pihole.servers.server1]
+      url = "http://192.168.1.50"
+
+[frontends]
+  [frontends.pihole]
+  entryPoints = ["http"]
+  backend = "pihole"
+  passHostHeader = true
+  [frontends.pihole.routes]
+    [frontends.pihole.routes.route0]
+      rule = "Host:pihole.shokohsc,AddPrefix: /admin"
 
 # Entrypoints definition
 #
@@ -91,6 +94,9 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/music.shokohsc.pem"
       keyFile = "/etc/traefik/certs/music.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/pihole.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/pihole.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/paint.shokohsc.pem"
       keyFile = "/etc/traefik/certs/paint.shokohsc-key.pem"
