@@ -260,4 +260,6 @@ insecureSkipVerify = true
   passHostHeader = true
   [frontends.frontend1.routes]
     [frontends.frontend1.routes.route0]
-      rule = "Host:pihole.shokohsc,AddPrefix:/admin"
+      rule = "Host:pihole.shokohsc"
+    [frontends.frontend1.routes.route0]
+      rule = "AddPrefix: /admin"
