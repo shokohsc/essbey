@@ -261,5 +261,5 @@ insecureSkipVerify = true
   [frontends.pihole.routes]
     [frontends.pihole.routes.route0]
       rule = "Host:pihole.shokohsc"
-    [frontends.pihole.routes.route0]
+    [frontends.pihole.routes.route1]
       rule = "AddPrefix: /admin"
