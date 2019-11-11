@@ -101,6 +101,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/rabbitmq.shokohsc.pem"
       keyFile = "/etc/traefik/certs/rabbitmq.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/routeur.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/routeur.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/stackedit.shokohsc.pem"
       keyFile = "/etc/traefik/certs/stackedit.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -252,6 +255,10 @@ insecureSkipVerify = true
     [backends.pihole.servers]
       [backends.pihole.servers.server0]
       url = "http://192.168.1.50"
+  [backends.routeur]
+    [backends.routeur.servers]
+      [backends.routeur.servers.server0]
+      url = "http://192.168.1.1"
 
 [frontends]
   [frontends.pihole]
@@ -263,3 +270,10 @@ insecureSkipVerify = true
       rule = "Host:pihole.shokohsc"
     [frontends.pihole.routes.route1]
       rule = "AddPrefix: /admin"
+  [frontends.routeur]
+  entryPoints = ["http", "https"]
+  backend = "routeur"
+  passHostHeader = true
+  [frontends.routeur.routes]
+    [frontends.routeur.routes.route0]
+      rule = "Host:routeur.shokohsc"
