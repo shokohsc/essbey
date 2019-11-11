@@ -248,18 +248,18 @@ insecureSkipVerify = true
   watch = true
 
 [backends]
-  [backends.backend1]
-    [backends.backend1.servers]
-      [backends.backend1.servers.server0]
+  [backends.pihole]
+    [backends.pihole.servers]
+      [backends.pihole.servers.server0]
       url = "http://192.168.1.50"
 
 [frontends]
-  [frontends.frontend1]
+  [frontends.pihole]
   entryPoints = ["http", "https"]
-  backend = "backend1"
+  backend = "pihole"
   passHostHeader = true
-  [frontends.frontend1.routes]
-    [frontends.frontend1.routes.route0]
+  [frontends.pihole.routes]
+    [frontends.pihole.routes.route0]
       rule = "Host:pihole.shokohsc"
-    [frontends.frontend1.routes.route0]
+    [frontends.pihole.routes.route0]
       rule = "AddPrefix: /admin"
