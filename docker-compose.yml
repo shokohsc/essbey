@@ -415,7 +415,6 @@ services:
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/setup.sh:/setup.sh
-        entrypoint: /setup.sh
         networks:
             - connected
             - hidden
