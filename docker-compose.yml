@@ -281,7 +281,7 @@ services:
         container_name: traefik
         image: traefik:1.7.16-alpine
         restart: ${RESTART_MODE}
-        command: --api --docker --metrics --metrics.prometheus
+        command: --configFile=/etc/traefik/traefik.toml --metrics --metrics.prometheus
         ports:
             - "80:80"
             - "443:443"
