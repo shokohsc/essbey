@@ -29,19 +29,19 @@ defaultEntryPoints = ["http", "https"]
 ################################################################
 
 [backends]
-  [backends.pihole]
-    [backends.pihole.servers]
-      [backends.pihole.servers.server1]
+  [backends.backend1]
+    [backends.backend1.servers]
+      [backends.backend1.servers.server1]
       url = "http://192.168.1.50"
 
 [frontends]
-  [frontends.pihole]
+  [frontends.frontend1]
   entryPoints = ["http"]
   backend = "pihole"
   passHostHeader = true
-  [frontends.pihole.routes]
-    [frontends.pihole.routes.route0]
-      rule = "Host:pihole.shokohsc,AddPrefix: /admin"
+  [frontends.frontend1.routes]
+    [frontends.frontend1.routes.route0]
+      rule = "Host:pihole.shokohsc,AddPrefix:/admin"
 
 # Entrypoints definition
 #
