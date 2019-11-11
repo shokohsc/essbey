@@ -1041,7 +1041,7 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: -p 9000 -f ""
+        command: -p 9000 -f
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
@@ -1092,7 +1092,7 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: -p 3000 -f ""
+        command: -p 3000 -f
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
