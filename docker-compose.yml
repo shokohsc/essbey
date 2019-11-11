@@ -229,10 +229,11 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: -p 9091 -f""
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
+            ROUTE: 192.168.1.0/24
+            VPNPORT: 9091
             SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
@@ -1041,10 +1042,11 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: -p 9000 -f
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
+            ROUTE: 192.168.1.0/24
+            VPNPORT: 9000
             SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
@@ -1092,10 +1094,11 @@ services:
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
-        command: -p 3000 -f
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
+            ROUTE: 192.168.1.0/24
+            VPNPORT: 3000
             SIDEKICK_URL: http://gateway:3000/api/ovpn
         depends_on:
             - gateway
