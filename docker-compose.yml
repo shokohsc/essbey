@@ -426,6 +426,7 @@ services:
             - cadvisor
             - influxdb
             - graphite
+            - elasticsearch
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
@@ -748,6 +749,7 @@ services:
         depends_on:
             - influxdb
             - graphite
+            - elasticsearch
             # - mosquitto
         labels:
             - "traefik.enable=false"
