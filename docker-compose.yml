@@ -30,7 +30,6 @@ volumes:
     peerflix_data: {}
     graphite_data: {}
     thelounge_data: {}
-    zenbot_data: {}
     commafeed_data: {}
 
 services:
@@ -1212,24 +1211,6 @@ services:
             - "traefik.frontend.rule=Host:irc.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=9000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    zenbot:
-        image: deviavir/zenbot
-        container_name: zenbot
-        restart: ${RESTART_MODE}
-        volumes:
-            - zenbot_data:/app/database
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=17365"
         logging:
             options:
                 max-size: "50k"
