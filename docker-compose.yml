@@ -1292,6 +1292,9 @@ services:
         image: shokohsc/gekko
         container_name: gekko
         restart: ${RESTART_MODE}
+        environment:
+          HOST: gekko.${DOMAIN}
+          PORT: 3000
         volumes:
             - ./config/gekko/config.js:/app/config.js
         networks:
