@@ -1294,7 +1294,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
           HOST: gekko.${DOMAIN}
-          PORT: 3000
+          PORT: 443
           USE_SSL: 1
         volumes:
             - ./config/gekko/config.js:/app/config.js
@@ -1307,7 +1307,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:gekko.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
+            - "traefik.port=443"
         logging:
             options:
                 max-size: "50k"
