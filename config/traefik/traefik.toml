@@ -53,6 +53,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/chronograf.shokohsc.pem"
       keyFile = "/etc/traefik/certs/chronograf.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/gekko.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/gekko.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/grafana.shokohsc.pem"
       keyFile = "/etc/traefik/certs/grafana.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -62,11 +65,11 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/h5ai.shokohsc.pem"
       keyFile = "/etc/traefik/certs/h5ai.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
-      certFile = "/etc/traefik/certs/irc.shokohsc.pem"
-      keyFile = "/etc/traefik/certs/irc.shokohsc-key.pem"
-      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/heimdall.shokohsc.pem"
       keyFile = "/etc/traefik/certs/heimdall.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/irc.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/irc.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/kibana.shokohsc.pem"
       keyFile = "/etc/traefik/certs/kibana.shokohsc-key.pem"
@@ -103,6 +106,9 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/rabbitmq.shokohsc.pem"
       keyFile = "/etc/traefik/certs/rabbitmq.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/redis.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/redis.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/routeur.shokohsc.pem"
       keyFile = "/etc/traefik/certs/routeur.shokohsc-key.pem"

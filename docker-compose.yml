@@ -31,6 +31,7 @@ volumes:
     graphite_data: {}
     thelounge_data: {}
     commafeed_data: {}
+    redis_data: {}
 
 services:
 
@@ -1250,6 +1251,59 @@ services:
             - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=17365"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    redis:
+        image: redis
+        container_name: redis
+        restart: ${RESTART_MODE}
+        volumes:
+            - redis_data:/data
+        networks:
+            - hidden
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    redis-ui:
+        image: marian/rebrow
+        container_name: redis-ui
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - redis
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:redis.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=5001"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    gekko:
+        image: shokohsc/gekko
+        container_name: gekko
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./config/gekko/config.js:/app/config.js
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - redis
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:gekko.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=3000"
         logging:
             options:
                 max-size: "50k"
