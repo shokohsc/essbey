@@ -1294,7 +1294,8 @@ services:
         restart: ${RESTART_MODE}
         environment:
           HOST: gekko.${DOMAIN}
-          USE_SSL: 'true'
+          PORT: 80
+          USE_SSL: 1
         volumes:
             - ./config/gekko/config.js:/app/config.js
         networks:
