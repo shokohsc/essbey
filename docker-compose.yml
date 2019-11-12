@@ -29,6 +29,9 @@ volumes:
     mysql_data: {}
     peerflix_data: {}
     graphite_data: {}
+    thelounge_data: {}
+    zenbot_data: {}
+    commafeed_data: {}
 
 services:
 
@@ -1191,6 +1194,60 @@ services:
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=15672"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    thelounge:
+        image: thelounge/thelounge
+        container_name: thelounge
+        restart: ${RESTART_MODE}
+        volumes:
+            - thelounge_data:/var/opt/thelounge
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:irc.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=9000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    zenbot:
+        image: deviavir/zenbot
+        container_name: zenbot
+        restart: ${RESTART_MODE}
+        volumes:
+            - zen_data:/app/database
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=17365"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    commafeed:
+        image: lucabelluccini/commafeed-docker
+        container_name: commafeed
+        restart: ${RESTART_MODE}
+        volumes:
+            - commafeed_data:/data
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:rss.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8082"
         logging:
             options:
                 max-size: "50k"
