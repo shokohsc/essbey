@@ -1222,7 +1222,7 @@ services:
         container_name: zenbot
         restart: ${RESTART_MODE}
         volumes:
-            - zen_data:/app/database
+            - zenbot_data:/app/database
         networks:
             - connected
         labels:
