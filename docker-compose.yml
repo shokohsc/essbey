@@ -1242,6 +1242,9 @@ services:
             MONGODB_PORT_27017_TCP_ADDR: mongo
         networks:
             - connected
+            - hidden
+        depends_on:
+            - mongo
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
