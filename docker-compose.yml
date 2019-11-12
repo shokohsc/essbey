@@ -1233,3 +1233,21 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
+
+    zenbot:
+        image: deviavir/zenbot
+        container_name: zenbot
+        restart: ${RESTART_MODE}
+        environment:
+            MONGODB_PORT_27017_TCP_ADDR: mongo
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=17365"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
