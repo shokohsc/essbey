@@ -1238,8 +1238,8 @@ services:
         image: deviavir/zenbot
         container_name: zenbot
         restart: ${RESTART_MODE}
-        environment:
-            MONGODB_PORT_27017_TCP_ADDR: mongo
+        volumes:
+            - ./config/zenbot/conf.js:/app/conf.js
         networks:
             - connected
             - hidden
