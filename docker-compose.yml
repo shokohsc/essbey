@@ -101,9 +101,12 @@ services:
         volumes:
             - ./config/logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro
         networks:
+            - connected
             - hidden
         depends_on:
             - elasticsearch
+        labels:
+            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
