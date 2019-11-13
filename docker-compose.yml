@@ -1347,6 +1347,9 @@ services:
             AMQP_HOST: rabbitmq
         networks:
             - connected
+        depends_on:
+            - rabbitmq
+            - mattermost
         labels:
             - "traefik.enable=false"
         logging:
