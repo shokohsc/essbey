@@ -1331,3 +1331,22 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
+
+    minecraft-mattermost-relay: # Relay between mattermost & minecraft via rabbitmq api
+        container_name: minecraft-mattermost-relay
+        image: shokohsc/minecraft-mattermost-relay
+        restart: ${RESTART_MODE}
+        environment:
+            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
+            RCON_HOST: minecraft
+            RCON_PORT: 45575
+            RCON_PASSWORD: minecraft
+            AMQP_HOST: rabbitmq
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
