@@ -910,7 +910,10 @@ services:
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8823"
         logging:
             options:
                 max-size: "50k"
