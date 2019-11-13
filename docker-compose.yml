@@ -97,7 +97,7 @@ services:
         image: docker.elastic.co/logstash/logstash:7.3.2
         restart: ${RESTART_MODE}
         environment:
-            LOG_LEVEL: warning
+            LOG_LEVEL: warn
         volumes:
             - ./config/logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro
         networks:
