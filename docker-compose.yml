@@ -99,7 +99,7 @@ services:
         environment:
             LOG_LEVEL: warning
         volumes:
-            - ./config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+            - ./config/logstash/pipeline.conf:/usr/share/logstash/pipeline/pipeline.conf:ro
         networks:
             - hidden
         depends_on:
