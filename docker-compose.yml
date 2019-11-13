@@ -20,7 +20,6 @@ volumes:
     elasticsearch_data: {}
     grafana_data: {}
     influx_data: {}
-    minecraft_data: {}
     mongo_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
@@ -883,11 +882,12 @@ services:
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
+            VERSION: 1.14.4
+            TYPE: FORGE
         ports:
             - "25565:25565/tcp"
         volumes:
-            - minecraft_data:/data
-            - ./config/minecraft/server.properties:/data/server.properties
+            - ./config/minecraft:/data
         networks:
             - connected
         labels:
