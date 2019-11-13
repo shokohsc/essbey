@@ -92,6 +92,23 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    logstash: # Logs watcher
+        container_name: logstash
+        image: docker.elastic.co/logstash/logstash:7.3.2
+        restart: ${RESTART_MODE}
+        environment:
+            LOG_LEVEL: warning
+        volumes:
+            - ./config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+        networks:
+            - hidden
+        depends_on:
+            - elasticsearch
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     filebeat: # Logs watcher
         container_name: filebeat
         image: docker.elastic.co/beats/filebeat:7.3.2
@@ -105,8 +122,7 @@ services:
         networks:
             - hidden
         depends_on:
-            - elasticsearch
-            - kibana
+            - logstash
         logging:
             options:
                 max-size: "50k"

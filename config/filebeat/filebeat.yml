@@ -12,10 +12,8 @@ processors:
     target: "json"
     overwrite_keys: true
 
-output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
-  indices:
-    - index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+output.logstash:
+  hosts: ["logstash:5044"]
 
 logging.json: true
 logging.metrics.enabled: false
