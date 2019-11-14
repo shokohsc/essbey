@@ -903,11 +903,11 @@ services:
             EULA: 'TRUE'
             VERSION: 1.14.4
             TYPE: SPIGOT
-            CONSOLE: FALSE
+            CONSOLE: 'false'
             MEMORY: 2G
             LEVEL_TYPE: AMPLIFIED
             LEVEL: world
-            PVP: true
+            PVP: 'true'
             MOTD: A Vanilla Minecraft Server powered by Docker
             MODE: survival
             SEED: -8913466909937400889
@@ -919,7 +919,7 @@ services:
             MAX_TICK_TIME: 60000
             MAX_BUILD_HEIGHT: 512
             SNOOPER_ENABLED: 'false'
-            HARDCORE: false
+            HARDCORE: 'false'
             GENERATE_STRUCTURES: 'true'
             FORCE_GAMEMODE: 'false'
             ENABLE_COMMAND_BLOCK: 'true'
