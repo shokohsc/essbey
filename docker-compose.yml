@@ -898,18 +898,47 @@ services:
     minecraft:
         container_name: minecraft
         image: itzg/minecraft-server
-        # command: --noconsole
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
             VERSION: 1.14.4
-            # TYPE: SPIGOT
-            # BUILD_FROM_SOURCE: 'true'
+            TYPE: SPIGOT
+            CONSOLE: FALSE
+            MEMORY: 2G
+            LEVEL_TYPE: AMPLIFIED
+            LEVEL: world
+            PVP: true
+            MOTD: A Vanilla Minecraft Server powered by Docker
+            MODE: survival
+            SEED: -8913466909937400889
+            VIEW_DISTANCE: 10
+            SPAWN_PROTECTION: 0
+            SPAWN_MONSTERS: 'true'
+            SPAWN_NPCS: 'true'
+            SPAWN_ANIMALS: 'true'
+            MAX_TICK_TIME: 60000
+            MAX_BUILD_HEIGHT: 512
+            SNOOPER_ENABLED: 'false'
+            HARDCORE: false
+            GENERATE_STRUCTURES: 'true'
+            FORCE_GAMEMODE: 'false'
+            ENABLE_COMMAND_BLOCK: 'true'
+            MAX_PLAYERS: 10
+            MAX_WORLD_SIZE: 29999984
+            ALLOW_NETHER: 'true'
+            ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
+            ENABLE_QUERY: 'false'
+            ENABLE_RCON: 'true'
+            RCON_PASSORD: minecraft
+            OPS: shokohsc,danydoudoune
+            DIFFICULTY: hard
+            SERVER_NAME: minecraft
+            SERVER_PORT: 25565
+            OVERRIDE_SERVER_PROPERTIES: 'true'
         ports:
             - "25565:25565/tcp"
         volumes:
-            - ./config/minecraft/server.properties:/data/server.properties
-            # - ./config/minecraft/plugins/Dynmap-3.0-beta-5-spigot.jar:/data/plugins/Dynmap-3.0-beta-5-spigot.jar
+            - ./config/minecraft:/data
         networks:
             - connected
         labels:
