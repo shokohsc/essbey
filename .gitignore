@@ -12,6 +12,6 @@ config/heimdall
 config/traefik/certs/
 config/minecraft/*
 !config/minecraft/server.properties
-!config/minecraft/mods/
+!config/minecraft/plugins/
 
 .DS_Store
