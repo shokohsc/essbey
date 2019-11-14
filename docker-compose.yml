@@ -908,7 +908,7 @@ services:
             - "25565:25565/tcp"
         volumes:
             - ./config/minecraft/server.properties:/data/server.properties
-            - ./config/minecraft/mods/Dynmap-3.0-beta-5-spigot.jar:/data/mods/Dynmap-3.0-beta-5-spigot.jar
+            - ./config/minecraft/plugins/Dynmap-3.0-beta-5-spigot.jar:/data/plugins/Dynmap-3.0-beta-5-spigot.jar
         networks:
             - connected
         labels:
@@ -1242,7 +1242,7 @@ services:
                 max-file: "2"
 
     commafeed:
-        image: lucabelluccini/commafeed-docker
+        image: saggio/commafeed
         container_name: commafeed
         restart: ${RESTART_MODE}
         volumes:
