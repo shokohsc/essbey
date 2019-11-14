@@ -904,6 +904,8 @@ services:
             VERSION: 1.14.4
             TYPE: SPIGOT
             CONSOLE: 'false'
+            ONLINE_MODE: 'false'
+            ALLOW_FLIGHT: 'true'
             MEMORY: 2G
             LEVEL_TYPE: AMPLIFIED
             LEVEL: world
