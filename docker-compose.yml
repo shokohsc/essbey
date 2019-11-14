@@ -898,7 +898,7 @@ services:
     minecraft:
         container_name: minecraft
         image: itzg/minecraft-server
-        command: --noconsole
+        # command: --noconsole
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
