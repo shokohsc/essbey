@@ -904,6 +904,7 @@ services:
             EULA: 'TRUE'
             VERSION: 1.14.4
             TYPE: SPIGOT
+            BUILD_FROM_SOURCE: 'true'
         ports:
             - "25565:25565/tcp"
         volumes:
