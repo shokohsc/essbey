@@ -898,19 +898,24 @@ services:
     minecraft:
         container_name: minecraft
         image: itzg/minecraft-server
+        command: --noconsole
         restart: ${RESTART_MODE}
         environment:
             EULA: 'TRUE'
             VERSION: 1.14.4
-            TYPE: FORGE
+            TYPE: SPIGOT
         ports:
             - "25565:25565/tcp"
         volumes:
-            - ./config/minecraft:/data
+            - ./config/minecraft/server.properties:/data/server.properties
+            - ./config/minecraft/mods/Dynmap-3.0-beta-5-spigot.jar:/data/mods/Dynmap-3.0-beta-5-spigot.jar
         networks:
             - connected
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8123"
         logging:
             options:
                 max-size: "50k"
