@@ -100,7 +100,8 @@ services:
         environment:
             LOG_LEVEL: warn
         volumes:
-            - ./config/logstash:/usr/share/logstash/pipeline:ro
+            - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+            - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro
         networks:
             - connected
             - hidden
