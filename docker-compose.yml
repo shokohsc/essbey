@@ -855,7 +855,7 @@ services:
     # miflora-daemon: # Miflora daemon
     #     container_name: miflora-daemon
     #     build:
-    #         context: miflora-mqtt-daemon
+    #         context: build/miflora-mqtt-daemon
     #     cap_add:
     #         - net_admin
     #         - sys_admin
@@ -873,7 +873,7 @@ services:
     # mqtt-forwarder:
     #     container_name: mqtt-forwarder
     #     build:
-    #         context: mqtt-forwarder
+    #         context: build/mqtt-forwarder
     #     restart: ${RESTART_MODE}
     #     environment:
     #         INFLUXDB_HOST: influxdb
@@ -1027,7 +1027,7 @@ services:
 
     mattermost:
         build:
-            context: mattermost
+            context: build/mattermost
             args:
                 - edition=team
         container_name: mattermost
@@ -1279,6 +1279,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - commafeed_data:/data
+            - ./config/commafeed/config.yml:/config/config.yml
         networks:
             - connected
         labels:
