@@ -31,6 +31,7 @@ volumes:
     thelounge_data: {}
     commafeed_data: {}
     redis_data: {}
+    zenbot_data: {}
 
 services:
 
@@ -1297,6 +1298,7 @@ services:
         container_name: zenbot
         restart: ${RESTART_MODE}
         volumes:
+            - zenbot_data:/data
             - ./config/zenbot/conf.js:/app/conf.js
         networks:
             - connected
