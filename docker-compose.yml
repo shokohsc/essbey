@@ -785,8 +785,6 @@ services:
         container_name: graphite
         image: graphiteapp/graphite-statsd
         restart: ${RESTART_MODE}
-        environment:
-            LOG_LISTENER_CONNECTIONS: 'false'
         networks:
             - connected
         volumes:
