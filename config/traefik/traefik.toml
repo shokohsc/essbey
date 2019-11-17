@@ -122,6 +122,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/stackedit.shokohsc.pem"
       keyFile = "/etc/traefik/certs/stackedit.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/theia.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/theia.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/torrent.shokohsc.pem"
       keyFile = "/etc/traefik/certs/torrent.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]

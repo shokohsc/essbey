@@ -1373,6 +1373,24 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    theia:
+        image: theiaide/theia
+        container_name: theia
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./:/home/project:cached
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:theia.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     minecraft-mattermost-relay: # Relay between mattermost & minecraft via rabbitmq api
         container_name: minecraft-mattermost-relay
         image: shokohsc/minecraft-mattermost-relay
