@@ -807,6 +807,9 @@ services:
             INFLUXDB_DB: miflora
             INFLUXDB_USER: miflora
             INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+            INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
+            INFLUXDB_HTTP_LOG_ENABLED: 'false'
+            INFLUXDB_LOGGING_LEVEL: warn
         networks:
             - hidden
         volumes:
