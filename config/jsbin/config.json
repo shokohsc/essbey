@@ -10,7 +10,7 @@
     },
     "max-request-size": "1MB",
     "store": {
-        "adapter": "sqlite",
+        "adapter": "mysql",
         "sqlite": {
             "location": "jsbin.sqlite"
         },
