@@ -2,7 +2,7 @@
     "env": "production",
     "timezone": "Europe/Paris",
     "url": {
-        "host": "localhost:3000",
+        "host": "jsbin.shokohsc",
         "prefix": "/",
         "ssl": false,
         "static": false,
