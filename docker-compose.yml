@@ -33,6 +33,7 @@ volumes:
     redis_data: {}
     zenbot_data: {}
     theia_data: {}
+    jsbin_data: {}
 
 services:
 
@@ -1393,6 +1394,43 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    jsbin:
+        image: euprogramador/jsbin
+        container_name: jsbin
+        restart: ${RESTART_MODE}
+        environment:
+            JSBIN_CONFIG: /jsbin.json
+        volumes:
+            - jsbin_data:/home/project:cached
+            - ./config/jsbin/config.json:/jsbin.json:cached
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    regex:
+        image: njae86fq/regexr
+        container_name: regex
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:regex.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
