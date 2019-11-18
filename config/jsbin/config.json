@@ -8,7 +8,7 @@
         "static": false,
         "runner": false
     },
-    "max-request-size": "512MB",
+    "max-request-size": "1MB",
     "store": {
         "adapter": "sqlite",
         "sqlite": {

@@ -1402,7 +1402,7 @@ services:
                 max-file: "2"
 
     jsbin:
-        image: euprogramador/jsbin
+        image: robbash/jsbin
         container_name: jsbin
         restart: ${RESTART_MODE}
         environment:
