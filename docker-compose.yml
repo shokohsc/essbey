@@ -1416,7 +1416,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
+            - "traefik.port=80"
         logging:
             options:
                 max-size: "50k"
