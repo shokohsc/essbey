@@ -4,7 +4,7 @@
     "url": {
         "host": "jsbin.shokohsc:443",
         "prefix": "/",
-        "ssl": false,
+        "ssl": true,
         "static": false,
         "runner": false
     },
