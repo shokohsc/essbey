@@ -239,8 +239,8 @@ services:
         environment:
             MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
             RCON_HOST: minecraft
-            RCON_PORT: 45575
-            RCON_PASSWORD: minecraft
+            RCON_PORT: ${RCON_PORT}
+            RCON_PASSWORD: ${RCON_PASSWORD}
             AMQP_HOST: rabbitmq
         networks:
             - connected
@@ -913,6 +913,7 @@ services:
             EULA: 'TRUE'
             VERSION: 1.14.4
             TYPE: SPIGOT
+            OVERRIDE_SERVER_PROPERTIES: 'true'
             CONSOLE: 'false'
             ONLINE_MODE: 'false'
             ALLOW_FLIGHT: 'true'
@@ -924,7 +925,7 @@ services:
             MODE: survival
             SEED: -8913466909937400889
             VIEW_DISTANCE: 10
-            SPAWN_PROTECTION: 0
+            SPAWN_PROTECTION: 16
             SPAWN_MONSTERS: 'true'
             SPAWN_NPCS: 'true'
             SPAWN_ANIMALS: 'true'
@@ -941,12 +942,12 @@ services:
             ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
             ENABLE_QUERY: 'false'
             ENABLE_RCON: 'true'
-            RCON_PASSORD: minecraft
-            OPS: shokohsc,danydoudoune
+            RCON_PORT: ${RCON_PORT}
+            RCON_PASSWORD: ${RCON_PASSWORD}
+            OPS: ${MINECRAFT_OPS}
             DIFFICULTY: hard
             SERVER_NAME: minecraft
             SERVER_PORT: 25565
-            OVERRIDE_SERVER_PROPERTIES: 'true'
         ports:
             - "25565:25565/tcp"
         volumes:
