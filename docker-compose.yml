@@ -232,12 +232,16 @@ services:
         labels:
             - "traefik.enable=false"
 
-    gateway: # Vpn profile api
-        container_name: gateway
-        image: shokohsc/gateway-sidekick
+    sidekick: # Vpn profile api
+        container_name: sidekick
+        image: shokohsc/sidekick
         restart: ${RESTART_MODE}
         environment:
             MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
+            RCON_HOST: minecraft
+            RCON_PORT: 45575
+            RCON_PASSWORD: minecraft
+            AMQP_HOST: rabbitmq
         networks:
             - connected
         labels:
@@ -258,9 +262,9 @@ services:
             FIREWALL: ''
             ROUTE: 192.168.1.0/24
             VPNPORT: 9091
-            SIDEKICK_URL: http://gateway:3000/api/ovpn
+            SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
-            - gateway
+            - sidekick
         devices:
             - "/dev/net/tun:/dev/net/tun"
         networks:
@@ -1112,9 +1116,9 @@ services:
             FIREWALL: ''
             ROUTE: 192.168.1.0/24
             VPNPORT: 9000
-            SIDEKICK_URL: http://gateway:3000/api/ovpn
+            SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
-            - gateway
+            - sidekick
         devices:
             - "/dev/net/tun:/dev/net/tun"
         networks:
@@ -1164,9 +1168,9 @@ services:
             FIREWALL: ''
             ROUTE: 192.168.1.0/24
             VPNPORT: 3000
-            SIDEKICK_URL: http://gateway:3000/api/ovpn
+            SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
-            - gateway
+            - sidekick
         devices:
             - "/dev/net/tun:/dev/net/tun"
         networks:
@@ -1390,28 +1394,6 @@ services:
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    minecraft-mattermost-relay: # Relay between mattermost & minecraft via rabbitmq api
-        container_name: minecraft-mattermost-relay
-        image: shokohsc/minecraft-mattermost-relay
-        restart: ${RESTART_MODE}
-        environment:
-            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
-            RCON_HOST: minecraft
-            RCON_PORT: 45575
-            RCON_PASSWORD: minecraft
-            AMQP_HOST: rabbitmq
-        networks:
-            - connected
-        depends_on:
-            - rabbitmq
-            - mattermost
-        labels:
-            - "traefik.enable=false"
         logging:
             options:
                 max-size: "50k"
