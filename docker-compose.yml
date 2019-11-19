@@ -108,6 +108,7 @@ services:
             - connected
             - hidden
         depends_on:
+            - rabbitmq
             - elasticsearch
         labels:
             - "traefik.enable=false"
