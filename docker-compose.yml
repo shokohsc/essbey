@@ -34,6 +34,7 @@ volumes:
     zenbot_data: {}
     theia_data: {}
     jsbin_data: {}
+    webtorrent_data: {}
 
 services:
 
@@ -247,6 +248,7 @@ services:
         networks:
             - connected
         labels:
+            - "autoheal=true"
             - "traefik.enable=false"
         logging:
             options:
@@ -1435,6 +1437,58 @@ services:
             - "traefik.frontend.rule=Host:regex.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    vpn-webtorrent: # Torrenting vpn
+        container_name: vpn-webtorrent
+        image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        environment:
+            TZ: ${TIMEZONE}
+            FIREWALL: ''
+            ROUTE: 192.168.1.0/24
+            VPNPORT: 9081
+            SIDEKICK_URL: http://sidekick:3000/api/ovpn
+        depends_on:
+            - sidekick
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
+        networks:
+            connected:
+                ipv4_address: 172.1.0.66
+        dns: 8.8.8.8
+        labels:
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.torrent.frontend.rule=Host:webtorrent.${DOMAIN}"
+            - "traefik.torrent.port=9081"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    webtorrent:
+        image: shokohsc/webtorrent-webui
+        container_name: webtorrent
+        restart: ${RESTART_MODE}
+        network_mode: "service:vpn-webtorrent"
+        volumes:
+            - webtorrent_data:/data
+        depends_on:
+            - vpn-webtorrent
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
         logging:
             options:
                 max-size: "50k"
