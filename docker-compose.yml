@@ -1465,8 +1465,8 @@ services:
         labels:
             - "autoheal=true"
             - "traefik.enable=true"
-            - "traefik.torrent.frontend.rule=Host:webtorrent.${DOMAIN}"
-            - "traefik.torrent.port=9081"
+            - "traefik.webtorrent.frontend.rule=Host:webtorrent.${DOMAIN}"
+            - "traefik.webtorrent.port=9081"
         logging:
             options:
                 max-size: "50k"
@@ -1491,6 +1491,72 @@ services:
             timeout: 30s
             start_period: 60s
             retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    vpn-watchtor: # Torrenting vpn
+        container_name: vpn-watchtor
+        image: shokohsc/openvpn-client
+        cap_add:
+            - net_admin
+        restart: ${RESTART_MODE}
+        environment:
+            TZ: ${TIMEZONE}
+            FIREWALL: ''
+            ROUTE: 192.168.1.0/24
+            VPNPORT: 5000
+            SIDEKICK_URL: http://sidekick:3000/api/ovpn
+        depends_on:
+            - sidekick
+        devices:
+            - "/dev/net/tun:/dev/net/tun"
+        networks:
+            connected:
+                ipv4_address: 172.1.0.67
+        dns: 8.8.8.8
+        labels:
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.watchtor.frontend.rule=Host:watchtor.${DOMAIN}"
+            - "traefik.watchtor.port=5000"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    watchtor:
+        image: shokohsc/watchtor
+        container_name: watchtor
+        restart: ${RESTART_MODE}
+        network_mode: "service:vpn-watchtor"
+        depends_on:
+            - vpn-watchtor
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    filepizza:
+        image: kern/filepizza:master
+        container_name: filepizza
+        restart: ${RESTART_MODE}
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:filepizza.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
         logging:
             options:
                 max-size: "50k"

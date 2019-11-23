@@ -53,6 +53,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/chronograf.shokohsc.pem"
       keyFile = "/etc/traefik/certs/chronograf.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/filepizza.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/filepizza.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/gekko.shokohsc.pem"
       keyFile = "/etc/traefik/certs/gekko.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
@@ -139,6 +142,9 @@ defaultEntryPoints = ["http", "https"]
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/transmission.shokohsc.pem"
       keyFile = "/etc/traefik/certs/transmission.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/watchtor.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/watchtor.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/webtorrent.shokohsc.pem"
       keyFile = "/etc/traefik/certs/webtorrent.shokohsc-key.pem"
