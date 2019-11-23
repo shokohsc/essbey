@@ -1476,7 +1476,7 @@ services:
         image: shokohsc/webtorrent-webui
         container_name: webtorrent
         restart: ${RESTART_MODE}
-        command: "webtorrent-webui -l webtorrent.${DOMAIN} -t /tf -d /data"
+        command: "webtorrent-webui-hybrid -l webtorrent.${DOMAIN} -t /tf -d /data"
         network_mode: "service:vpn-webtorrent"
         volumes:
             - ./shared/transmission:/tf
