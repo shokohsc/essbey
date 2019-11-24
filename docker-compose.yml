@@ -34,7 +34,6 @@ volumes:
     zenbot_data: {}
     theia_data: {}
     jsbin_data: {}
-    webtorrent_data: {}
 
 services:
 
@@ -255,8 +254,8 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    vpn-transmission: # Torrenting vpn
-        container_name: vpn-transmission
+    vpn-client: # Torrenting vpn
+        container_name: vpn-client
         image: shokohsc/openvpn-client
         cap_add:
             - net_admin
@@ -265,7 +264,8 @@ services:
             TZ: ${TIMEZONE}
             FIREWALL: ''
             ROUTE: 192.168.1.0/24
-            VPNPORT: 9091
+            VPNPORT_1: 9091
+            VPNPORT_2: 9000
             SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
             - sidekick
@@ -280,6 +280,8 @@ services:
             - "traefik.enable=true"
             - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
             - "traefik.transmission.port=9091"
+            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
+            - "traefik.peerflix.port=9000"
         logging:
             options:
                 max-size: "50k"
@@ -293,9 +295,31 @@ services:
             - ./config/transmission:/config
             - ./download:/downloads
             - ./shared/transmission:/watch
-        network_mode: "service:vpn-transmission"
+        network_mode: "service:vpn-client"
         depends_on:
-            - vpn-transmission
+            - vpn-client
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    peerflix:
+        image: shokohsc/peerflix-server
+        container_name: peerflix
+        restart: ${RESTART_MODE}
+        network_mode: "service:vpn-client"
+        depends_on:
+            - vpn-client
+        volumes:
+            - peerflix_data:/tmp/torrent-stream
         labels:
             - "autoheal=true"
         healthcheck:
@@ -1110,110 +1134,6 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    vpn-peerflix: # Torrenting vpn
-        container_name: vpn-peerflix
-        image: shokohsc/openvpn-client
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            FIREWALL: ''
-            ROUTE: 192.168.1.0/24
-            VPNPORT: 9000
-            SIDEKICK_URL: http://sidekick:3000/api/ovpn
-        depends_on:
-            - sidekick
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
-        networks:
-            connected:
-                ipv4_address: 172.1.0.64
-        dns: 8.8.8.8
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
-            - "traefik.peerflix.port=9000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    peerflix:
-        image: shokohsc/peerflix-server
-        container_name: peerflix
-        restart: ${RESTART_MODE}
-        network_mode: "service:vpn-peerflix"
-        volumes:
-            - peerflix_data:/tmp/torrent-stream
-        depends_on:
-            - vpn-peerflix
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    vpn-cloudtorrent: # Torrenting vpn
-        container_name: vpn-cloudtorrent
-        image: shokohsc/openvpn-client
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            FIREWALL: ''
-            ROUTE: 192.168.1.0/24
-            VPNPORT: 3000
-            SIDEKICK_URL: http://sidekick:3000/api/ovpn
-        depends_on:
-            - sidekick
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
-        networks:
-            connected:
-                ipv4_address: 172.1.0.65
-        dns: 8.8.8.8
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.torrent.frontend.rule=Host:torrent.${DOMAIN}"
-            - "traefik.torrent.port=3000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    cloudtorrent:
-        image: shokohsc/cloud-torrent
-        container_name: cloudtorrent
-        restart: ${RESTART_MODE}
-        network_mode: "service:vpn-cloudtorrent"
-        volumes:
-            - ./download/complete:/downloads
-        depends_on:
-            - vpn-cloudtorrent
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
     airsonic:
         image: linuxserver/airsonic
         container_name: airsonic
@@ -1437,110 +1357,6 @@ services:
             - "traefik.frontend.rule=Host:regex.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    vpn-webtorrent: # Torrenting vpn
-        container_name: vpn-webtorrent
-        image: shokohsc/openvpn-client
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            FIREWALL: ''
-            ROUTE: 192.168.1.0/24
-            VPNPORT: 9081
-            SIDEKICK_URL: http://sidekick:3000/api/ovpn
-        depends_on:
-            - sidekick
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
-        networks:
-            connected:
-                ipv4_address: 172.1.0.66
-        dns: 8.8.8.8
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.webtorrent.frontend.rule=Host:webtorrent.${DOMAIN}"
-            - "traefik.webtorrent.port=9081"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    webtorrent:
-        image: shokohsc/webtorrent-webui
-        container_name: webtorrent
-        restart: ${RESTART_MODE}
-        command: "webtorrent-webui -l webtorrent.${DOMAIN} -t /tf -d /data"
-        network_mode: "service:vpn-webtorrent"
-        volumes:
-            - ./shared/transmission:/tf
-            - webtorrent_data:/data
-        depends_on:
-            - vpn-webtorrent
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    vpn-watchtor: # Torrenting vpn
-        container_name: vpn-watchtor
-        image: shokohsc/openvpn-client
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            FIREWALL: ''
-            ROUTE: 192.168.1.0/24
-            VPNPORT: 5000
-            SIDEKICK_URL: http://sidekick:3000/api/ovpn
-        depends_on:
-            - sidekick
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
-        networks:
-            connected:
-                ipv4_address: 172.1.0.67
-        dns: 8.8.8.8
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.watchtor.frontend.rule=Host:watchtor.${DOMAIN}"
-            - "traefik.watchtor.port=5000"
-        logging:
-            options:
-                max-size: "50k"
-                max-file: "2"
-
-    watchtor:
-        image: shokohsc/watchtor
-        container_name: watchtor
-        restart: ${RESTART_MODE}
-        network_mode: "service:vpn-watchtor"
-        depends_on:
-            - vpn-watchtor
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
         logging:
             options:
                 max-size: "50k"
