@@ -74,6 +74,9 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/irc.shokohsc.pem"
       keyFile = "/etc/traefik/certs/irc.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/alfred.shokohsc.pem"
+      keyFile = "/etc/traefik/certs/alfred.shokohsc-key.pem"
+      [[entryPoints.https.tls.certificates]]
       certFile = "/etc/traefik/certs/jsbin.shokohsc.pem"
       keyFile = "/etc/traefik/certs/jsbin.shokohsc-key.pem"
       [[entryPoints.https.tls.certificates]]

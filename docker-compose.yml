@@ -1377,3 +1377,23 @@ services:
             options:
                 max-size: "50k"
                 max-file: "2"
+
+    homeassistant:
+        image: homeassistant/home-assistant:stable
+        container_name: homeassistant
+        restart: ${RESTART_MODE}
+        environment:
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/homeassistant:/config
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:alfred.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8123"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
