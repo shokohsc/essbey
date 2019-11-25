@@ -34,6 +34,7 @@ volumes:
     zenbot_data: {}
     theia_data: {}
     jsbin_data: {}
+    jenkins_data: {}
 
 services:
 
@@ -1373,6 +1374,24 @@ services:
             - "traefik.frontend.rule=Host:filepizza.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    jenkins:
+        image: jenkins/jenkins:lts
+        container_name: jenkins
+        restart: ${RESTART_MODE}
+        volumes:
+            - jenkins_data:/var/jenkins_home
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
         logging:
             options:
                 max-size: "50k"
