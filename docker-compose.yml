@@ -40,7 +40,7 @@ services:
 
     elasticsearch: # Json database
         container_name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
+        image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
         restart: ${RESTART_MODE}
         environment:
           discovery.type: single-node
@@ -76,7 +76,7 @@ services:
 
     kibana: # Elasticsearch data UI
         container_name: kibana
-        image: docker.elastic.co/kibana/kibana:7.3.2
+        image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
         restart: ${RESTART_MODE}
         environment:
             SERVER_NAME: kibana
@@ -98,13 +98,12 @@ services:
 
     logstash: # Logs watcher
         container_name: logstash
-        image: docker.elastic.co/logstash/logstash:7.3.2
+        image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
         restart: ${RESTART_MODE}
         environment:
             LOG_LEVEL: warn
         volumes:
-            - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
-            - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro
+            - ./config/logstash:/usr/share/logstash/pipeline
         networks:
             - connected
             - hidden
@@ -120,7 +119,7 @@ services:
 
     filebeat: # Logs watcher
         container_name: filebeat
-        image: docker.elastic.co/beats/filebeat:7.3.2
+        image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
         restart: ${RESTART_MODE}
         command: filebeat -e -strict.perms=false
         user: root
@@ -634,7 +633,6 @@ services:
         container_name: openvpn-ui
         image: awalach/openvpn-web-ui
         restart: ${RESTART_MODE}
-        restart: always
         volumes:
             - ./config/openvpn:/etc/openvpn
             - openvpn-ui_data:/opt/openvpn-gui/db
