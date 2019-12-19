@@ -26,7 +26,6 @@ volumes:
     openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
-    peerflix_data: {}
     graphite_data: {}
     thelounge_data: {}
     commafeed_data: {}
@@ -47,6 +46,7 @@ services:
           ES_JAVA_OPTS: "-Xmx512m -Xms512m"
         volumes:
             - elasticsearch_data:/usr/share/elasticsearch/data
+        hostname: elasticsearch
         networks:
             - hidden
         logging:
@@ -81,6 +81,7 @@ services:
         environment:
             SERVER_NAME: kibana
             LOGGING_QUIET: 'true'
+        hostname: kibana
         networks:
             - connected
             - hidden
@@ -104,6 +105,7 @@ services:
             LOG_LEVEL: warn
         volumes:
             - ./config/logstash:/usr/share/logstash/pipeline
+        hostname: logstash
         networks:
             - connected
             - hidden
@@ -127,6 +129,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - /var/lib/docker:/var/lib/docker:ro
             - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+        hostname: filebeat
         networks:
             - hidden
         depends_on:
@@ -148,6 +151,7 @@ services:
             - ./download/complete:/mount/downloads
             - ./shared:/mount/shared
             - /media/nuc/WD2To:/mount/media
+        hostname: samba
         networks:
             - connected
         labels:
@@ -168,6 +172,7 @@ services:
             - ./download/complete:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
             - /media/nuc/WD2To:/home/shokohsc/upload/media
+        hostname: sftp
         networks:
             - connected
         labels:
@@ -185,6 +190,7 @@ services:
             SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
             TOKEN: ${DUCKDNS_TOKEN}
             TZ: ${TIMEZONE}
+        hostname: duckdns
         networks:
             - connected
         labels:
@@ -209,6 +215,7 @@ services:
             driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
+        hostname: openvpn
         networks:
             - connected
         labels:
@@ -227,6 +234,7 @@ services:
             driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
+        hostname: openvpn-tcp
         networks:
             - connected
         depends_on:
@@ -244,6 +252,7 @@ services:
             RCON_PORT: ${RCON_PORT}
             RCON_PASSWORD: ${RCON_PASSWORD}
             AMQP_HOST: rabbitmq
+        hostname: sidekick
         networks:
             - connected
         labels:
@@ -271,6 +280,7 @@ services:
             - sidekick
         devices:
             - "/dev/net/tun:/dev/net/tun"
+        hostname: vpn-client
         networks:
             connected:
                 ipv4_address: 172.1.0.63
@@ -318,8 +328,6 @@ services:
         network_mode: "service:vpn-client"
         depends_on:
             - vpn-client
-        volumes:
-            - peerflix_data:/tmp/torrent-stream
         labels:
             - "autoheal=true"
         healthcheck:
@@ -345,6 +353,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - ./config/traefik/certs:/etc/traefik/certs
             - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml
+        hostname: traefik
         networks:
             - connected
         labels:
@@ -362,6 +371,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+        hostname: portainer
         networks:
             - connected
         labels:
@@ -382,6 +392,7 @@ services:
             AUTOHEAL_START_PERIOD: 60
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+        hostname: autoheal
         networks:
             - connected
         labels:
@@ -400,6 +411,7 @@ services:
             - ./download/complete:/root/downloads
             - ./shared:/root/shared
             - /media/nuc/WD2To:/root/media
+        hostname: commander
         networks:
             - connected
         labels:
@@ -442,6 +454,7 @@ services:
             - ./work/plex:/transcode
             - /media/nuc/WD2To:/data/media
             - ./download/complete:/data/downloads
+        hostname: plex
         networks:
             - connected
         hostname: "plex"
@@ -472,6 +485,7 @@ services:
         volumes:
             - grafana_data:/var/lib/grafana
             - ./config/grafana/setup.sh:/setup.sh
+        hostname: grafana
         networks:
             - connected
             - hidden
@@ -507,6 +521,7 @@ services:
             - '--web.console.templates=/etc/prometheus/consoles'
             - '--storage.tsdb.retention=24h'
             - '--web.enable-lifecycle'
+        hostname: prometheus
         networks:
             - connected
             - hidden
@@ -526,6 +541,7 @@ services:
             - '--config.file=/etc/alertmanager/config.yml'
             - '--storage.path=/alertmanager'
         restart: ${RESTART_MODE}
+        hostname: alertmanager
         networks:
             - hidden
         logging:
@@ -547,6 +563,7 @@ services:
             - '--path.procfs=/host/proc'
             - '--path.sysfs=/host/sys'
             - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+        hostname: nodeexporter
         networks:
             - hidden
         logging:
@@ -564,6 +581,7 @@ services:
             - /sys:/sys:ro
             - /var/lib/docker/:/var/lib/docker:ro
             - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+        hostname: cadvisor
         networks:
             - hidden
         logging:
@@ -575,6 +593,7 @@ services:
         image: prom/pushgateway
         container_name: pushgateway
         restart: ${RESTART_MODE}
+        hostname: pushgateway
         networks:
             - hidden
         logging:
@@ -592,6 +611,7 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/heimdall:/config
+        hostname: heimdall
         networks:
             - connected
         labels:
@@ -616,6 +636,7 @@ services:
             OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
             OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
             OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
+        hostname: monitor
         networks:
             - connected
         depends_on:
@@ -636,6 +657,7 @@ services:
         volumes:
             - ./config/openvpn:/etc/openvpn
             - openvpn-ui_data:/opt/openvpn-gui/db
+        hostname: openvpn-ui
         networks:
             - connected
         depends_on:
@@ -658,6 +680,7 @@ services:
             - /var/www/symfony
             - ./shared/gazee:/var/www/symfony/public/files/weekly
             - /media/nuc/WD2To/comics:/var/www/symfony/public/files/all
+        hostname: comic-reader
         networks:
             - hidden
         logging:
@@ -673,6 +696,7 @@ services:
             TZ: ${TIMEZONE}
         volumes_from:
             - comic-reader
+        hostname: php-fpm-comic
         networks:
             - hidden
         depends_on:
@@ -692,6 +716,7 @@ services:
             TZ: ${TIMEZONE}
         volumes_from:
             - comic-reader
+        hostname: nginx-comic
         networks:
             - hidden
             - connected
@@ -718,6 +743,7 @@ services:
         tty: true
         volumes:
             - /var/www/symfony
+        hostname: wol-web
         networks:
             - hidden
         logging:
@@ -735,6 +761,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         volumes_from:
             - wol-web
+        hostname: php-fpm-wol
         networks:
             - connected
         depends_on:
@@ -756,6 +783,7 @@ services:
             TZ: ${TIMEZONE}
         volumes_from:
             - wol-web
+        hostname: nginx-wol
         networks:
             - connected
         links:
@@ -781,6 +809,7 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
+        hostname: paint-web
         networks:
             - connected
         labels:
@@ -796,6 +825,7 @@ services:
         container_name: telegraf
         image: telegraf
         restart: ${RESTART_MODE}
+        hostname: telegraf
         networks:
             - connected
             - hidden
@@ -817,6 +847,7 @@ services:
         container_name: graphite
         image: graphiteapp/graphite-statsd
         restart: ${RESTART_MODE}
+        hostname: graphite
         networks:
             - connected
         volumes:
@@ -842,6 +873,7 @@ services:
             INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
             INFLUXDB_HTTP_LOG_ENABLED: 'false'
             INFLUXDB_LOGGING_LEVEL: warn
+        hostname: influxdb
         networks:
             - hidden
         volumes:
@@ -856,6 +888,7 @@ services:
         container_name: chronograf
         restart: ${RESTART_MODE}
         command: --influxdb-url=http://influxdb:8086
+        hostname: chronograf
         networks:
             - connected
             - hidden
@@ -877,6 +910,7 @@ services:
     #     restart: ${RESTART_MODE}
     #     ports:
     #         - "1883:1883/tcp"
+        # hostname: mosquitto
     #     networks:
     #         - connected
     #     volumes:
@@ -919,6 +953,7 @@ services:
     #         INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
     #         MQTT_HOST: mosquitto
     #         MQTT_TOPIC: ${MQTT_TOPIC}
+        # hostname: mqtt-forwarder
     #     networks:
     #         - connected
     #         - hidden
@@ -979,6 +1014,7 @@ services:
             - "25565:25565/tcp"
         volumes:
             - ./config/minecraft:/data
+        hostname: minecraft
         networks:
             - connected
         labels:
@@ -997,6 +1033,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - mongo_data:/data/db
+        hostname: mongo
         networks:
             - hidden
         logging:
@@ -1011,6 +1048,7 @@ services:
         environment:
             ROOT_URL: ${WK_ROOT_URL}
             MONGO_URL: ${MONGO_URL}/wekan
+        hostname: wekan
         networks:
             - connected
             - hidden
@@ -1030,6 +1068,7 @@ services:
         image: mongo-express
         container_name: mongo-express
         restart: ${RESTART_MODE}
+        hostname: mongo-express
         networks:
             - connected
             - hidden
@@ -1051,6 +1090,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - mysql_data:/var/lib/mysql
+        hostname: mysql
         networks:
             - hidden
         environment:
@@ -1081,6 +1121,7 @@ services:
         volumes:
             - mattermost_data:/mattermost
             - /etc/localtime:/etc/localtime:ro
+        hostname: mattermost
         networks:
             - connected
             - hidden
@@ -1102,6 +1143,7 @@ services:
         restart: ${RESTART_MODE}
         environment:
             ADMINER_DESIGN: konya
+        hostname: adminer
         networks:
             - connected
             - hidden
@@ -1121,6 +1163,7 @@ services:
         image: benweet/stackedit
         container_name: stackedit
         restart: ${RESTART_MODE}
+        hostname: stackedit
         networks:
             - connected
         labels:
@@ -1143,6 +1186,7 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - /media/nuc/WD2To/music:/music:ro
+        hostname: airsonic
         networks:
             - connected
         labels:
@@ -1161,6 +1205,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - ./:/var/www
+        hostname: h5ai
         networks:
             - connected
         labels:
@@ -1177,6 +1222,7 @@ services:
         image: rabbitmq:management-alpine
         container_name: rabbitmq
         restart: ${RESTART_MODE}
+        hostname: rabbitmq
         networks:
             - connected
         labels:
@@ -1195,6 +1241,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - thelounge_data:/var/opt/thelounge
+        hostname: thelounge
         networks:
             - connected
         labels:
@@ -1214,6 +1261,7 @@ services:
         volumes:
             - commafeed_data:/data
             - ./config/commafeed/config.yml:/config/config.yml
+        hostname: commafeed
         networks:
             - connected
         labels:
@@ -1233,6 +1281,7 @@ services:
         volumes:
             - zenbot_data:/data
             - ./config/zenbot/conf.js:/app/conf.js
+        hostname: zenbot
         networks:
             - connected
             - hidden
@@ -1254,6 +1303,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - redis_data:/data
+        hostname: redis
         networks:
             - hidden
         logging:
@@ -1265,6 +1315,7 @@ services:
         image: marian/rebrow
         container_name: redis-ui
         restart: ${RESTART_MODE}
+        hostname: redis-ui
         networks:
             - connected
             - hidden
@@ -1290,6 +1341,7 @@ services:
           USE_SSL: 1
         volumes:
             - ./config/gekko/config.js:/app/config.js
+        hostname: gekko
         networks:
             - connected
             - hidden
@@ -1311,6 +1363,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - theia_data:/home/project:cached
+        hostname: theia
         networks:
             - connected
         labels:
@@ -1333,6 +1386,7 @@ services:
         volumes:
             - jsbin_data:/home/project:cached
             - ./config/jsbin/config.json:/jsbin.json:cached
+        hostname: jsbin
         networks:
             - connected
         labels:
@@ -1349,6 +1403,7 @@ services:
         image: njae86fq/regexr
         container_name: regex
         restart: ${RESTART_MODE}
+        hostname: regex
         networks:
             - connected
         labels:
@@ -1365,6 +1420,7 @@ services:
         image: kern/filepizza:master
         container_name: filepizza
         restart: ${RESTART_MODE}
+        hostname: filepizza
         networks:
             - connected
         labels:
@@ -1383,6 +1439,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - jenkins_data:/var/jenkins_home
+        hostname: jenkins
         networks:
             - connected
         labels:
