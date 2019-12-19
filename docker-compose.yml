@@ -457,7 +457,6 @@ services:
             - ./work/plex:/transcode
             - /media/nuc/WD2To:/data/media
             - ./download/complete:/data/downloads
-        hostname: plex
         networks:
             - connected
         hostname: "plex"
