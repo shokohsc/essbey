@@ -34,6 +34,7 @@ volumes:
     theia_data: {}
     jsbin_data: {}
     jenkins_data: {}
+    cloudtorrent_data: {}
 
 services:
 
@@ -275,7 +276,8 @@ services:
             ROUTE: 192.168.1.0/24
             VPNPORT_1: 9091
             VPNPORT_2: 9000
-            VPNPORT_3: 9060
+            VPNPORT_3: 3000
+            VPNPORT_4: 9060
             SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
             - sidekick
@@ -293,6 +295,8 @@ services:
             - "traefik.transmission.port=9091"
             - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
             - "traefik.peerflix.port=9000"
+            - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
+            - "traefik.cloudtorrent.port=3000"
             - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
             - "traefik.irc.port=9060"
         logging:
@@ -328,6 +332,28 @@ services:
         image: shokohsc/peerflix-server
         container_name: peerflix
         restart: ${RESTART_MODE}
+        network_mode: "service:vpn-client"
+        depends_on:
+            - vpn-client
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+        logging:
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    cloudtorrent:
+        image: jpillora/cloud-torrent
+        container_name: cloudtorrent
+        restart: ${RESTART_MODE}
+        volumes:
+            - cloudtorrent_data:/downloads
         network_mode: "service:vpn-client"
         depends_on:
             - vpn-client
