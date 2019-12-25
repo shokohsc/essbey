@@ -349,7 +349,7 @@ services:
                 max-file: "2"
 
     cloudtorrent:
-        image: jpillora/cloud-torrent
+        image: shokohsc/cloud-torrent
         container_name: cloudtorrent
         restart: ${RESTART_MODE}
         volumes:
