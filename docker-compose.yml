@@ -277,7 +277,6 @@ services:
             VPNPORT_1: 9091
             VPNPORT_2: 9000
             VPNPORT_3: 3000
-            VPNPORT_4: 9060
             SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
             - sidekick
@@ -297,8 +296,6 @@ services:
             - "traefik.peerflix.port=9000"
             - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
             - "traefik.cloudtorrent.port=3000"
-            - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
-            - "traefik.irc.port=9060"
         logging:
             options:
                 max-size: "50k"
@@ -1269,18 +1266,14 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - thelounge_data:/var/opt/thelounge
-            - ./config/thelounge/config.js:/var/opt/thelounge/config.js
-        network_mode: "service:vpn-client"
-        depends_on:
-            - vpn-client
+        hostname: thelounge
+        networks:
+            - connected
         labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+            - "traefik.enable=true"
+            - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.irc.port=9000"
         logging:
             options:
                 max-size: "50k"
