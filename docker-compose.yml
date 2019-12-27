@@ -350,7 +350,7 @@ services:
         container_name: cloudtorrent
         restart: ${RESTART_MODE}
         volumes:
-            - cloudtorrent_data:/downloads
+            - ./download/complete:/downloads
         network_mode: "service:vpn-client"
         depends_on:
             - vpn-client
