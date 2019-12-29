@@ -34,7 +34,6 @@ volumes:
     theia_data: {}
     jsbin_data: {}
     jenkins_data: {}
-    cloudtorrent_data: {}
 
 services:
 
