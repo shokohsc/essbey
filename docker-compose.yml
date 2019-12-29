@@ -470,6 +470,35 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    jellyfin:
+        container_name: jellyfin
+        image: linuxserver/jellyfin
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        devices:
+            - "/dev/dri:/dev/dri"
+        volumes:
+            - ./config/jellyfin:/config
+            - jellyfin_data:/cache
+            - ${WD1To_PATH}:/data/WD1To
+            - ${WD2To_PATH}:/data/WD2To
+            - ./download/complete:/data/downloads
+        networks:
+            - connected
+        hostname: "jellyfin"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
+            - "traefik.port=8096"
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "2"
+
     plex: # Media server
         container_name: plex
         image: linuxserver/plex

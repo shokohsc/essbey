@@ -7,6 +7,7 @@ shared/
 
 config/openvpn/
 config/plex/
+config/jellyfin/
 config/transmission/
 config/heimdall
 config/traefik/certs/
