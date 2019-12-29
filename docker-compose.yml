@@ -51,6 +51,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -71,6 +72,7 @@ services:
     #         - ./config/curator/config.yml:/curator/config.yml
     #         - ./config/curator/action.yml:/curator/action.yml
     #     logging:
+    driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -94,6 +96,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5601"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -116,6 +119,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -136,6 +140,7 @@ services:
         depends_on:
             - logstash
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -159,6 +164,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -181,6 +187,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -199,6 +206,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -215,6 +223,7 @@ services:
         ports:
             - "32767:1194/udp"
         logging:
+            driver: "json-file"
             driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
@@ -234,6 +243,7 @@ services:
         ports:
             - "32767:1194/tcp"
         logging:
+            driver: "json-file"
             driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
@@ -262,6 +272,7 @@ services:
             - "autoheal=true"
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -299,6 +310,7 @@ services:
             - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
             - "traefik.cloudtorrent.port=3000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -323,6 +335,7 @@ services:
             start_period: 60s
             retries: 5
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -343,6 +356,7 @@ services:
             start_period: 60s
             retries: 5
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -365,6 +379,7 @@ services:
             start_period: 60s
             retries: 5
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -389,6 +404,7 @@ services:
             - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -407,6 +423,7 @@ services:
             - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
             - "traefik.port=9000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -426,6 +443,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -448,6 +466,7 @@ services:
             - "traefik.frontend.rule=Host:commander.${DOMAIN}"
             - "traefik.port=8000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -491,6 +510,7 @@ services:
             - "traefik.frontend.rule=Host:plex.${DOMAIN}"
             - "traefik.port=32400"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -530,6 +550,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -555,6 +576,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -572,6 +594,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -594,6 +617,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -612,6 +636,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -624,6 +649,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -646,6 +672,7 @@ services:
             - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -673,6 +700,7 @@ services:
             - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -694,6 +722,7 @@ services:
             - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -711,6 +740,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             driver: none
 
     php-fpm-comic:
@@ -729,6 +759,7 @@ services:
         depends_on:
             - comic-reader
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -758,6 +789,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -774,6 +806,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             driver: none
 
     php-fpm-wol:
@@ -796,6 +829,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -824,6 +858,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -844,6 +879,7 @@ services:
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -866,6 +902,7 @@ services:
         labels:
             - "traefik.enable=false"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -885,6 +922,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -906,6 +944,7 @@ services:
         volumes:
             - influx_data:/var/lib/influxdb
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -927,6 +966,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8888"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -946,6 +986,7 @@ services:
     #     labels:
     #         - "traefik.enable=false"
     #     logging:
+    driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -964,6 +1005,7 @@ services:
     #     depends_on:
     #         - mosquitto
     #     logging:
+    driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -990,6 +1032,7 @@ services:
     #     labels:
     #         - "traefik.enable=false"
     #     logging:
+    driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -1050,6 +1093,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8123"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1064,6 +1108,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1087,6 +1132,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1107,6 +1153,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8081"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1126,6 +1173,7 @@ services:
             MYSQL_USER: mattermost
             MYSQL_PASSWORD: mattermost
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1160,6 +1208,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1182,6 +1231,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1199,6 +1249,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1222,6 +1273,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=4040"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1243,6 +1295,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1260,6 +1313,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=15672"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1279,6 +1333,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.irc.port=9000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1299,6 +1354,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8082"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1322,6 +1378,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=17365"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1336,6 +1393,7 @@ services:
         networks:
             - hidden
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1356,6 +1414,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5001"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1382,6 +1441,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=443"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1401,6 +1461,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1424,6 +1485,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=443"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1441,6 +1503,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1458,6 +1521,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
@@ -1477,6 +1541,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
         logging:
+            driver: "json-file"
             options:
                 max-size: "50k"
                 max-file: "2"
