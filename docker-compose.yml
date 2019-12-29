@@ -472,7 +472,7 @@ services:
 
     plex: # Media server
         container_name: plex
-        image: linuxserver/plex
+        image: plexinc/pms-docker
         restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
@@ -480,8 +480,8 @@ services:
             VERSION: docker
             PLEX_CLAIM: ${PLEX_CLAIM}
             UMASK_SET: 022
-            # ADVERTISE_IP: ${PLEX_ROOT_URL}
-            # TZ: ${TIMEZONE}
+            ADVERTISE_IP: ${PLEX_ROOT_URL}
+            TZ: ${TIMEZONE}
         ports:
             - "32400:32400/tcp"
             - "32400:32400/udp"
@@ -489,6 +489,12 @@ services:
             - "32469:32469/udp"
             - "5353:5353/udp"
             - "1900:1900/udp"
+            - "3005:3005/tcp"
+            - "8324:8324/tcp"
+            - "32410:32410/udp"
+            - "32412:32412/udp"
+            - "32413:32413/udp"
+            - "32414:32414/udp"
         devices:
             - "/dev/dri:/dev/dri"
         volumes:
