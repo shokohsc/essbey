@@ -478,6 +478,8 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
+        ports:
+            - "1900:1900/udp"
         devices:
             - "/dev/dri:/dev/dri"
         volumes:
