@@ -195,7 +195,7 @@ insecureSkipVerify = true
   passHostHeader = true
   [frontends.pihole.routes]
     [frontends.pihole.routes.route0]
-      rule = "Host:pihole.shokohsc"
+      rule = "Host:pihole.shokohsc.home"
     [frontends.pihole.routes.route1]
       rule = "AddPrefix: /admin"
   [frontends.routeur]
@@ -204,4 +204,4 @@ insecureSkipVerify = true
   passHostHeader = true
   [frontends.routeur.routes]
     [frontends.routeur.routes.route0]
-      rule = "Host:routeur.shokohsc"
+      rule = "Host:routeur.shokohsc.home"
