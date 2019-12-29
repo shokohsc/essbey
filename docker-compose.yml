@@ -151,7 +151,8 @@ services:
         volumes:
             - ./download/complete:/mount/downloads
             - ./shared:/mount/shared
-            - /media/nuc/WD2To:/mount/media
+            - ${WD1To_PATH}:/mount/media/WD1To
+            - ${WD2To_PATH}:/mount/media/WD2To
         hostname: samba
         networks:
             - connected
@@ -172,7 +173,8 @@ services:
         volumes:
             - ./download/complete:/home/shokohsc/upload/downloads
             - ./shared:/home/shokohsc/upload/shared
-            - /media/nuc/WD2To:/home/shokohsc/upload/media
+            - ${WD1To_PATH}:/home/shokohsc/upload/media/WD1To
+            - ${WD2To_PATH}:/home/shokohsc/upload/media/WD2To
         hostname: sftp
         networks:
             - connected
@@ -273,7 +275,7 @@ services:
         environment:
             TZ: ${TIMEZONE}
             FIREWALL: ''
-            ROUTE: 192.168.1.0/24
+            ROUTE: 10.164.18.0/24
             VPNPORT_1: 9091
             VPNPORT_2: 9000
             VPNPORT_3: 3000
@@ -436,7 +438,8 @@ services:
             - /:/mnt/fs
             - ./download/complete:/root/downloads
             - ./shared:/root/shared
-            - /media/nuc/WD2To:/root/media
+            - ${WD1To_PATH}:/root/media/WD1To
+            - ${WD2To_PATH}:/root/media/WD2To
         hostname: commander
         networks:
             - connected
@@ -477,8 +480,8 @@ services:
             - "/dev/dri:/dev/dri"
         volumes:
             - ./config/plex:/config
-            - ./work/plex:/transcode
-            - /media/nuc/WD2To:/data/media
+            - ${WD1To_PATH}:/data/media/WD1To
+            - ${WD2To_PATH}:/data/media/WD2To
             - ./download/complete:/data/downloads
         networks:
             - connected
@@ -509,7 +512,6 @@ services:
             GF_LOG_LEVEL: warn
         volumes:
             - grafana_data:/var/lib/grafana
-            - ./config/grafana/setup.sh:/setup.sh
         hostname: grafana
         networks:
             - connected
@@ -704,7 +706,7 @@ services:
         volumes:
             - /var/www/symfony
             - ./shared/gazee:/var/www/symfony/public/files/weekly
-            - /media/nuc/WD2To/comics:/var/www/symfony/public/files/all
+            - ${WD2To_PATH}/comics:/var/www/symfony/public/files/all
         hostname: comic-reader
         networks:
             - hidden
@@ -1210,7 +1212,7 @@ services:
             PUID: ${PUID}
             TZ: ${TIMEZONE}
         volumes:
-            - /media/nuc/WD2To/music:/music:ro
+            - ${WD2To_PATH}/music:/music:ro
         hostname: airsonic
         networks:
             - connected
@@ -1229,7 +1231,9 @@ services:
         container_name: h5ai
         restart: ${RESTART_MODE}
         volumes:
-            - ./:/var/www
+            - ./:/var/www/project
+            - ${WD1To_PATH}:/var/www/WD1To
+            - ${WD2To_PATH}:/var/www/WD2To
         hostname: h5ai
         networks:
             - connected
