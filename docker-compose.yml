@@ -72,7 +72,7 @@ services:
     #         - ./config/curator/config.yml:/curator/config.yml
     #         - ./config/curator/action.yml:/curator/action.yml
     #     logging:
-    driver: "json-file"
+    #         driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -986,7 +986,7 @@ services:
     #     labels:
     #         - "traefik.enable=false"
     #     logging:
-    driver: "json-file"
+    #         driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -1005,7 +1005,7 @@ services:
     #     depends_on:
     #         - mosquitto
     #     logging:
-    driver: "json-file"
+    #         driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
@@ -1032,7 +1032,7 @@ services:
     #     labels:
     #         - "traefik.enable=false"
     #     logging:
-    driver: "json-file"
+    #         driver: "json-file"
     #         options:
     #             max-size: "50k"
     #             max-file: "2"
