@@ -479,7 +479,6 @@ services:
             PUID: ${PUID}
             VERSION: docker
             PLEX_CLAIM: ${PLEX_CLAIM}
-            UMASK_SET: 022
             ADVERTISE_IP: ${PLEX_ROOT_URL}
             TZ: ${TIMEZONE}
         ports:
