@@ -482,7 +482,6 @@ services:
             - "/dev/dri:/dev/dri"
         volumes:
             - ./config/jellyfin:/config
-            - jellyfin_data:/cache
             - ${WD1To_PATH}:/data/WD1To
             - ${WD2To_PATH}:/data/WD2To
             - ./download/complete:/data/downloads
