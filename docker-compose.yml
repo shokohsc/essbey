@@ -472,7 +472,7 @@ services:
 
     plex: # Media server
         container_name: plex
-        image: plexinc/pms-docker
+        image: linuxserver/plex
         restart: ${RESTART_MODE}
         environment:
             PGID: ${PGID}
@@ -489,18 +489,12 @@ services:
             - "32469:32469/udp"
             - "5353:5353/udp"
             - "1900:1900/udp"
-            - "3005:3005/tcp"
-            - "8324:8324/tcp"
-            - "32410:32410/udp"
-            - "32412:32412/udp"
-            - "32413:32413/udp"
-            - "32414:32414/udp"
         devices:
             - "/dev/dri:/dev/dri"
         volumes:
             - ./config/plex:/config
-            - ${WD1To_PATH}:/data/media/WD1To
-            - ${WD2To_PATH}:/data/media/WD2To
+            - ${WD1To_PATH}:/data/WD1To
+            - ${WD2To_PATH}:/data/WD2To
             - ./download/complete:/data/downloads
         networks:
             - connected
