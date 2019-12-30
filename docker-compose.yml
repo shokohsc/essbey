@@ -624,7 +624,8 @@ services:
         container_name: nodeexporter
         restart: ${RESTART_MODE}
         user: root
-        privileged: true
+        cap_add:
+            - sys_admin
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
