@@ -620,19 +620,15 @@ services:
                 max-file: "2"
 
     nodeexporter: # Grafana requirement
-        image: prom/node-exporter:v0.16.0
+        image: quay.io/prometheus/node-exporter
         container_name: nodeexporter
         restart: ${RESTART_MODE}
         user: root
         privileged: true
         volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
-            - /:/rootfs:ro
+            - /:/host:ro,rslave
         command:
-            - '--path.procfs=/host/proc'
-            - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+            - '--path.rootfs=/host'
         hostname: nodeexporter
         networks:
             - hidden
