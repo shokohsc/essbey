@@ -478,8 +478,6 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
-        ports:
-            - "1900:1900/udp"
         devices:
             - "/dev/dri:/dev/dri"
         volumes:
@@ -500,43 +498,43 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    # plex: # Media server
-    #     container_name: plex
-    #     image: linuxserver/plex
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         VERSION: docker
-    #         PLEX_CLAIM: ${PLEX_CLAIM}
-    #         ADVERTISE_IP: ${PLEX_ROOT_URL}
-    #         TZ: ${TIMEZONE}
-    #     ports:
-    #         - "32400:32400/tcp"
-    #         - "32400:32400/udp"
-    #         - "32469:32469/tcp"
-    #         - "32469:32469/udp"
-    #         - "5353:5353/udp"
-    #         - "1901:1900/udp"
-    #     devices:
-    #         - "/dev/dri:/dev/dri"
-    #     volumes:
-    #         - ./config/plex:/config
-    #         - ${WD1To_PATH}:/data/WD1To
-    #         - ${WD2To_PATH}:/data/WD2To
-    #         - ./download/complete:/data/downloads
-    #     networks:
-    #         - connected
-    #     hostname: "plex"
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:plex.${DOMAIN}"
-    #         - "traefik.port=32400"
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
+    plex: # Media server
+        container_name: plex
+        image: linuxserver/plex
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            VERSION: docker
+            PLEX_CLAIM: ${PLEX_CLAIM}
+            ADVERTISE_IP: ${PLEX_ROOT_URL}
+            TZ: ${TIMEZONE}
+        ports:
+            - "32400:32400/tcp"
+            - "32400:32400/udp"
+            - "32469:32469/tcp"
+            - "32469:32469/udp"
+            - "5353:5353/udp"
+            - "1900:1900/udp"
+        devices:
+            - "/dev/dri:/dev/dri"
+        volumes:
+            - ./config/plex:/config
+            - ${WD1To_PATH}:/data/WD1To
+            - ${WD2To_PATH}:/data/WD2To
+            - ./download/complete:/data/downloads
+        networks:
+            - connected
+        hostname: "plex.shokohsc.home"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:plex.${DOMAIN}"
+            - "traefik.port=32400"
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "2"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
