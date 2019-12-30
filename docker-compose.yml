@@ -625,11 +625,11 @@ services:
         restart: ${RESTART_MODE}
         user: root
         cap_add:
-            - sys_admin
+            - sys_time
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
-            - /:/rootfs:ro
+            - /:/host/root:ro
         command:
             - '--path.rootfs=/host/root'
             - '--path.procfs=/host/proc'
