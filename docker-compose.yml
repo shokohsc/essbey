@@ -507,8 +507,6 @@ services:
             PUID: ${PUID}
             VERSION: docker
             PLEX_CLAIM: ${PLEX_CLAIM}
-            ADVERTISE_IP: ${PLEX_ROOT_URL}
-            TZ: ${TIMEZONE}
         ports:
             - "32400:32400/tcp"
             - "32400:32400/udp"
@@ -525,7 +523,7 @@ services:
             - ./download/complete:/data/downloads
         networks:
             - connected
-        hostname: "plex.shokohsc.home"
+        hostname: "plex"
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:plex.${DOMAIN}"
