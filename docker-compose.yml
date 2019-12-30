@@ -507,6 +507,7 @@ services:
             PUID: ${PUID}
             VERSION: docker
             PLEX_CLAIM: ${PLEX_CLAIM}
+            ADVERTISE_IP: ${PLEX_ADVERTISED_URL}
         ports:
             - "32400:32400/tcp"
             - "32400:32400/udp"
