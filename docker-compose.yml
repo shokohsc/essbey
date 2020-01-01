@@ -1554,6 +1554,8 @@ services:
             ES_PORT: 9200
             RUN_ON_START: 'true'
             USE_CRON: 'true'
+        ports:
+            - 9999:9999/tcp
         volumes:
             - ./config/diskover:/config
             - ${WD1To_PATH}:/data/WD1To
