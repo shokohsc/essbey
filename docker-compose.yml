@@ -470,34 +470,6 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
-    jellyfin:
-        container_name: jellyfin
-        image: linuxserver/jellyfin
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        devices:
-            - "/dev/dri:/dev/dri"
-        volumes:
-            - ./config/jellyfin:/config
-            - ${WD1To_PATH}:/data/WD1To
-            - ${WD2To_PATH}:/data/WD2To
-            - ./download/complete:/data/downloads
-        networks:
-            - connected
-        hostname: "jellyfin"
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
-            - "traefik.port=8096"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
-
     plex: # Media server
         container_name: plex
         image: linuxserver/plex
@@ -1562,6 +1534,44 @@ services:
             - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "50k"
+                max-file: "2"
+
+    diskover:
+        container_name: diskover
+        image: linuxserver/diskover
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
+            RUN_ON_START: 'true'
+            USE_CRON: 'true'
+        volumes:
+            - ./config/diskover:/config
+            - ${WD1To_PATH}:/data/WD1To
+            - ${WD2To_PATH}:/data/WD2To
+            - /:/data/rootfs
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - elasticsearch
+            - redis
+        hostname: "diskover"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:diskover.${DOMAIN}"
+            - "traefik.port=80"
+            - "traefik.frontend.rule=Host:diskover-dashboard.${DOMAIN}"
+            - "traefik.port=9181"
         logging:
             driver: "json-file"
             options:
