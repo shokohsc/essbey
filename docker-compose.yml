@@ -1587,6 +1587,7 @@ services:
         hostname: diskover
         labels:
             - "traefik.enable=true"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.diskover.frontend.rule=Host:diskover.${DOMAIN}"
             - "traefik.diskover.port=80"
             - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
