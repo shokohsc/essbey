@@ -1572,8 +1572,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:diskover.${DOMAIN}"
             - "traefik.port=80"
-            - "traefik.frontend.rule=Host:diskover-dashboard.${DOMAIN}"
-            - "traefik.port=9181"
         logging:
             driver: "json-file"
             options:
