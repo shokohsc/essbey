@@ -1570,8 +1570,10 @@ services:
         hostname: "diskover"
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:diskover.${DOMAIN}"
-            - "traefik.port=80"
+            - "traefik.diskover.frontend.rule=Host:diskover.${DOMAIN}"
+            - "traefik.diskover.port=80"
+            - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
+            - "traefik.rq.port=9181"
         logging:
             driver: "json-file"
             options:
