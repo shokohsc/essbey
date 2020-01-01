@@ -1577,9 +1577,7 @@ services:
             - 9999:9999/tcp
         volumes:
             - ./config/diskover:/config
-            - ${WD1To_PATH}:/data/WD1To
-            - ${WD2To_PATH}:/data/WD2To
-            - /:/data/rootfs
+            - /:/data
         networks:
             - connected
             - hidden
