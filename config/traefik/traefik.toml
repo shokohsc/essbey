@@ -191,11 +191,6 @@ insecureSkipVerify = true
   watch = true
 
 [backends]
-  [backends.pihole]
-    [backends.pihole.servers]
-      [backends.pihole.servers.server0]
-      url = "https://pihole.pi.home"
-      weight = 1
   [backends.routeur]
     [backends.routeur.servers]
       [backends.routeur.servers.server0]
@@ -203,13 +198,6 @@ insecureSkipVerify = true
       weight = 1
 
 [frontends]
-  [frontends.pihole]
-  entryPoints = ["http", "https"]
-  backend = "pihole"
-  passHostHeader = true
-  [frontends.pihole.routes]
-    [frontends.pihole.routes.route0]
-      rule = "Host:pihole.shokohsc.home"
   [frontends.routeur]
   entryPoints = ["http", "https"]
   backend = "routeur"

@@ -549,7 +549,7 @@ services:
                 max-file: "2"
 
     prometheus: # Database, grafana requirement
-        image: prom/prometheus:v2.4.3
+        image: prom/prometheus
         container_name: prometheus
         restart: ${RESTART_MODE}
         volumes:
@@ -629,9 +629,11 @@ services:
             - /:/rootfs:ro
         hostname: cadvisor
         networks:
+            - connected
             - hidden
         labels:
             - "traefik.enable=true"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
             - "traefik.port=8080"
         logging:
