@@ -47,6 +47,20 @@ defaultEntryPoints = ["http", "https"]
       certFile = "/etc/traefik/certs/_wildcard.shokohsc.home.pem"
       keyFile = "/etc/traefik/certs/_wildcard.shokohsc.home-key.pem"
 
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/pi.home.pem"
+      keyFile = "/etc/traefik/certs/pi.home-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/_wildcard.pi.home.pem"
+      keyFile = "/etc/traefik/certs/_wildcard.pi.home-key.pem"
+
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/lucio.home.pem"
+      keyFile = "/etc/traefik/certs/lucio.home-key.pem"
+      [[entryPoints.https.tls.certificates]]
+      certFile = "/etc/traefik/certs/_wildcard.lucio.home.pem"
+      keyFile = "/etc/traefik/certs/_wildcard.lucio.home-key.pem"
+
 
 ################################################################
 # Traefik logs configuration
@@ -156,7 +170,7 @@ defaultEntryPoints = ["http", "https"]
 # Optional
 # Default: ""
 #
-domain = "shokohsc"
+domain = "shokohsc.home"
 
 # Expose containers by default in traefik
 #
@@ -180,7 +194,7 @@ insecureSkipVerify = true
   [backends.pihole]
     [backends.pihole.servers]
       [backends.pihole.servers.server0]
-      url = "http://10.164.18.53"
+      url = "https://pihole.pi.home"
       weight = 1
   [backends.routeur]
     [backends.routeur.servers]
