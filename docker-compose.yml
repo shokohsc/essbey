@@ -554,6 +554,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - ./config/prometheus/:/etc/prometheus/
+            - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
             - prometheus_data:/prometheus
         command:
             - '--config.file=/etc/prometheus/prometheus.yml'
