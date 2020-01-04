@@ -44,6 +44,8 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets: ['traefik:8080', 'traefik.pi.home', 'traefik.lucio.home']
+    tls_config:
+      ca_file: '/etc/ca/rootCA.pem'
 
   - job_name: 'docker'
     scrape_interval: 10s
