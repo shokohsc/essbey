@@ -568,7 +568,10 @@ services:
             - connected
             - hidden
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
+            - "traefik.port=9090"
         logging:
             driver: "json-file"
             options:
@@ -608,7 +611,6 @@ services:
             - '--path.rootfs=/host/root'
             - '--path.procfs=/host/proc'
             - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
         hostname: nodeexporter
         networks:
             - hidden

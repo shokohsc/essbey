@@ -43,8 +43,12 @@ scrape_configs:
     scrape_interval: 10s
     honor_labels: true
     static_configs:
-      - targets: ['traefik:8080']
+      - targets: ['traefik:8080', 'traefik.pi.home', 'traefik.lucio.home']
 
+  - job_name: 'docker'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['sombra.home:42375', 'pi.home:42375', 'lucio.home:42375']
 
 alerting:
   alertmanagers:

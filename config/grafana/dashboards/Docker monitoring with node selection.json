@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.2.4"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -48,11 +12,12 @@
       }
     ]
   },
-  "description": "Docker monitoring with Prometheus and cAdvisor",
+  "description": "Docker monitoring with Prometheus and cAdvisor with node selection",
   "editable": true,
-  "gnetId": 193,
+  "gnetId": 8321,
   "graphTooltip": 1,
-  "id": null,
+  "id": 27,
+  "iteration": 1578141234063,
   "links": [],
   "panels": [
     {
@@ -64,7 +29,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "format": "none",
@@ -100,6 +65,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -120,7 +86,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(container_last_seen{image!=\"\"})",
+          "expr": "count(container_last_seen{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"})",
           "intervalFactor": 2,
           "legendFormat": "",
           "metric": "container_last_seen",
@@ -151,7 +117,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "format": "mbytes",
@@ -187,6 +153,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -207,7 +174,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(container_memory_usage_bytes{image!=\"\"})/1024/1024",
+          "expr": "sum(container_memory_usage_bytes{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"})/1024/1024",
           "intervalFactor": 2,
           "legendFormat": "",
           "metric": "container_memory_usage_bytes",
@@ -238,7 +205,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "format": "percent",
@@ -274,6 +241,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
+      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -294,7 +262,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100)",
+          "expr": "sum(rate(container_cpu_user_seconds_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m]) * 100)",
           "intervalFactor": 2,
           "legendFormat": "",
           "metric": "container_memory_usage_bytes",
@@ -321,11 +289,12 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "decimals": 2,
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 7,
@@ -333,6 +302,7 @@
         "x": 0,
         "y": 3
       },
+      "hiddenSeries": false,
       "id": 2,
       "isNew": true,
       "legend": {
@@ -350,6 +320,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -360,7 +333,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100",
+          "expr": "rate(container_cpu_user_seconds_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m]) * 100",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "cpu",
@@ -370,6 +343,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "CPU Usage",
       "tooltip": {
@@ -378,7 +352,6 @@
         "sort": 0,
         "value_type": "cumulative"
       },
-      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -415,11 +388,12 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "decimals": 2,
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 7,
@@ -427,6 +401,7 @@
         "x": 0,
         "y": 10
       },
+      "hiddenSeries": false,
       "id": 1,
       "isNew": true,
       "legend": {
@@ -444,6 +419,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -454,7 +432,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_memory_usage_bytes{image!=\"\"}",
+          "expr": "container_memory_usage_bytes{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
@@ -465,6 +443,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Memory Usage",
       "tooltip": {
@@ -473,7 +452,6 @@
         "sort": 0,
         "value_type": "cumulative"
       },
-      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -510,10 +488,11 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 7,
@@ -521,6 +500,7 @@
         "x": 0,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 3,
       "isNew": true,
       "legend": {
@@ -536,6 +516,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -546,7 +529,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_receive_bytes_total{image!=\"\"}[5m])",
+          "expr": "irate(container_network_receive_bytes_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m])",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "container_network_receive_bytes_total",
@@ -556,6 +539,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Network Rx",
       "tooltip": {
@@ -600,10 +584,11 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 7,
@@ -611,6 +596,7 @@
         "x": 12,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 4,
       "isNew": true,
       "legend": {
@@ -626,6 +612,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -636,7 +625,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_network_transmit_bytes_total{image!=\"\"}[5m])",
+          "expr": "irate(container_network_transmit_bytes_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m])",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "refId": "A",
@@ -645,8 +634,201 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Network Tx",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "hiddenSeries": false,
+      "id": 8,
+      "isNew": true,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "irate(container_fs_reads_bytes_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m])",
+          "intervalFactor": 2,
+          "legendFormat": "{{name}}",
+          "metric": "container_fs_reads_bytes_total",
+          "refId": "A",
+          "step": 20
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "I/O Rx",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "grid": {},
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "hiddenSeries": false,
+      "id": 9,
+      "isNew": true,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "irate(container_fs_writes_bytes_total{instance=~\"$node:$port\",job=~\"$job\",image!=\"\"}[5m])",
+          "intervalFactor": 2,
+          "legendFormat": "{{name}}",
+          "metric": "container_fs_writes_bytes_total",
+          "refId": "A",
+          "step": 20
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "I/O Tx",
       "tooltip": {
         "msResolution": false,
         "shared": true,
@@ -686,13 +868,89 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 16,
+  "schemaVersion": 21,
   "style": "dark",
   "tags": [
     "docker"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "text": "cadvisor",
+          "value": "cadvisor"
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": "label_values(container_cpu_user_seconds_total, job)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "cadvisor",
+          "value": "cadvisor"
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Host:",
+        "multi": false,
+        "name": "node",
+        "options": [],
+        "query": "label_values(container_cpu_user_seconds_total{job=~\"$job\"}, instance)",
+        "refresh": 1,
+        "regex": "/([^:]+):.*/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "8080",
+          "value": "8080"
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Port",
+        "multi": false,
+        "name": "port",
+        "options": [],
+        "query": "label_values(container_cpu_user_seconds_total{instance=~\"$node:(.*)\"}, instance)",
+        "refresh": 1,
+        "regex": "/[^:]+:(.*)/",
+        "skipUrlSync": false,
+        "sort": 3,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
   },
   "time": {
     "from": "now-3h",
@@ -724,7 +982,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Docker monitoring",
-  "uid": "lm6igZpZz",
+  "title": "Docker monitoring with node selection",
+  "uid": "RKwJe_YZz",
   "version": 1
 }
