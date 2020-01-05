@@ -611,6 +611,7 @@ services:
             - '--path.rootfs=/host/root'
             - '--path.procfs=/host/proc'
             - '--path.sysfs=/host/sys'
+            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
         hostname: nodeexporter
         networks:
             - hidden
