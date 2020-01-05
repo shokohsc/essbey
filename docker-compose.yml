@@ -596,13 +596,35 @@ services:
                 max-size: "50k"
                 max-file: "2"
 
+    # nodeexporter: # Grafana requirement
+    #     image: quay.io/prometheus/node-exporter
+    #     container_name: nodeexporter
+    #     restart: ${RESTART_MODE}
+    #     user: root
+    #     cap_add:
+    #         - sys_time
+    #     volumes:
+    #         - /proc:/host/proc:ro
+    #         - /sys:/host/sys:ro
+    #         - /:/host/root:ro
+    #     command:
+    #         - '--path.rootfs=/host/root'
+    #         - '--path.procfs=/host/proc'
+    #         - '--path.sysfs=/host/sys'
+    #         - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    #     hostname: nodeexporter
+    #     networks:
+    #         - hidden
+    #     logging:
+    #         driver: "json-file"
+    #         options:
+    #             max-size: "50k"
+    #             max-file: "2"
+    #
     nodeexporter: # Grafana requirement
         image: quay.io/prometheus/node-exporter
         container_name: nodeexporter
         restart: ${RESTART_MODE}
-        user: root
-        cap_add:
-            - sys_time
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
@@ -611,10 +633,8 @@ services:
             - '--path.rootfs=/host/root'
             - '--path.procfs=/host/proc'
             - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
         hostname: nodeexporter
-        networks:
-            - hidden
+        network_mode: host
         logging:
             driver: "json-file"
             options:
