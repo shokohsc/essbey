@@ -16,7 +16,7 @@ scrape_configs:
   - job_name: 'nodeexporter'
     scrape_interval: 5s
     static_configs:
-      - targets: ['sombra.home:9100', 'nodeexporter.pi.home', 'nodeexporter.lucio.home']
+      - targets: ['sombra.home:9100', 'pi.home:9100', 'lucio.home:9100']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
