@@ -626,14 +626,11 @@ services:
         container_name: nodeexporter
         restart: ${RESTART_MODE}
         volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
-            - /:/host/root:ro
+            - /:/host:ro,rslave
         command:
-            - '--path.rootfs=/host/root'
-            - '--path.procfs=/host/proc'
-            - '--path.sysfs=/host/sys'
+            - '--path.rootfs=/host'
         hostname: nodeexporter
+        pid: host
         network_mode: host
         logging:
             driver: "json-file"
