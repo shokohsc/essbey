@@ -625,11 +625,12 @@ services:
         image: quay.io/prometheus/node-exporter
         container_name: nodeexporter
         restart: ${RESTART_MODE}
+        cap_add:
+            - sys_time
         volumes:
             - /:/host:ro,rslave
         command:
             - '--path.rootfs=/host'
-        hostname: nodeexporter
         pid: host
         network_mode: host
         logging:
