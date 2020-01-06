@@ -24,7 +24,7 @@ scrape_configs:
   - job_name: 'cadvisor'
     scrape_interval: 5s
     static_configs:
-      - targets: ['cadvisor:8080', 'cadvisor.pi.home:443', 'cadvisor.lucio.home:443']
+      - targets: ['cadvisor:8080', 'cadvisor.pi.home', 'cadvisor.lucio.home']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -43,7 +43,7 @@ scrape_configs:
     scrape_interval: 10s
     honor_labels: true
     static_configs:
-      - targets: ['traefik:8080', 'traefik.pi.home:443', 'traefik.lucio.home:443']
+      - targets: ['traefik:8080', 'traefik.pi.home', 'traefik.lucio.home']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -55,7 +55,7 @@ scrape_configs:
   - job_name: 'jenkins'
     metrics_path: '/prometheus/'
     static_configs:
-      - targets: ['jenkins']
+      - targets: ['jenkins:8080']
 
   - job_name: 'blackbox'
     metrics_path: /probe
