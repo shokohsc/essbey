@@ -50,11 +50,6 @@ services:
         hostname: elasticsearch
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     # curator: # Elasticsearch indices janitor
     #     container_name: curator
@@ -95,11 +90,6 @@ services:
             - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5601"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     logstash: # Logs watcher
         container_name: logstash
@@ -118,11 +108,6 @@ services:
             - elasticsearch
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     filebeat: # Logs watcher
         container_name: filebeat
@@ -139,11 +124,6 @@ services:
             - hidden
         depends_on:
             - logstash
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     samba: # SMB server
         container_name: samba
@@ -163,11 +143,6 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     sftp: # Sftp server
         container_name: sftp
@@ -186,11 +161,6 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
@@ -205,11 +175,6 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     openvpn: # Internal vpn
         container_name: openvpn
@@ -271,11 +236,6 @@ services:
         labels:
             - "autoheal=true"
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     vpn-client: # Torrenting vpn
         container_name: vpn-client
@@ -309,11 +269,6 @@ services:
             - "traefik.peerflix.port=9000"
             - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
             - "traefik.cloudtorrent.port=3000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     transmission: # Torrent client
         container_name: transmission
@@ -334,11 +289,6 @@ services:
             timeout: 30s
             start_period: 60s
             retries: 5
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     peerflix:
         image: shokohsc/peerflix-server
@@ -355,11 +305,6 @@ services:
             timeout: 30s
             start_period: 60s
             retries: 5
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     cloudtorrent:
         image: shokohsc/cloud-torrent
@@ -378,11 +323,6 @@ services:
             timeout: 30s
             start_period: 60s
             retries: 5
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     traefik: # Reverse proxy
         container_name: traefik
@@ -403,11 +343,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     portainer: # Docker management
         container_name: portainer
@@ -422,11 +357,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
             - "traefik.port=9000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     autoheal: # Service looking for container to restart
         container_name: autoheal
@@ -442,11 +372,6 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     commander: # Web ui server admin
         container_name: commander
@@ -465,11 +390,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:commander.${DOMAIN}"
             - "traefik.port=8000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     plex: # Media server
         container_name: plex
@@ -502,11 +422,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:plex.${DOMAIN}"
             - "traefik.port=32400"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
@@ -542,11 +457,6 @@ services:
             - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     prometheus: # Database, grafana requirement
         image: prom/prometheus
@@ -572,11 +482,19 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
             - "traefik.port=9090"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
+
+    blackbox: # Prometheus requirement
+        image: prom/blackbox-exporter:master
+        container_name: blackbox
+        restart: ${RESTART_MODE}
+        hostname: blackbox
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
+            - "traefik.port=9115"
 
     alertmanager: # Grafana requirement
         image: prom/alertmanager:v0.15.2
@@ -590,11 +508,6 @@ services:
         hostname: alertmanager
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     # nodeexporter: # Grafana requirement
     #     image: quay.io/prometheus/node-exporter
@@ -633,11 +546,6 @@ services:
             - '--path.rootfs=/host'
         pid: host
         network_mode: host
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     cadvisor: # Grafana requirement
         image: gcr.io/google-containers/cadvisor
@@ -658,11 +566,6 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     pushgateway: # Grafana requirement
         image: prom/pushgateway
@@ -671,11 +574,6 @@ services:
         hostname: pushgateway
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     heimdall: # Heimdall
         image: linuxserver/heimdall
@@ -694,11 +592,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     monitor: # Openvpn monitor
         image: ruimarinho/openvpn-monitor
@@ -722,11 +615,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     openvpn-ui:
         container_name: openvpn-ui
@@ -744,11 +632,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     comic-reader:
         container_name: comic-reader
@@ -781,11 +664,6 @@ services:
             - hidden
         depends_on:
             - comic-reader
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     nginx-comic:
         container_name: nginx-comic
@@ -811,11 +689,6 @@ services:
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
 
     wol-web:
@@ -851,11 +724,6 @@ services:
             - wol-web
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     nginx-wol:
         container_name: nginx-wol
@@ -880,11 +748,6 @@ services:
             - "traefik.frontend.rule=Host:wol.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     paint-web:
         container_name: paint-web
@@ -901,11 +764,6 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:paint.${DOMAIN}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     telegraf: # Telegraf
         container_name: telegraf
@@ -924,11 +782,6 @@ services:
             # - mosquitto
         labels:
             - "traefik.enable=false"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     graphite: # Graphite database
         container_name: graphite
@@ -944,11 +797,6 @@ services:
             - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     influxdb: # Influx database
         container_name: influxdb
@@ -966,11 +814,6 @@ services:
             - hidden
         volumes:
             - influx_data:/var/lib/influxdb
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     chronograf: # InfluxDB Admin UI
         image: chronograf
@@ -988,11 +831,6 @@ services:
             - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8888"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
     #
     # mosquitto: # Mosquitto mqtt broker
     #     container_name: mosquitto
@@ -1115,11 +953,6 @@ services:
             - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8123"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     mongo: # Wekan requirement
         image: mongo
@@ -1130,11 +963,6 @@ services:
         hostname: mongo
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     wekan: # Wekan
         image: wekanteam/wekan:v3.50
@@ -1154,11 +982,6 @@ services:
             - "traefik.frontend.rule=Host:wekan.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     mongo-express:
         image: mongo-express
@@ -1175,11 +998,6 @@ services:
             - "traefik.frontend.rule=Host:mongo.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8081"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     mysql:
         image: mariadb
@@ -1195,11 +1013,6 @@ services:
             MYSQL_DATABASE: mattermost
             MYSQL_USER: mattermost
             MYSQL_PASSWORD: mattermost
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     mattermost:
         build:
@@ -1230,11 +1043,6 @@ services:
             - "traefik.frontend.rule=Host:mattermost.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     adminer:
         image: adminer
@@ -1253,11 +1061,6 @@ services:
             - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     stackedit:
         image: benweet/stackedit
@@ -1271,11 +1074,6 @@ services:
             - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     airsonic:
         image: linuxserver/airsonic
@@ -1295,11 +1093,6 @@ services:
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=4040"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     h5ai:
         image: corfr/h5ai
@@ -1317,11 +1110,6 @@ services:
             - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     rabbitmq:
         image: rabbitmq:management-alpine
@@ -1335,11 +1123,6 @@ services:
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=15672"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     thelounge:
         image: thelounge/thelounge
@@ -1355,11 +1138,6 @@ services:
             - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.irc.port=9000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     commafeed:
         image: saggio/commafeed
@@ -1376,11 +1154,6 @@ services:
             - "traefik.frontend.rule=Host:rss.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8082"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     zenbot:
         image: deviavir/zenbot
@@ -1400,11 +1173,6 @@ services:
             - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=17365"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     redis:
         image: redis
@@ -1415,11 +1183,6 @@ services:
         hostname: redis
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     redis-ui:
         image: marian/rebrow
@@ -1436,11 +1199,6 @@ services:
             - "traefik.frontend.rule=Host:redis.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5001"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     gekko:
         image: shokohsc/gekko
@@ -1463,11 +1221,6 @@ services:
             - "traefik.frontend.rule=Host:gekko.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=443"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     theia:
         image: theiaide/theia
@@ -1483,11 +1236,6 @@ services:
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     jsbin:
         image: robbash/jsbin
@@ -1507,11 +1255,6 @@ services:
             - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=443"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     regex:
         image: njae86fq/regexr
@@ -1525,11 +1268,6 @@ services:
             - "traefik.frontend.rule=Host:regex.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     filepizza:
         image: kern/filepizza:master
@@ -1543,11 +1281,6 @@ services:
             - "traefik.frontend.rule=Host:filepizza.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     jenkins:
         image: jenkins/jenkins:lts
@@ -1563,11 +1296,6 @@ services:
             - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     elasticsearch-diskover: # Json database
         container_name: elasticsearch-diskover
@@ -1581,11 +1309,6 @@ services:
         hostname: elasticsearch-diskover
         networks:
             - hidden
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"
 
     diskover:
         container_name: diskover
@@ -1620,8 +1343,3 @@ services:
             - "traefik.diskover.port=80"
             - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
             - "traefik.rq.port=9181"
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "50k"
-                max-file: "2"

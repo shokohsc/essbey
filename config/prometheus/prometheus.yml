@@ -24,7 +24,7 @@ scrape_configs:
   - job_name: 'cadvisor'
     scrape_interval: 5s
     static_configs:
-      - targets: ['cadvisor:8080', 'cadvisor.pi.home', 'cadvisor.lucio.home']
+      - targets: ['cadvisor:8080', 'cadvisor.pi.home:443', 'cadvisor.lucio.home:443']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -43,7 +43,7 @@ scrape_configs:
     scrape_interval: 10s
     honor_labels: true
     static_configs:
-      - targets: ['traefik:8080', 'traefik.pi.home', 'traefik.lucio.home']
+      - targets: ['traefik:8080', 'traefik.pi.home:443', 'traefik.lucio.home:443']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -51,6 +51,31 @@ scrape_configs:
     scrape_interval: 10s
     static_configs:
       - targets: ['sombra.home:42375', 'pi.home:42375', 'lucio.home:42375']
+
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus/'
+    static_configs:
+      - targets: ['jenkins']
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://vpn-client:9091
+        - http://vpn-client:9000
+        - http://vpn-client:3000
+        # - http://prometheus.io    # Target to probe with http.
+        # - https://prometheus.io   # Target to probe with https.
+        # - http://example.com:8080 # Target to probe with http on port 8080.
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
 
 alerting:
   alertmanagers:
