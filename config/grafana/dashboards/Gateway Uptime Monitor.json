@@ -19,6 +19,85 @@
   "links": [],
   "panels": [
     {
+      "cacheTimeout": null,
+      "datasource": null,
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "links": [],
+      "options": {
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [
+              {
+                "id": 0,
+                "op": "=",
+                "text": "N/A",
+                "type": 1,
+                "value": "null"
+              }
+            ],
+            "max": 100,
+            "min": 0,
+            "nullValueMode": "connected",
+            "thresholds": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 95
+              },
+              {
+                "color": "green",
+                "value": 99
+              }
+            ],
+            "title": "",
+            "unit": "none"
+          },
+          "override": {},
+          "values": false
+        },
+        "orientation": "horizontal",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "6.5.2",
+      "targets": [
+        {
+          "expr": "avg_over_time(probe_success{job=\"blackbox\",instance=\"http://vpn-client:9091\"}[$__interval]) * 100",
+          "hide": false,
+          "legendFormat": "transmission",
+          "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(probe_success{job=\"blackbox\",instance=\"http://vpn-client:9000\"}[$__interval]) * 100",
+          "hide": false,
+          "legendFormat": "peerflix",
+          "refId": "B"
+        },
+        {
+          "expr": "avg_over_time(probe_success{job=\"blackbox\",instance=\"http://vpn-client:3000\"}[$__interval]) * 100",
+          "hide": false,
+          "legendFormat": "cloudtorrent",
+          "refId": "C"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Torrent services SLA",
+      "type": "gauge"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -30,7 +109,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 5
       },
       "hiddenSeries": false,
       "id": 2,
@@ -226,7 +305,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 6
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 3,
@@ -425,7 +504,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 6,
@@ -685,5 +764,5 @@
   "timezone": "",
   "title": "Gateway Uptime Monitor",
   "uid": "qw6-vNcZk",
-  "version": 1
+  "version": 3
 }
