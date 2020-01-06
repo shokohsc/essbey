@@ -585,6 +585,7 @@ services:
             TZ: ${TIMEZONE}
         volumes:
             - ./config/heimdall:/config
+            - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
         hostname: heimdall
         networks:
             - connected
