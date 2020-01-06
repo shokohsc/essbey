@@ -16,8 +16,8 @@
   "editable": false,
   "gnetId": 405,
   "graphTooltip": 0,
-  "id": 29,
-  "iteration": 1578141404699,
+  "id": 4,
+  "iteration": 1578320737010,
   "links": [],
   "panels": [
     {
@@ -39,8 +39,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "style": {},
@@ -63,13 +63,13 @@
       "mode": "html",
       "options": {},
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 11,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "style": {},
@@ -92,13 +92,13 @@
       "mode": "html",
       "options": {},
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 11,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "style": {},
@@ -165,8 +165,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "sparkline": {
@@ -259,13 +259,13 @@
         }
       ],
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 20,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "sparkline": {
@@ -358,13 +358,13 @@
         }
       ],
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 20,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "sparkline": {
@@ -448,8 +448,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -625,13 +625,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 7,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -807,13 +807,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 7,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -992,8 +992,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [
@@ -1211,13 +1211,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 17,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [
@@ -1435,13 +1435,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 17,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [
@@ -1658,8 +1658,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -1759,13 +1759,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 13,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -1865,13 +1865,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 13,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -1975,8 +1975,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2077,13 +2077,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 9,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2184,13 +2184,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 9,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2293,8 +2293,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2394,13 +2394,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 19,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2500,13 +2500,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 19,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -2609,8 +2609,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [
@@ -2724,13 +2724,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 14,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [
@@ -2844,13 +2844,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 14,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [
@@ -2967,8 +2967,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [
@@ -3082,13 +3082,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 18,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [
@@ -3202,13 +3202,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 18,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [
@@ -3325,8 +3325,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3426,13 +3426,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 25,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3532,13 +3532,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 25,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3641,8 +3641,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3742,13 +3742,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 22,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3848,13 +3848,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 22,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -3957,8 +3957,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [
@@ -4072,13 +4072,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 12,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [
@@ -4192,13 +4192,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 12,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [
@@ -4315,8 +4315,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -4414,13 +4414,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 21,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -4518,13 +4518,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 21,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -4625,8 +4625,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [
@@ -4755,13 +4755,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 23,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [
@@ -4890,13 +4890,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 23,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [
@@ -5028,8 +5028,8 @@
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.lucio.home:80",
-          "value": "nodeexporter.lucio.home:80"
+          "text": "lucio.home:9100",
+          "value": "lucio.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -5127,13 +5127,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 24,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter.pi.home:80",
-          "value": "nodeexporter.pi.home:80"
+          "text": "pi.home:9100",
+          "value": "pi.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -5231,13 +5231,13 @@
       "points": false,
       "renderer": "flot",
       "repeat": null,
-      "repeatIteration": 1578141404699,
+      "repeatIteration": 1578320737010,
       "repeatPanelId": 24,
       "scopedVars": {
         "node": {
           "selected": true,
-          "text": "nodeexporter:9100",
-          "value": "nodeexporter:9100"
+          "text": "sombra.home:9100",
+          "value": "sombra.home:9100"
         }
       },
       "seriesOverrides": [],
@@ -5306,13 +5306,11 @@
         "allFormat": "glob",
         "allValue": null,
         "current": {
-          "selected": false,
-          "tags": [],
-          "text": "nodeexporter.lucio.home:80 + nodeexporter.pi.home:80 + nodeexporter:9100",
+          "text": "lucio.home:9100 + pi.home:9100 + sombra.home:9100",
           "value": [
-            "nodeexporter.lucio.home:80",
-            "nodeexporter.pi.home:80",
-            "nodeexporter:9100"
+            "lucio.home:9100",
+            "pi.home:9100",
+            "sombra.home:9100"
           ]
         },
         "datasource": "Prometheus",
@@ -5369,6 +5367,6 @@
   },
   "timezone": "browser",
   "title": "Node Exporter Server Metrics",
-  "uid": "uOrnzuLWk",
+  "uid": "0UJl5qYWz",
   "version": 2
 }

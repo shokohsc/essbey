@@ -15,7 +15,7 @@
   "editable": false,
   "gnetId": 2690,
   "graphTooltip": 0,
-  "id": 14,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -685,5 +685,5 @@
   "timezone": "",
   "title": "Gateway Uptime Monitor",
   "uid": "qw6-vNcZk",
-  "version": 29
+  "version": 1
 }

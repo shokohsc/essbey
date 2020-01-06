@@ -13,11 +13,11 @@
     ]
   },
   "description": "Docker monitoring with Prometheus and cAdvisor with node selection",
-  "editable": true,
+  "editable": false,
   "gnetId": 8321,
   "graphTooltip": 1,
-  "id": 27,
-  "iteration": 1578141234063,
+  "id": 5,
+  "iteration": 1578320682089,
   "links": [],
   "panels": [
     {
@@ -953,7 +953,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -983,6 +983,6 @@
   },
   "timezone": "browser",
   "title": "Docker monitoring with node selection",
-  "uid": "RKwJe_YZz",
-  "version": 1
+  "uid": "94A953YZk",
+  "version": 2
 }

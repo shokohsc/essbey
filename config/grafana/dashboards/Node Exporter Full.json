@@ -15,8 +15,8 @@
   "editable": false,
   "gnetId": 1860,
   "graphTooltip": 0,
-  "id": 23,
-  "iteration": 1578141289697,
+  "id": 3,
+  "iteration": 1578320716428,
   "links": [],
   "panels": [
     {
@@ -1742,14 +1742,12 @@
           "decimals": 2,
           "description": "",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 0,
             "y": 26
           },
-          "hiddenSeries": false,
           "id": 3,
           "legend": {
             "alignAsTable": true,
@@ -1770,9 +1768,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": true,
           "pointradius": 5,
           "points": false,
@@ -1859,7 +1854,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "CPU",
           "tooltip": {
@@ -1867,6 +1861,7 @@
             "sort": 0,
             "value_type": "individual"
           },
+          "transparent": false,
           "type": "graph",
           "xaxis": {
             "buckets": null,
@@ -1892,11 +1887,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -1927,14 +1918,12 @@
           "decimals": 2,
           "description": "",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 12,
             "y": 26
           },
-          "hiddenSeries": false,
           "id": 24,
           "legend": {
             "alignAsTable": true,
@@ -1955,9 +1944,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2055,7 +2041,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Stack",
           "tooltip": {
@@ -2088,11 +2073,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -2106,14 +2087,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 0,
             "y": 38
           },
-          "hiddenSeries": false,
           "id": 84,
           "legend": {
             "alignAsTable": true,
@@ -2130,9 +2109,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2194,7 +2170,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic",
           "tooltip": {
@@ -2227,11 +2202,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -2242,7 +2213,6 @@
           "decimals": 3,
           "description": "",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
@@ -2250,7 +2220,6 @@
             "y": 38
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 156,
           "legend": {
             "alignAsTable": true,
@@ -2270,9 +2239,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2293,7 +2259,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk Space Used",
           "tooltip": {
@@ -2326,11 +2291,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -2340,14 +2301,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 0,
             "y": 50
           },
-          "hiddenSeries": false,
           "id": 229,
           "legend": {
             "alignAsTable": true,
@@ -2366,9 +2325,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2480,7 +2436,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk IOps",
           "tooltip": {
@@ -2513,11 +2468,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -2530,14 +2481,12 @@
           "decimals": 3,
           "description": "",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 12,
             "y": 50
           },
-          "hiddenSeries": false,
           "id": 42,
           "legend": {
             "alignAsTable": true,
@@ -2557,9 +2506,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2615,7 +2561,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "I/O Usage Read / Write",
           "tooltip": {
@@ -2648,11 +2593,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -2665,14 +2606,12 @@
           "decimals": 3,
           "description": "",
           "fill": 4,
-          "fillGradient": 0,
           "gridPos": {
             "h": 12,
             "w": 12,
             "x": 0,
             "y": 62
           },
-          "hiddenSeries": false,
           "id": 127,
           "legend": {
             "alignAsTable": true,
@@ -2692,9 +2631,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2716,7 +2652,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "I/O Usage Times",
           "tooltip": {
@@ -2749,11 +2684,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "repeat": null,
@@ -2797,14 +2728,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 27
+            "y": 63
           },
-          "hiddenSeries": false,
           "id": 136,
           "legend": {
             "alignAsTable": true,
@@ -2823,9 +2752,6 @@
           "links": [],
           "maxPerRow": 2,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2854,7 +2780,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Active / Inactive",
           "tooltip": {
@@ -2887,11 +2812,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -2919,14 +2840,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 27
+            "y": 63
           },
-          "hiddenSeries": false,
           "id": 135,
           "legend": {
             "alignAsTable": true,
@@ -2945,9 +2864,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -2985,7 +2901,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Commited",
           "tooltip": {
@@ -3018,11 +2933,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -3050,14 +2961,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 37
+            "y": 73
           },
-          "hiddenSeries": false,
           "id": 191,
           "legend": {
             "alignAsTable": true,
@@ -3076,9 +2985,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3127,7 +3033,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Active / Inactive Detail",
           "tooltip": {
@@ -3160,11 +3065,7 @@
               "min": null,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -3194,14 +3095,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 37
+            "y": 73
           },
-          "hiddenSeries": false,
           "id": 130,
           "legend": {
             "alignAsTable": true,
@@ -3220,9 +3119,6 @@
           "links": [],
           "maxPerRow": 2,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3259,7 +3155,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Writeback and Dirty",
           "tooltip": {
@@ -3292,11 +3187,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -3324,14 +3215,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 47
+            "y": 83
           },
-          "hiddenSeries": false,
           "id": 138,
           "legend": {
             "alignAsTable": true,
@@ -3350,9 +3239,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3381,7 +3267,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Shared and Mapped",
           "tooltip": {
@@ -3414,11 +3299,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -3448,14 +3329,12 @@
           "datasource": "Prometheus",
           "decimals": 2,
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 47
+            "y": 83
           },
-          "hiddenSeries": false,
           "id": 131,
           "legend": {
             "alignAsTable": true,
@@ -3474,9 +3353,6 @@
           "links": [],
           "maxPerRow": 2,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3505,7 +3381,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Memory Slab",
           "tooltip": {
@@ -3538,11 +3413,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {
@@ -3575,7 +3446,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 57
+            "y": 93
           },
           "id": 70,
           "legend": {
@@ -3595,7 +3466,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3699,7 +3569,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 57
+            "y": 93
           },
           "id": 159,
           "legend": {
@@ -3719,7 +3589,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3805,7 +3674,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 67
+            "y": 103
           },
           "id": 129,
           "legend": {
@@ -3825,7 +3694,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -3923,7 +3791,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 67
+            "y": 103
           },
           "id": 160,
           "legend": {
@@ -3943,7 +3811,6 @@
           "links": [],
           "maxPerRow": 2,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -4029,7 +3896,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 77
+            "y": 113
           },
           "id": 140,
           "legend": {
@@ -4049,7 +3916,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -4151,7 +4017,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 77
+            "y": 113
           },
           "id": 71,
           "legend": {
@@ -4171,7 +4037,6 @@
           "links": [],
           "maxPerRow": 2,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -4265,7 +4130,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 87
+            "y": 123
           },
           "id": 128,
           "legend": {
@@ -4287,7 +4152,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -4390,7 +4254,7 @@
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 87
+            "y": 123
           },
           "id": 137,
           "legend": {
@@ -4410,7 +4274,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -4505,7 +4368,7 @@
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 97
+            "y": 133
           },
           "id": 132,
           "legend": {
@@ -4525,7 +4388,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {},
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -10849,14 +10711,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 31
+            "y": 397
           },
-          "hiddenSeries": false,
           "id": 9,
           "legend": {
             "alignAsTable": true,
@@ -10875,9 +10735,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -10990,7 +10847,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk IOps Completed",
           "tooltip": {
@@ -11023,11 +10879,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11037,14 +10889,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 31
+            "y": 397
           },
-          "hiddenSeries": false,
           "id": 33,
           "legend": {
             "alignAsTable": true,
@@ -11063,9 +10913,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -11179,7 +11026,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk R/W Data",
           "tooltip": {
@@ -11212,11 +11058,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11226,14 +11068,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 3,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 41
+            "y": 407
           },
-          "hiddenSeries": false,
           "id": 37,
           "legend": {
             "alignAsTable": true,
@@ -11254,9 +11094,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -11370,7 +11207,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk R/W Time",
           "tooltip": {
@@ -11403,11 +11239,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11417,14 +11249,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 41
+            "y": 407
           },
-          "hiddenSeries": false,
           "id": 35,
           "legend": {
             "alignAsTable": true,
@@ -11445,9 +11275,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -11548,7 +11375,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk IOs Weighted",
           "tooltip": {
@@ -11581,11 +11407,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11595,14 +11417,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 51
+            "y": 417
           },
-          "hiddenSeries": false,
           "id": 133,
           "legend": {
             "alignAsTable": true,
@@ -11623,9 +11443,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -11737,7 +11554,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk R/W Merged",
           "tooltip": {
@@ -11770,11 +11586,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11784,14 +11596,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 3,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 51
+            "y": 417
           },
-          "hiddenSeries": false,
           "id": 36,
           "legend": {
             "alignAsTable": true,
@@ -11812,9 +11622,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -11915,7 +11722,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Time Spent Doing I/Os",
           "tooltip": {
@@ -11948,11 +11754,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -11962,14 +11764,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 61
+            "y": 427
           },
-          "hiddenSeries": false,
           "id": 34,
           "legend": {
             "alignAsTable": true,
@@ -11990,9 +11790,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -12093,7 +11890,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Disk IOs Current in Progress",
           "tooltip": {
@@ -12126,11 +11922,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -12140,14 +11932,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 61
+            "y": 427
           },
-          "hiddenSeries": false,
           "id": 66,
           "legend": {
             "alignAsTable": true,
@@ -12165,9 +11955,6 @@
           "links": [],
           "maxPerRow": 6,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -12268,7 +12055,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Open Error File",
           "tooltip": {
@@ -12301,11 +12087,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "repeat": null,
@@ -12811,14 +12593,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 33
+            "y": 449
           },
-          "hiddenSeries": false,
           "id": 60,
           "legend": {
             "alignAsTable": true,
@@ -12836,9 +12616,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -12900,7 +12677,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic by Packets",
           "tooltip": {
@@ -12933,11 +12709,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -12946,14 +12718,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 33
+            "y": 449
           },
-          "hiddenSeries": false,
           "id": 142,
           "legend": {
             "alignAsTable": true,
@@ -12975,9 +12745,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13039,7 +12806,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Errors",
           "tooltip": {
@@ -13072,11 +12838,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13085,14 +12847,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 43
+            "y": 459
           },
-          "hiddenSeries": false,
           "id": 143,
           "legend": {
             "alignAsTable": true,
@@ -13114,9 +12874,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13178,7 +12935,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Drop",
           "tooltip": {
@@ -13211,11 +12967,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13224,14 +12976,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 43
+            "y": 459
           },
-          "hiddenSeries": false,
           "id": 141,
           "legend": {
             "alignAsTable": true,
@@ -13253,9 +13003,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13317,7 +13064,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Compressed",
           "tooltip": {
@@ -13350,11 +13096,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13363,14 +13105,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 53
+            "y": 469
           },
-          "hiddenSeries": false,
           "id": 146,
           "legend": {
             "alignAsTable": true,
@@ -13392,9 +13132,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13448,7 +13185,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Multicast",
           "tooltip": {
@@ -13481,11 +13217,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13494,14 +13226,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 53
+            "y": 469
           },
-          "hiddenSeries": false,
           "id": 144,
           "legend": {
             "alignAsTable": true,
@@ -13523,9 +13253,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13587,7 +13314,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Fifo",
           "tooltip": {
@@ -13620,11 +13346,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13633,14 +13355,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 63
+            "y": 479
           },
-          "hiddenSeries": false,
           "id": 145,
           "legend": {
             "alignAsTable": true,
@@ -13662,9 +13382,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13719,7 +13436,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Frame",
           "tooltip": {
@@ -13752,11 +13468,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13765,14 +13477,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 63
+            "y": 479
           },
-          "hiddenSeries": false,
           "id": 231,
           "legend": {
             "alignAsTable": true,
@@ -13794,9 +13504,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13838,7 +13545,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Carrier",
           "tooltip": {
@@ -13871,11 +13577,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -13884,14 +13586,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 73
+            "y": 489
           },
-          "hiddenSeries": false,
           "id": 232,
           "legend": {
             "alignAsTable": true,
@@ -13913,9 +13613,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -13957,7 +13654,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Network Traffic Colls",
           "tooltip": {
@@ -13990,11 +13686,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -14003,14 +13695,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 73
+            "y": 489
           },
-          "hiddenSeries": false,
           "id": 61,
           "legend": {
             "alignAsTable": true,
@@ -14027,9 +13717,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -14064,7 +13751,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "NF Contrack",
           "tooltip": {
@@ -14097,11 +13783,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -14110,14 +13792,12 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 83
+            "y": 499
           },
-          "hiddenSeries": false,
           "id": 230,
           "legend": {
             "alignAsTable": true,
@@ -14134,9 +13814,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -14157,7 +13834,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "ARP Entries",
           "tooltip": {
@@ -14190,11 +13866,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "repeat": null,
@@ -14737,15 +14409,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 35
+            "y": 521
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 49,
           "legend": {
             "alignAsTable": true,
@@ -14767,9 +14437,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -14830,7 +14497,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP In / Out",
           "tooltip": {
@@ -14863,11 +14529,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -14876,15 +14538,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 35
+            "y": 521
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 221,
           "legend": {
             "alignAsTable": true,
@@ -14907,9 +14567,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -14963,7 +14620,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP In / Out Octets",
           "tooltip": {
@@ -14996,11 +14652,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15009,15 +14661,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 45
+            "y": 531
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 119,
           "legend": {
             "alignAsTable": true,
@@ -15040,9 +14690,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15096,7 +14743,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Bcast",
           "tooltip": {
@@ -15129,11 +14775,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15142,15 +14784,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 45
+            "y": 531
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 222,
           "legend": {
             "alignAsTable": true,
@@ -15173,9 +14813,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15229,7 +14866,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Bcast Octets",
           "tooltip": {
@@ -15262,11 +14898,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15275,15 +14907,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 55
+            "y": 541
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 120,
           "legend": {
             "alignAsTable": true,
@@ -15306,9 +14936,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15364,7 +14991,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Mcast",
           "tooltip": {
@@ -15397,11 +15023,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15410,15 +15032,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 55
+            "y": 541
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 223,
           "legend": {
             "alignAsTable": true,
@@ -15441,9 +15061,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15499,7 +15116,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Mcast Octets",
           "tooltip": {
@@ -15532,11 +15148,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15545,15 +15157,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 65
+            "y": 551
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 81,
           "legend": {
             "alignAsTable": true,
@@ -15575,9 +15185,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15606,7 +15213,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Forwarding",
           "tooltip": {
@@ -15639,11 +15245,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15652,15 +15254,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 65
+            "y": 551
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 122,
           "legend": {
             "alignAsTable": true,
@@ -15682,9 +15282,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15721,7 +15318,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Fragmented",
           "tooltip": {
@@ -15754,11 +15350,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15767,15 +15359,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 75
+            "y": 561
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 51,
           "legend": {
             "alignAsTable": true,
@@ -15798,9 +15388,6 @@
           "links": [],
           "maxPerRow": 12,
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15845,7 +15432,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP ECT / CEP",
           "tooltip": {
@@ -15878,11 +15464,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -15891,15 +15473,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 75
+            "y": 561
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 123,
           "legend": {
             "alignAsTable": true,
@@ -15921,9 +15501,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -15968,7 +15545,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Reasambled",
           "tooltip": {
@@ -16001,11 +15577,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -16014,15 +15586,13 @@
           "dashes": false,
           "datasource": "Prometheus",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 85
+            "y": 571
           },
           "height": "",
-          "hiddenSeries": false,
           "id": 118,
           "legend": {
             "alignAsTable": true,
@@ -16044,9 +15614,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -16144,7 +15711,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Netstat IP Errors / Discards",
           "tooltip": {
@@ -16177,11 +15743,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "repeat": null,
@@ -21152,14 +20714,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
-            "y": 40
+            "y": 746
           },
-          "hiddenSeries": false,
           "id": 40,
           "legend": {
             "alignAsTable": true,
@@ -21175,9 +20735,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -21199,7 +20756,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Node Exporter Scrape Time",
           "tooltip": {
@@ -21232,11 +20788,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -21246,14 +20798,12 @@
           "datasource": "Prometheus",
           "description": "",
           "fill": 2,
-          "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 12,
-            "y": 40
+            "y": 746
           },
-          "hiddenSeries": false,
           "id": 157,
           "legend": {
             "alignAsTable": true,
@@ -21269,9 +20819,6 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
           "percentage": false,
           "pointradius": 5,
           "points": false,
@@ -21293,7 +20840,6 @@
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Node Exporter Scrape Success",
           "tooltip": {
@@ -21326,11 +20872,7 @@
               "min": null,
               "show": false
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "repeat": null,
@@ -21372,8 +20914,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "nodeexporter",
-          "value": "nodeexporter"
+          "text": "sombra",
+          "value": "sombra"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -21397,8 +20939,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "nodeexporter",
-          "value": "nodeexporter"
+          "text": "sombra.home",
+          "value": "sombra.home"
         },
         "datasource": "Prometheus",
         "definition": "",
@@ -21477,6 +21019,6 @@
   },
   "timezone": "browser",
   "title": "Node Exporter Full",
-  "uid": "wEEFCULZz",
+  "uid": "ot_wc3LZz",
   "version": 2
 }
