@@ -303,7 +303,6 @@ services:
         image: shokohsc/cloud-torrent
         container_name: cloudtorrent
         restart: ${RESTART_MODE}
-        user: ${PUID}:${PGID}
         volumes:
             - ./download/complete:/downloads
         network_mode: "service:vpn-client"
