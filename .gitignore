@@ -5,6 +5,7 @@ download/
 work/
 shared/
 
+config/alertmanager/
 config/openvpn/
 config/plex/
 config/diskover/

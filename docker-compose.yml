@@ -66,11 +66,6 @@ services:
     #     volumes:
     #         - ./config/curator/config.yml:/curator/config.yml
     #         - ./config/curator/action.yml:/curator/action.yml
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
 
     kibana: # Elasticsearch data UI
         container_name: kibana
@@ -128,7 +123,7 @@ services:
     samba: # SMB server
         container_name: samba
         image: dperson/samba
-        command: '-s "shared;/mount;yes;no;yes;all;none"'
+        command: '-s "shared;/mount;yes;no;yes;all;none" -p'
         restart: ${RESTART_MODE}
         ports:
             - "139:139"
@@ -187,14 +182,13 @@ services:
             - "5555"
         ports:
             - "32767:1194/udp"
-        logging:
-            driver: "json-file"
-            driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
         hostname: openvpn
         networks:
             - connected
+        logging:
+            driver: none
         labels:
             - "traefik.enable=false"
 
@@ -207,9 +201,6 @@ services:
         restart: ${RESTART_MODE}
         ports:
             - "32767:1194/tcp"
-        logging:
-            driver: "json-file"
-            driver: none
         volumes:
             - ./config/openvpn:/etc/openvpn
         hostname: openvpn-tcp
@@ -217,6 +208,8 @@ services:
             - connected
         depends_on:
             - openvpn
+        logging:
+            driver: none
         labels:
             - "traefik.enable=false"
 
@@ -310,6 +303,7 @@ services:
         image: shokohsc/cloud-torrent
         container_name: cloudtorrent
         restart: ${RESTART_MODE}
+        user: ${PUID}:${PGID}
         volumes:
             - ./download/complete:/downloads
         network_mode: "service:vpn-client"
@@ -492,12 +486,11 @@ services:
             - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
             - "traefik.port=9115"
 
     alertmanager: # Grafana requirement
-        image: prom/alertmanager:v0.15.2
+        image: prom/alertmanager
         container_name: alertmanager
         volumes:
             - ./config/alertmanager/:/etc/alertmanager/
@@ -507,7 +500,9 @@ services:
         restart: ${RESTART_MODE}
         hostname: alertmanager
         networks:
-            - hidden
+            - connected
+        labels:
+            - "traefik.enable=false"
 
     # nodeexporter: # Grafana requirement
     #     image: quay.io/prometheus/node-exporter
@@ -528,11 +523,6 @@ services:
     #     hostname: nodeexporter
     #     networks:
     #         - hidden
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
     #
     nodeexporter: # Grafana requirement
         image: quay.io/prometheus/node-exporter
@@ -647,7 +637,6 @@ services:
         networks:
             - hidden
         logging:
-            driver: "json-file"
             driver: none
 
     php-fpm-comic:
@@ -660,9 +649,9 @@ services:
             TZ: ${TIMEZONE}
         volumes_from:
             - comic-reader
-        hostname: php-fpm-comic
+        hostname: php-fpm
         networks:
-            - hidden
+            - connected
         depends_on:
             - comic-reader
 
@@ -678,7 +667,6 @@ services:
             - comic-reader
         hostname: nginx-comic
         networks:
-            - hidden
             - connected
         links:
             - "php-fpm-comic:php-fpm"
@@ -688,7 +676,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
 
 
@@ -703,7 +690,6 @@ services:
         networks:
             - hidden
         logging:
-            driver: "json-file"
             driver: none
 
     php-fpm-wol:
@@ -718,7 +704,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         volumes_from:
             - wol-web
-        hostname: php-fpm-wol
+        hostname: php-fpm
         networks:
             - connected
         depends_on:
@@ -747,7 +733,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:wol.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
 
     paint-web:
@@ -796,7 +781,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
 
     influxdb: # Influx database
@@ -847,11 +831,6 @@ services:
     #         - mosquitto_data:/mosquitto/data
     #     labels:
     #         - "traefik.enable=false"
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
 
     # miflora-daemon: # Miflora daemon
     #     container_name: miflora-daemon
@@ -866,11 +845,6 @@ services:
     #     network_mode: host
     #     depends_on:
     #         - mosquitto
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
     #
     # mqtt-forwarder:
     #     container_name: mqtt-forwarder
@@ -893,11 +867,6 @@ services:
     #         - mosquitto
     #     labels:
     #         - "traefik.enable=false"
-    #     logging:
-    #         driver: "json-file"
-    #         options:
-    #             max-size: "50k"
-    #             max-file: "2"
 
     minecraft:
         container_name: minecraft
@@ -952,7 +921,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8123"
 
     mongo: # Wekan requirement
@@ -1073,7 +1041,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
 
     airsonic:
@@ -1092,7 +1059,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:music.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=4040"
 
     h5ai:
@@ -1109,7 +1075,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
 
     rabbitmq:
@@ -1122,7 +1087,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=15672"
 
     thelounge:
@@ -1137,7 +1101,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.irc.port=9000"
 
     commafeed:
@@ -1153,7 +1116,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:rss.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8082"
 
     zenbot:
@@ -1235,7 +1197,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
 
     jsbin:
@@ -1254,7 +1215,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=443"
 
     regex:
@@ -1267,7 +1227,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:regex.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
 
     filepizza:
@@ -1280,7 +1239,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:filepizza.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
 
     jenkins:
@@ -1295,7 +1253,6 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8080"
 
     elasticsearch-diskover: # Json database
