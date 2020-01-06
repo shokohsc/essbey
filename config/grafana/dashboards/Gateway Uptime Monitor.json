@@ -54,22 +54,22 @@
               },
               {
                 "color": "yellow",
-                "value": 95
+                "value": 94
               },
               {
                 "color": "green",
-                "value": 99
+                "value": 98
               }
             ],
             "title": "",
-            "unit": "none"
+            "unit": "percent"
           },
           "override": {},
           "values": false
         },
         "orientation": "horizontal",
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": false
       },
       "pluginVersion": "6.5.2",
       "targets": [
@@ -764,5 +764,5 @@
   "timezone": "",
   "title": "Gateway Uptime Monitor",
   "uid": "qw6-vNcZk",
-  "version": 3
+  "version": 4
 }
