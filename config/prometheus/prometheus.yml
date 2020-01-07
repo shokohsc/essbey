@@ -101,6 +101,11 @@ scrape_configs:
       target_label:  'instance'
       replacement:   '$1'
 
+  - job_name: mongodb
+    static_configs:
+    - targets: ['mongodb-exporter:9216']
+
+
 alerting:
   alertmanagers:
   - scheme: http

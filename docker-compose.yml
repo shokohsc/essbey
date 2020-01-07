@@ -528,6 +528,16 @@ services:
         networks:
             - hidden
 
+    mongodb-exporter: # Prometheus requirement
+        image: prom/mongodb-exporter
+        container_name: mongodb-exporter
+        restart: ${RESTART_MODE}
+        environment:
+            MONGODB_URI: "mongodb://localhost:27017"
+        hostname: mongodb-exporter
+        networks:
+            - hidden
+
     alertmanager: # Grafana requirement
         image: prom/alertmanager
         container_name: alertmanager
