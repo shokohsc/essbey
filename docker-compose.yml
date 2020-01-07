@@ -555,6 +555,20 @@ services:
         labels:
             - "traefik.enable=false"
 
+    pihole-exporter: # Prometheus requirement
+        image: ekofr/pihole-exporter
+        container_name: pihole-exporter
+        restart: ${RESTART_MODE}
+        environment:
+            PIHOLE_HOSTNAME: http://pihole.pi.home
+            PIHOLE_PASSWORD: ${GLOBAL_PASSWORD}
+        hostname: pihole-exporter
+        networks:
+            - connected
+            - hidden
+        labels:
+            - "traefik.enable=false"
+
     alertmanager: # Grafana requirement
         image: prom/alertmanager
         container_name: alertmanager
