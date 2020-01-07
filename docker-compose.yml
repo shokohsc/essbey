@@ -490,7 +490,7 @@ services:
 
     mysqld-exporter: # Prometheus requirement
         image: prom/mysqld-exporter
-        container_name: mysql-exporter
+        container_name: mysqld-exporter
         restart: ${RESTART_MODE}
         environment:
             DATA_SOURCE_NAME: "root:${MYSQL_ROOT_PASSWORD}@(mysql:3306)/"
@@ -500,6 +500,15 @@ services:
             - hidden
         labels:
             - "traefik.enable=false"
+
+    redis-exporter: # Prometheus requirement
+        image: oliver006/redis_exporter:alpine
+        container_name: redis-exporter
+        restart: ${RESTART_MODE}
+        command: --redis.addr=redis:6379
+        hostname: redis-exporter
+        networks:
+            - hidden
 
     alertmanager: # Grafana requirement
         image: prom/alertmanager

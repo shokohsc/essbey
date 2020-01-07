@@ -77,9 +77,13 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
 
-  - job_name: mysql
+  - job_name: 'mysqld-exporter'
     static_configs:
       - targets: ['mysqld-exporter:9104']
+
+  - job_name: redis_exporter
+    static_configs:
+    - targets: ['redis-exporter:9121']
 
 alerting:
   alertmanagers:
