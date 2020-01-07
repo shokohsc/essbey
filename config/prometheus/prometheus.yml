@@ -91,12 +91,12 @@ scrape_configs:
     metrics_path: "/metrics"
     static_configs:
     - targets:
-      - elasticsearch-exporter:9108
+      - elasticsearch-exporter:9114
       labels:
         service: elasticsearch
     relabel_configs:
     - source_labels: [__address__]
-      regex: '(.*)\:9108'
+      regex: '(.*)\:9114'
       target_label:  'instance'
       replacement:   '$1'
 
@@ -106,12 +106,12 @@ scrape_configs:
     metrics_path: "/metrics"
     static_configs:
     - targets:
-      - elasticsearch-diskover-exporter:9108
+      - elasticsearch-diskover-exporter:9114
       labels:
         service: elasticsearch-diskover
     relabel_configs:
     - source_labels: [__address__]
-      regex: '(.*)\:9108'
+      regex: '(.*)\:9114'
       target_label:  'instance'
       replacement:   '$1'
 
