@@ -12,6 +12,7 @@ config/diskover/
 config/transmission/
 config/heimdall
 config/traefik/certs/
+!config/minecraft/mods/prometheus-integration-1.0.1.jar
 !config/minecraft/plugins/Dynmap-3.0-beta-5-spigot.jar
 !config/minecraft/plugins/WorldBorder.jar
 config/minecraft/
