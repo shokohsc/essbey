@@ -541,31 +541,6 @@ services:
         labels:
             - "traefik.enable=false"
 
-    minecraft-exporter: # Prometheus requirement
-        image: baughn/mcprom
-        container_name: minecraft-exporter
-        restart: ${RESTART_MODE}
-        hostname: minecraft-exporter
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "traefik.enable=false"
-
-    minecraft-dashboard: # Prometheus requirement
-        image: baughn/mcdash
-        container_name: minecraft-dashboard
-        restart: ${RESTART_MODE}
-        hostname: minecraft-dashboard
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "traefik.enable=true"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.frontend.rule=Host:mcdash.${DOMAIN}"
-            - "traefik.port=3000"
-
     alertmanager: # Grafana requirement
         image: prom/alertmanager
         container_name: alertmanager
