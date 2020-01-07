@@ -5,7 +5,7 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-      monitor: 'docker-host-alpha'
+      monitor: docker-host-alpha
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 # rule_files:
@@ -13,7 +13,7 @@ global:
 
 # A scrape configuration containing exactly one endpoint to scrape.
 scrape_configs:
-  - job_name: 'nodeexporter'
+  - job_name: nodeexporter
     scrape_interval: 5s
     static_configs:
       - targets: ['sombra.home:9100', 'pi.home:9100', 'lucio.home:9100']
@@ -21,25 +21,25 @@ scrape_configs:
       ca_file: '/etc/ca/rootCA.pem'
 
 
-  - job_name: 'cadvisor'
+  - job_name: cadvisor
     scrape_interval: 5s
     static_configs:
       - targets: ['cadvisor:8080', 'cadvisor.pi.home', 'cadvisor.lucio.home']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
-  - job_name: 'prometheus'
+  - job_name: prometheus
     scrape_interval: 10s
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'pushgateway'
+  - job_name: pushgateway
     scrape_interval: 10s
     honor_labels: true
     static_configs:
       - targets: ['pushgateway:9091']
 
-  - job_name: 'traefik'
+  - job_name: traefik
     scrape_interval: 10s
     honor_labels: true
     static_configs:
@@ -47,17 +47,17 @@ scrape_configs:
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
-  - job_name: 'docker'
+  - job_name: docker
     scrape_interval: 10s
     static_configs:
       - targets: ['sombra.home:42375', 'pi.home:42375', 'lucio.home:42375']
 
-  - job_name: 'jenkins'
+  - job_name: jenkins
     metrics_path: '/prometheus/'
     static_configs:
       - targets: ['jenkins:8080']
 
-  - job_name: 'blackbox'
+  - job_name: blackbox
     metrics_path: /probe
     params:
       module: [http_2xx]  # Look for a HTTP 200 response.
@@ -77,13 +77,31 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
 
-  - job_name: 'mysqld-exporter'
+  - job_name: mysql
     static_configs:
       - targets: ['mysqld-exporter:9104']
 
-  - job_name: redis_exporter
+  - job_name: redis
     static_configs:
     - targets: ['redis-exporter:9121']
+
+  - job_name: elasticsearch
+    scrape_interval: 60s
+    scrape_timeout:  30s
+    metrics_path: "/metrics"
+    static_configs:
+    - targets:
+      - elasticsearch-exporter:9108
+      labels:
+        service: elasticsearch
+      - elasticsearch-diskover-exporter:9108
+      labels:
+        service: elasticsearch-diskover
+    relabel_configs:
+    - source_labels: [__address__]
+      regex: '(.*)\:9108'
+      target_label:  'instance'
+      replacement:   '$1'
 
 alerting:
   alertmanagers:
