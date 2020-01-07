@@ -111,6 +111,10 @@ scrape_configs:
       labels:
         server_name: 'minecraft'
 
+  - job_name: rabbitmq
+    static_configs:
+    - targets: ['rabbitmq:9419']
+
 alerting:
   alertmanagers:
   - scheme: http

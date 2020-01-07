@@ -541,6 +541,20 @@ services:
         labels:
             - "traefik.enable=false"
 
+    rabbitmq-exporter: # Prometheus requirement
+        image: kbudde/rabbitmq-exporter
+        container_name: rabbitmq-exporter
+        restart: ${RESTART_MODE}
+        environment:
+            RABBIT_URL: http://rabbitmq:15672
+            LOG_LEVEL: error
+        hostname: rabbitmq-exporter
+        networks:
+            - connected
+            - hidden
+        labels:
+            - "traefik.enable=false"
+
     alertmanager: # Grafana requirement
         image: prom/alertmanager
         container_name: alertmanager
