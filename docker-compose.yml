@@ -560,7 +560,7 @@ services:
         container_name: pihole-exporter
         restart: ${RESTART_MODE}
         environment:
-            PIHOLE_HOSTNAME: http://pihole.pi.home
+            PIHOLE_HOSTNAME: pihole.pi.home
             PIHOLE_PASSWORD: ${GLOBAL_PASSWORD}
         hostname: pihole-exporter
         networks:
