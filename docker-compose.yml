@@ -488,6 +488,19 @@ services:
             - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
             - "traefik.port=9115"
 
+    mysqld-exporter: # Prometheus requirement
+        image: prom/mysqld-exporter
+        container_name: mysql-exporter
+        restart: ${RESTART_MODE}
+        environment:
+            DATA_SOURCE_NAME: "${MYSQL_USER}:${MYSQL_PASSWORD}@(mysql:3306)/"
+        hostname: mysqld-exporter
+        networks:
+            - connected
+            - hidden
+        labels:
+            - "traefik.enable=false"
+
     alertmanager: # Grafana requirement
         image: prom/alertmanager
         container_name: alertmanager
