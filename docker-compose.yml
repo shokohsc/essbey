@@ -511,7 +511,7 @@ services:
             - hidden
 
     elasticsearch-exporter: # Prometheus requirement
-        image: docker-registry.ecg.so/dk/docker-hub/justwatch/elasticsearch_exporter:1.0.2
+        image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-exporter
         restart: ${RESTART_MODE}
         command:
@@ -523,7 +523,7 @@ services:
             - hidden
 
     elasticsearch-diskover-exporter: # Prometheus requirement
-        image: docker-registry.ecg.so/dk/docker-hub/justwatch/elasticsearch_exporter:1.0.2
+        image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-diskover-exporter
         restart: ${RESTART_MODE}
         command:
