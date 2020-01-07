@@ -529,7 +529,7 @@ services:
             - hidden
 
     mongodb-exporter: # Prometheus requirement
-        image: prom/mongodb-exporter
+        image: ssheehy/mongodb-exporter
         container_name: mongodb-exporter
         restart: ${RESTART_MODE}
         environment:
