@@ -12,9 +12,9 @@ config/diskover/
 config/transmission/
 config/heimdall
 config/traefik/certs/
+config/minecraft/
 !config/minecraft/plugins/Dynmap-3.0-beta-5-spigot.jar
 !config/minecraft/plugins/WorldBorder.jar
-!config/minecraft/plugins/minecraft-prometheus-exporter-1.2.0.jar
-config/minecraft/*
+!config/minecraft/plugins/minecraft-prometheus-exporter-2.0.0.jar
 
 .DS_Store
