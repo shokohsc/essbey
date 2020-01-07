@@ -528,15 +528,18 @@ services:
         networks:
             - hidden
 
-    mongodb-exporter: # Prometheus requirement
-        image: ssheehy/mongodb-exporter
-        container_name: mongodb-exporter
+    transmission-exporter: # Prometheus requirement
+        image: metalmatze/transmission-exporter
+        container_name: transmission-exporter
         restart: ${RESTART_MODE}
         environment:
-            MONGODB_URI: "mongodb://localhost:27017"
-        hostname: mongodb-exporter
+            TRANSMISSION_ADDR: http://vpn-client:9091
+        hostname: transmission-exporter
         networks:
+            - connected
             - hidden
+        labels:
+            - "traefik.enable=false"
 
     alertmanager: # Grafana requirement
         image: prom/alertmanager

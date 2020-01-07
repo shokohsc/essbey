@@ -101,9 +101,9 @@ scrape_configs:
       target_label:  'instance'
       replacement:   '$1'
 
-  - job_name: mongodb
+  - job_name: transmission
     static_configs:
-    - targets: ['mongodb-exporter:9216']
+    - targets: ['transmission-exporter:19091']
 
 
 alerting:
