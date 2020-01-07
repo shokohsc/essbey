@@ -514,7 +514,7 @@ services:
         image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-exporter
         restart: ${RESTART_MODE}
-        command: '-es.uri=http://elasticsearch:9200 -es.all -es.indices'
+        command: '--es.uri=http://elasticsearch:9200'
         hostname: elasticsearch-exporter
         networks:
             - hidden
@@ -523,7 +523,7 @@ services:
         image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-diskover-exporter
         restart: ${RESTART_MODE}
-        command: '-es.uri=http://elasticsearch-diskover:9200 -es.all -es.indices'
+        command: '--es.uri=http://elasticsearch-diskover:9200'
         hostname: elasticsearch-diskover-exporter
         networks:
             - hidden
