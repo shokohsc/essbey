@@ -563,6 +563,7 @@ services:
         command:
             - '--config.file=/etc/alertmanager/config.yml'
             - '--storage.path=/alertmanager'
+            - '--cluster.listen-address='
         restart: ${RESTART_MODE}
         hostname: alertmanager
         networks:
