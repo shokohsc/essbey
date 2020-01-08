@@ -505,7 +505,7 @@ services:
         image: oliver006/redis_exporter:alpine
         container_name: redis-exporter
         restart: ${RESTART_MODE}
-        command: --redis.addr=redis:6379
+        command: --redis.addr=redis:6379 --include-system-metrics
         hostname: redis-exporter
         networks:
             - hidden
@@ -549,20 +549,6 @@ services:
             RABBIT_URL: http://rabbitmq:15672
             LOG_LEVEL: error
         hostname: rabbitmq-exporter
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "traefik.enable=false"
-
-    pihole-exporter: # Prometheus requirement
-        image: ekofr/pihole-exporter
-        container_name: pihole-exporter
-        restart: ${RESTART_MODE}
-        environment:
-            PIHOLE_HOSTNAME: pihole.pi.home
-            PIHOLE_PASSWORD: ${GLOBAL_PASSWORD}
-        hostname: pihole-exporter
         networks:
             - connected
             - hidden

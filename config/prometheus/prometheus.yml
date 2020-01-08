@@ -100,6 +100,10 @@ scrape_configs:
       regex: '(.*)\:9114'
       target_label:  'instance'
       replacement:   '$1'
+    - source_labels: [__address__]
+      regex: '(.*)\:9114'
+      target_label:  'environment'
+      replacement:   '$1'
 
   - job_name: transmission
     static_configs:
@@ -117,7 +121,9 @@ scrape_configs:
 
   - job_name: pihole
     static_configs:
-    - targets: ['pihole-exporter:9617']
+    - targets: ['pihole-exporter.pi.home']
+    tls_config:
+      ca_file: '/etc/ca/rootCA.pem'
 
 alerting:
   alertmanagers:
