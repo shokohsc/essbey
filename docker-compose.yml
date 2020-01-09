@@ -1376,7 +1376,7 @@ services:
             - "traefik.rq.port=9181"
 
     drawio:
-        image: jgraph/draw.io
+        image: fjudith/draw.io
         container_name: drawio
         restart: ${RESTART_MODE}
         hostname: drawio
