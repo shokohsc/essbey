@@ -1374,3 +1374,15 @@ services:
             - "traefik.diskover.port=80"
             - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
             - "traefik.rq.port=9181"
+
+    drawio:
+        image: jgraph/draw.io
+        container_name: drawio
+        restart: ${RESTART_MODE}
+        hostname: drawio
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:drawio.${DOMAIN}"
+            - "traefik.port=8080"
