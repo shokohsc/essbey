@@ -767,13 +767,14 @@ services:
             PGID: ${PGID}
             PUID: ${PUID}
             TZ: ${TIMEZONE}
-            DOCKER_HOST: 'tcp://lucio.home:2376'
-            DOCKER_TLS_VERIFY: 'true'
-            DOCKER_CERT_PATH: /etc/ca
+            # DOCKER_HOST: 'tcp://lucio.home:2376'
+            # DOCKER_TLS_VERIFY: 'true'
+            # DOCKER_CERT_PATH: /etc/ca
         volumes:
-            - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
-            - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
-            - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
+            # - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
+            # - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
         volumes_from:
             - wol-web
         hostname: php-fpm
