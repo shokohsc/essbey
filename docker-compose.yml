@@ -514,7 +514,7 @@ services:
         image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-exporter
         restart: ${RESTART_MODE}
-        command: '--es.uri=http://elasticsearch:9200 --es.indices'
+        command: '--es.uri=http://elasticsearch:9200 --es.all --es.indices'
         hostname: elasticsearch-exporter
         networks:
             - hidden
@@ -523,7 +523,7 @@ services:
         image: justwatch/elasticsearch_exporter:1.1.0
         container_name: elasticsearch-diskover-exporter
         restart: ${RESTART_MODE}
-        command: '--es.uri=http://elasticsearch-diskover:9200 --es.indices'
+        command: '--es.uri=http://elasticsearch-diskover:9200 --es.all --es.indices'
         hostname: elasticsearch-diskover-exporter
         networks:
             - hidden
@@ -1376,9 +1376,15 @@ services:
             - "traefik.rq.port=9181"
 
     drawio:
-        image: fjudith/draw.io
+        image: jgraph/drawio
         container_name: drawio
         restart: ${RESTART_MODE}
+        # volumes:
+        #     - ./config/drawio/PostConfig.js:/usr/local/tomcat/webapps/draw/js/PostConfig.js
+        #     - ./config/drawio/PreConfig.js:/usr/local/tomcat/webapps/draw/js/PreConfig.js
+        #     - ./config/drawio/google_client_id:/usr/local/tomcat/webapps/draw/WEB-INF/google_client_id
+        #     - ./config/drawio/google_client_redirect_uri:/usr/local/tomcat/webapps/draw/WEB-INF/google_client_redirect_uri
+        #     - ./config/drawio/google_client_secret:/usr/local/tomcat/webapps/draw/WEB-INF/google_client_secret
         hostname: drawio
         networks:
             - connected
