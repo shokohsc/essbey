@@ -6,7 +6,6 @@ work/
 shared/
 
 config/alertmanager/
-config/drawio
 config/openvpn/
 config/plex/
 config/diskover/
