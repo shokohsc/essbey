@@ -319,7 +319,7 @@ services:
 
     traefik: # Reverse proxy
         container_name: traefik
-        image: traefik:1.7.20-alpine
+        image: traefik:maroilles-alpine
         restart: ${RESTART_MODE}
         command: --configFile=/etc/traefik/traefik.toml --metrics --metrics.prometheus
         ports:
