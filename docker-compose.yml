@@ -519,15 +519,6 @@ services:
         networks:
             - hidden
 
-    elasticsearch-diskover-exporter: # Prometheus requirement
-        image: justwatch/elasticsearch_exporter:1.1.0
-        container_name: elasticsearch-diskover-exporter
-        restart: ${RESTART_MODE}
-        command: '--es.uri=http://elasticsearch-diskover:9200 --es.all --es.indices'
-        hostname: elasticsearch-diskover-exporter
-        networks:
-            - hidden
-
     transmission-exporter: # Prometheus requirement
         image: metalmatze/transmission-exporter
         container_name: transmission-exporter

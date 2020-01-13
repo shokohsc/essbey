@@ -92,7 +92,6 @@ scrape_configs:
     static_configs:
     - targets:
       - elasticsearch-exporter:9114
-      - elasticsearch-diskover-exporter:9114
       labels:
         service: elasticsearch
     relabel_configs:
