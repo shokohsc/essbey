@@ -206,8 +206,6 @@ services:
         hostname: openvpn-tcp
         networks:
             - connected
-        depends_on:
-            - openvpn
         logging:
             driver: none
         labels:
@@ -228,7 +226,9 @@ services:
             - connected
         labels:
             - "autoheal=true"
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:sidekick.${DOMAIN}"
+            - "traefik.port=3000"
 
     vpn-client: # Torrenting vpn
         container_name: vpn-client
@@ -439,9 +439,6 @@ services:
             - hidden
         depends_on:
             - prometheus
-            - pushgateway
-            - nodeexporter
-            - cadvisor
             - influxdb
             - graphite
             - elasticsearch
@@ -483,6 +480,8 @@ services:
         hostname: blackbox
         networks:
             - connected
+        depends_on:
+            - prometheus
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
@@ -498,6 +497,9 @@ services:
         networks:
             - connected
             - hidden
+        depends_on:
+            - prometheus
+            - mysql
         labels:
             - "traefik.enable=false"
 
@@ -509,6 +511,9 @@ services:
         hostname: redis-exporter
         networks:
             - hidden
+        depends_on:
+            - prometheus
+            - redis
 
     elasticsearch-exporter: # Prometheus requirement
         image: justwatch/elasticsearch_exporter:1.1.0
@@ -518,6 +523,9 @@ services:
         hostname: elasticsearch-exporter
         networks:
             - hidden
+        depends_on:
+            - prometheus
+            - elasticsearch
 
     transmission-exporter: # Prometheus requirement
         image: metalmatze/transmission-exporter
@@ -529,6 +537,9 @@ services:
         networks:
             - connected
             - hidden
+        depends_on:
+            - prometheus
+            - transmission
         labels:
             - "traefik.enable=false"
 
@@ -543,6 +554,9 @@ services:
         networks:
             - connected
             - hidden
+        depends_on:
+            - prometheus
+            - mariadb
         labels:
             - "traefik.enable=false"
 
@@ -559,6 +573,9 @@ services:
         hostname: alertmanager
         networks:
             - connected
+        depends_on:
+            - prometheus
+            - mattermost
         labels:
             - "traefik.enable=false"
 
@@ -622,6 +639,8 @@ services:
         hostname: pushgateway
         networks:
             - hidden
+        depends_on:
+            - prometheus
 
     heimdall: # Heimdall
         image: linuxserver/heimdall
@@ -676,7 +695,7 @@ services:
         networks:
             - connected
         depends_on:
-            - openvpn
+            - openvpn-tcp
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
@@ -736,14 +755,11 @@ services:
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
             - "traefik.port=80"
 
-
     wol-web:
         container_name: wol-web
         image: shokohsc/server-wol
         restart: ${RESTART_MODE}
         tty: true
-        volumes:
-            - /var/www/symfony
         hostname: wol-web
         networks:
             - hidden
@@ -761,8 +777,9 @@ services:
             DOCKER_HOST: 'tcp://lucio.home:2376'
             DOCKER_TLS_VERIFY: 'true'
             DOCKER_CERT_PATH: /etc/ca
+            PEER_ID: ${PEER_ID}
         volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock'
+            # - '/var/run/docker.sock:/var/run/docker.sock'
             # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
             - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
             - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
@@ -796,7 +813,7 @@ services:
             - wol-web
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wol.${DOMAIN}"
+            - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
             - "traefik.port=80"
 
     paint-web:
