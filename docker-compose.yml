@@ -556,7 +556,7 @@ services:
             - hidden
         depends_on:
             - prometheus
-            - mariadb
+            - rabbitmq
         labels:
             - "traefik.enable=false"
 
