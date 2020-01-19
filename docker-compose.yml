@@ -94,6 +94,8 @@ services:
             LOG_LEVEL: warn
         volumes:
             - ./config/logstash:/usr/share/logstash/pipeline
+        ports:
+            - '5044:5044/tcp'
         hostname: logstash
         networks:
             - connected
@@ -114,7 +116,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - /var/lib/docker:/var/lib/docker:ro
             - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-        hostname: filebeat
+        hostname: filebeat-sombra
         networks:
             - hidden
         depends_on:
