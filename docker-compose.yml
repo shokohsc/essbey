@@ -35,6 +35,7 @@ volumes:
     theia_data: {}
     jsbin_data: {}
     jenkins_data: {}
+    see-eye_data: {}
 
 services:
 
@@ -1408,12 +1409,15 @@ services:
             DOCKER_AUTH_EMAIL: ${DOCKER_AUTH_EMAIL}
             DOCKER_AUTH_PASSWORD: ${DOCKER_AUTH_PASSWORD}
         volumes:
+            - see-eye_data:/app/data
             - /var/run/docker.sock:/var/run/docker.sock:ro
         hostname: see-eye
         networks:
             - connected
+            - hidden
         labels:
             - "autoheal=true"
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
