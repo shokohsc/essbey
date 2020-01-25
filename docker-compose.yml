@@ -1396,3 +1396,24 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:drawio.${DOMAIN}"
             - "traefik.port=8080"
+
+    see-eye: # ci api
+        container_name: see-eye
+        image: shokohsc/see-eye
+        restart: ${RESTART_MODE}
+        environment:
+            TZ: ${TIMEZONE}
+            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
+            DOCKER_AUTH_USERNAME: ${DOCKER_AUTH_USERNAME}
+            DOCKER_AUTH_EMAIL: ${DOCKER_AUTH_EMAIL}
+            DOCKER_AUTH_PASSWORD: ${DOCKER_AUTH_PASSWORD}
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        hostname: see-eye
+        networks:
+            - connected
+        labels:
+            - "autoheal=true"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
+            - "traefik.port=3000"
