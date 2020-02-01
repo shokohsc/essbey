@@ -328,6 +328,8 @@ services:
         image: linuxserver/deluge
         restart: ${RESTART_MODE}
         environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
             DELUGE_LOGLEVEL: error
         volumes:
             - ./config/deluge:/config
