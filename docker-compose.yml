@@ -333,7 +333,7 @@ services:
             DELUGE_LOGLEVEL: error
         volumes:
             - ./config/deluge:/config
-            - ./download/complete:/downloads
+            - ./download:/downloads
         network_mode: "service:vpn-client"
         depends_on:
             - vpn-client
