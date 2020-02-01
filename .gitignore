@@ -10,6 +10,7 @@ config/openvpn/
 config/plex/
 config/diskover/
 config/transmission/
+config/deluge/
 config/heimdall
 config/traefik/certs/
 config/minecraft/

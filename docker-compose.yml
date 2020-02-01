@@ -246,6 +246,7 @@ services:
             VPNPORT_1: 9091
             VPNPORT_2: 9000
             VPNPORT_3: 3000
+            VPNPORT_4: 8112
             SIDEKICK_URL: http://sidekick:3000/api/ovpn
         depends_on:
             - sidekick
@@ -265,6 +266,8 @@ services:
             - "traefik.peerflix.port=9000"
             - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
             - "traefik.cloudtorrent.port=3000"
+            - "traefik.deluge.frontend.rule=Host:deluge.${DOMAIN}"
+            - "traefik.deluge.port=8112"
 
     transmission: # Torrent client
         container_name: transmission
@@ -307,6 +310,27 @@ services:
         container_name: cloudtorrent
         restart: ${RESTART_MODE}
         volumes:
+            - ./download/complete:/downloads
+        network_mode: "service:vpn-client"
+        depends_on:
+            - vpn-client
+        labels:
+            - "autoheal=true"
+        healthcheck:
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            interval: 30s
+            timeout: 30s
+            start_period: 60s
+            retries: 5
+
+    deluge:
+        container_name: deluge
+        image: linuxserver/deluge
+        restart: ${RESTART_MODE}
+        environment:
+            DELUGE_LOGLEVEL: error
+        volumes:
+            - ./config/deluge:/config
             - ./download/complete:/downloads
         network_mode: "service:vpn-client"
         depends_on:
