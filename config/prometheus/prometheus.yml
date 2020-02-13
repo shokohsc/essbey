@@ -66,6 +66,7 @@ scrape_configs:
         - http://vpn-client:9091
         - http://vpn-client:9000
         - http://vpn-client:3000
+        - http://vpn-client:8112
         # - http://prometheus.io    # Target to probe with http.
         # - https://prometheus.io   # Target to probe with https.
         # - http://example.com:8080 # Target to probe with http on port 8080.
