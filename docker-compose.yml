@@ -564,6 +564,23 @@ services:
         labels:
             - "traefik.enable=false"
 
+    deluge-exporter: # Prometheus requirement
+        image: tobbez/deluge-exporter
+        container_name: deluge-exporter
+        restart: ${RESTART_MODE}
+        environment:
+            DELUGE_HOST: deluge
+        volumes:
+            - ./config/deluge:/root/.config/deluge/
+        hostname: deluge-exporter
+        networks:
+            - connected
+        depends_on:
+            - prometheus
+            - deluge
+        labels:
+            - "traefik.enable=false"
+
     rabbitmq-exporter: # Prometheus requirement
         image: kbudde/rabbitmq-exporter
         container_name: rabbitmq-exporter

@@ -105,6 +105,10 @@ scrape_configs:
     static_configs:
     - targets: ['transmission-exporter:19091']
 
+  - job_name: deluge
+    static_configs:
+    - targets: ['deluge-exporter:9354']
+
   - job_name: minecraft
     static_configs:
     - targets: ['minecraft:9225']
