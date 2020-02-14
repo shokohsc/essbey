@@ -17,7 +17,7 @@ client:
   master_only: False
 
 logging:
-  loglevel: DEBUG
+  loglevel: WARNING
   logfile:
   logformat: default
-  blacklist: ['elasticsearch', 'urllib3']
+  blacklist: []
