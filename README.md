@@ -38,5 +38,5 @@
     --network "seedbox_hidden" \
     praseodym/elasticsearch-curator \
     --config \
-    /curator/config.yml \
-    /curator/action.yml
+    config.yml \
+    action.yml
