@@ -7,7 +7,7 @@
 # copying it.
 actions:
   1:
-    action: delete_indices
+    action: delete_filebeat_indices
     description: >-
       Delete indices older than 7 days (based on index name), for filebeat-7.3.2-
       prefixed indices. Ignore the error if the filter does not result in an
@@ -19,6 +19,26 @@ actions:
     - filtertype: pattern
       kind: prefix
       value: filebeat-7.3.2-
+    - filtertype: age
+      source: name
+      direction: older
+      timestring: '%Y.%m.%d'
+      unit: days
+      unit_count: 7
+
+  2:
+    action: delete_telegraf_indices
+    description: >-
+      Delete indices older than 7 days (based on index name), for telegraf-
+      prefixed indices. Ignore the error if the filter does not result in an
+      actionable list of indices (ignore_empty_list) and exit cleanly.
+    options:
+      ignore_empty_list: True
+      disable_action: True
+    filters:
+    - filtertype: pattern
+      kind: prefix
+      value: telegraf-
     - filtertype: age
       source: name
       direction: older

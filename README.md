@@ -1,7 +1,7 @@
 # OPENVPN
 
     $> export CIPHER="AES-256-CBC"
-    $> docker-compose run --rm openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM:PORT -2 -C $CIPHER -n <pihole_ip> -n 8.8.8.8 -n 1.1.1.1 -e 'management 0.0.0.0 5555' -e 'push "redirect-gateway def1 bypass-dhcp"' -e 'management 0.0.0.0 5555' -e 'push "comp-lzo no"'
+    $> docker-compose run --rm openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM:PORT -2 -C $CIPHER -n <pihole_ip> -e 'management 0.0.0.0 5555' -e 'push "redirect-gateway def1 bypass-dhcp"' -e 'management 0.0.0.0 5555' -e 'push "comp-lzo no"'
     $> docker-compose run --rm openvpn ovpn_initpki
     $> sudo chown -R $(whoami): ./config/openvpn
     $> docker-compose up -d openvpn
