@@ -36,8 +36,8 @@ volumes:
     jsbin_data: {}
     jenkins_data: {}
     see-eye_data: {}
-    openvpn_data: {}
-    openvpn-tcp_data: {}
+    # openvpn_data: {}
+    # openvpn-tcp_data: {}
 
 services:
 
@@ -177,7 +177,7 @@ services:
             - "32767:1194/udp"
         volumes:
             - ./config/openvpn:/etc/openvpn
-            - openvpn_data:/tmp
+            # - openvpn_data:/tmp
         hostname: openvpn
         networks:
             - connected
@@ -197,7 +197,7 @@ services:
             - "32767:1194/tcp"
         volumes:
             - ./config/openvpn:/etc/openvpn
-            - openvpn-tcp_data:/tmp
+            # - openvpn-tcp_data:/tmp
         hostname: openvpn-tcp
         networks:
             - connected
@@ -581,22 +581,22 @@ services:
         labels:
             - "traefik.enable=false"
 
-    openvpn-exporter: # Prometheus requirement
-        image: kumina/openvpn-exporter
-        container_name: openvpn-exporter
-        command: -openvpn.status_paths /status/udp/openvpn-status.log,/status/tcp/openvpn-status.log
-        restart: ${RESTART_MODE}
-        hostname: openvpn-exporter
-        volumes:
-            - openvpn_data:/status/udp
-            - openvpn-tcp_data:/status/tcp
-        networks:
-            - connected
-        depends_on:
-            - prometheus
-            - openvpn
-        labels:
-            - "traefik.enable=false"
+    # openvpn-exporter: # Prometheus requirement
+    #     image: kumina/openvpn-exporter
+    #     container_name: openvpn-exporter
+    #     command: -openvpn.status_paths /status/udp/openvpn-status.log,/status/tcp/openvpn-status.log
+    #     restart: ${RESTART_MODE}
+    #     hostname: openvpn-exporter
+    #     volumes:
+    #         - openvpn_data:/status/udp
+    #         - openvpn-tcp_data:/status/tcp
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - prometheus
+    #         - openvpn
+    #     labels:
+    #         - "traefik.enable=false"
 
     alertmanager: # Grafana requirement
         image: prom/alertmanager
