@@ -98,10 +98,6 @@ scrape_configs:
     relabel_configs:
     - source_labels: [__address__]
       regex: '(.*)\:9114'
-      target_label:  'instance'
-      replacement:   '$1'
-    - source_labels: [__address__]
-      regex: '(.*)\:9114'
       target_label:  'environment'
       replacement:   '$1'
 

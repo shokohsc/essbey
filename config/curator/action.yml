@@ -7,7 +7,7 @@
 # copying it.
 actions:
   1:
-    action: delete_filebeat_indices
+    action: delete_indices
     description: >-
       Delete indices older than 7 days (based on index name), for filebeat-7.3.2-
       prefixed indices. Ignore the error if the filter does not result in an
@@ -27,7 +27,7 @@ actions:
       unit_count: 7
 
   2:
-    action: delete_telegraf_indices
+    action: delete_indices
     description: >-
       Delete indices older than 7 days (based on index name), for telegraf-
       prefixed indices. Ignore the error if the filter does not result in an
