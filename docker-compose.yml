@@ -56,22 +56,6 @@ services:
         networks:
             - hidden
 
-    curator: # Elasticsearch indices janitor
-        container_name: curator
-        image: praseodym/elasticsearch-curator
-        restart: ${RESTART_MODE}
-        command:
-            - '--config'
-            - 'config.yml'
-            - 'action.yml'
-        networks:
-            - hidden
-        depends_on:
-            - elasticsearch
-        volumes:
-            - ./config/curator/config.yml:/curator/config.yml
-            - ./config/curator/action.yml:/curator/action.yml
-
     kibana: # Elasticsearch data UI
         container_name: kibana
         image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
