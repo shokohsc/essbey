@@ -565,7 +565,7 @@ services:
             - "traefik.enable=false"
 
     deluge-exporter: # Prometheus requirement
-        image: tobbez/deluge-exporter
+        image: tobbez/deluge_exporter
         container_name: deluge-exporter
         restart: ${RESTART_MODE}
         environment:
