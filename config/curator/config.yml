@@ -12,7 +12,7 @@ client:
   client_cert:
   client_key:
   ssl_no_validate: False
-  http_auth:
+  http_auth: elastic:changeme
   timeout: 30
   master_only: False
 
