@@ -1355,7 +1355,7 @@ services:
             - "traefik.port=443"
 
     regex:
-        image: njae86fq/regexr
+        image: gufertum/regexr
         container_name: regex
         restart: ${RESTART_MODE}
         hostname: regex
@@ -1364,7 +1364,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:regex.${DOMAIN}"
-            - "traefik.port=3000"
+            - "traefik.port=8080"
 
     filepizza:
         image: kern/filepizza:master
