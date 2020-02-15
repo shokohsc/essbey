@@ -575,6 +575,7 @@ services:
         hostname: deluge-exporter
         networks:
             - connected
+            - hidden
         depends_on:
             - prometheus
             - deluge
