@@ -265,6 +265,10 @@ services:
         container_name: transmission
         image: linuxserver/transmission
         restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
         volumes:
             - ./config/transmission:/config
             - ./download:/downloads
@@ -322,6 +326,7 @@ services:
         environment:
             PGID: ${PGID}
             PUID: ${PUID}
+            TZ: ${TIMEZONE}
             DELUGE_LOGLEVEL: error
         volumes:
             - ./config/deluge:/config
