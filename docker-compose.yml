@@ -1399,6 +1399,7 @@ services:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+          xpack.security.enabled: "false"
         volumes:
             - elasticsearch-diskover_data:/usr/share/elasticsearch/data
         ulimits:
