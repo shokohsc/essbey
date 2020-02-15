@@ -569,7 +569,7 @@ services:
         container_name: deluge-exporter
         restart: ${RESTART_MODE}
         environment:
-            DELUGE_HOST: deluge
+            DELUGE_HOST: vpn-client
         volumes:
             - ./config/deluge:/root/.config/deluge/
         hostname: deluge-exporter
