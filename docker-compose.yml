@@ -36,6 +36,7 @@ volumes:
     jsbin_data: {}
     jenkins_data: {}
     see-eye_data: {}
+    chronograf_data: {}
     # openvpn_data: {}
     # openvpn-tcp_data: {}
 
@@ -948,6 +949,8 @@ services:
         restart: ${RESTART_MODE}
         command: --influxdb-url=http://influxdb:8086
         hostname: chronograf
+        volumes:
+            - chronograf_data:/var/lib/chronograf
         networks:
             - connected
             - hidden
