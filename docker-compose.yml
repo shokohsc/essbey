@@ -1392,6 +1392,7 @@ services:
         restart: ${RESTART_MODE}
         volumes:
             - jenkins_data:/var/jenkins_home
+            - /usr/bin/docker:/usr/bin/docker
         hostname: jenkins
         networks:
             - connected
