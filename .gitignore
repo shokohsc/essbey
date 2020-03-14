@@ -14,6 +14,7 @@ config/deluge/
 config/heimdall
 config/traefik/certs/
 config/minecraft/
+config/awx/SECRET_KEY
 !config/minecraft/plugins/*.jar
 
 .DS_Store

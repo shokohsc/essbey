@@ -1515,7 +1515,7 @@ services:
             - hidden
 
     awx_web:
-        image: geerlingguy/awx_web
+        image: ansible/awx_web
         container_name: awx_web
         restart: ${RESTART_MODE}
         hostname: awx_web
@@ -1523,8 +1523,9 @@ services:
         networks:
             - connected
             - hidden
+        volumes:
+            - ./config/awx/SECRET_KEY:/etc/tower/SECRET_KEY
         environment:
-            SECRET_KEY: ${GLOBAL_PASSWORD}
             DATABASE_USER: awx
             DATABASE_PASSWORD: awx
             DATABASE_NAME: awx
@@ -1544,7 +1545,7 @@ services:
             - "traefik.port=8052"
 
     awx_task:
-        image: geerlingguy/awx_task
+        image: ansible/awx_task
         container_name: awx_task
         restart: ${RESTART_MODE}
         hostname: awx_task
@@ -1552,8 +1553,9 @@ services:
         networks:
             - connected
             - hidden
+        volumes:
+            - ./config/awx/SECRET_KEY:/etc/tower/SECRET_KEY
         environment:
-            SECRET_KEY: ${GLOBAL_PASSWORD}
             DATABASE_USER: awx
             DATABASE_PASSWORD: awx
             DATABASE_NAME: awx
