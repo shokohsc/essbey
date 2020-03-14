@@ -37,6 +37,7 @@ volumes:
     jenkins_data: {}
     see-eye_data: {}
     chronograf_data: {}
+    postgres_data: {}
     # openvpn_data: {}
     # openvpn-tcp_data: {}
 
@@ -1489,3 +1490,81 @@ services:
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+
+    postgres:
+        image: postgres
+        container_name: postgres
+        restart: ${RESTART_MODE}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        hostname: postgres
+        networks:
+            - hidden
+        environment:
+            POSTGRES_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            POSTGRES_DB: awx
+            POSTGRES_USER: awx
+            POSTGRES_PASSWORD: awx
+
+    memcached:
+        image: memcached
+        container_name: memcached
+        restart: ${RESTART_MODE}
+        hostname: memcached
+        networks:
+            - hidden
+
+    awx_web:
+        image: ansible/awx_web
+        container_name: awx_web
+        restart: ${RESTART_MODE}
+        hostname: awx_web
+        user: root
+        networks:
+            - connected
+            - hidden
+        environment:
+            SECRET_KEY: ${GLOBAL_PASSWORD}
+            DATABASE_USER: awx
+            DATABASE_PASSWORD: awx
+            DATABASE_NAME: awx
+            DATABASE_PORT: 5432
+            DATABASE_HOST: postgres
+            RABBITMQ_USER: guest
+            RABBITMQ_PASSWORD: guest
+            RABBITMQ_HOST: rabbitmq
+            RABBITMQ_PORT: 5672
+            RABBITMQ_VHOST: rabbitmq
+            MEMCACHED_HOST: memcached
+            MEMCACHED_PORT: 11211
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:awx.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8052"
+
+    awx_task:
+        image: ansible/awx_task
+        container_name: awx_task
+        restart: ${RESTART_MODE}
+        hostname: awx_task
+        user: root
+        networks:
+            - connected
+            - hidden
+        environment:
+            SECRET_KEY: ${GLOBAL_PASSWORD}
+            DATABASE_USER: awx
+            DATABASE_PASSWORD: awx
+            DATABASE_NAME: awx
+            DATABASE_PORT: 5432
+            DATABASE_HOST: postgres
+            RABBITMQ_USER: guest
+            RABBITMQ_PASSWORD: guest
+            RABBITMQ_HOST: rabbitmq
+            RABBITMQ_PORT: 5672
+            RABBITMQ_VHOST: rabbitmq
+            MEMCACHED_HOST: memcached
+            MEMCACHED_PORT: 11211
+        labels:
+            - "traefik.enable=false"
