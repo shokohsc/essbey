@@ -1498,9 +1498,9 @@ services:
         environment:
             RUNDECK_GRAILS_URL: "rundeck.${DOMAIN}"
             RUNDECK_WITH_SSL: 'true'
-            EXTERNAL_SERVER_URL: 'https://rundeck.${DOMAIN}'
+            EXTERNAL_SERVER_URL: 'http://rundeck.${DOMAIN}'
             HTTP_PROXY: 'http://rundeck.${DOMAIN}'
-            HTTPS_PROXY: 'https://rundeck.${DOMAIN}'
+            HTTPS_PROXY: 'http://rundeck.${DOMAIN}'
             RDECK_JVM_SETTINGS: '-Djava.net.useSystemProxies=true'
         volumes:
             - rundeck_data:/var/lib/mysql
@@ -1511,4 +1511,4 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:rundeck.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=4443"
+            - "traefik.port=4440"
