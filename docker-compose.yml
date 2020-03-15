@@ -1489,3 +1489,21 @@ services:
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+
+    rundeck: # cronjobs
+        container_name: rundeck
+        image: rundeck/rundeck
+        restart: ${RESTART_MODE}
+        environment:
+            JVM_MAX_RAM_FRACTION: '2'
+            RUNDECK_GRAILS_URL: https://rundeck.${DOMAIN}
+        volumes:
+            - rundeck_data:/home/rundeck/server/data
+        hostname: rundeck
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:rundeck.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=4440"
