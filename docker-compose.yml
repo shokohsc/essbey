@@ -1511,4 +1511,4 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:rundeck.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=4440"
+            - "traefik.port=4443"
