@@ -37,6 +37,7 @@ volumes:
     jenkins_data: {}
     see-eye_data: {}
     chronograf_data: {}
+    rundeck_data: {}
     # openvpn_data: {}
     # openvpn-tcp_data: {}
 
