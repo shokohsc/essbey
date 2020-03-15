@@ -1493,7 +1493,7 @@ services:
 
     rundeck: # cronjobs
         container_name: rundeck
-        image: rundeck/rundeck
+        image: rundeck/rundeck:SNAPSHOT
         restart: ${RESTART_MODE}
         environment:
             JVM_MAX_RAM_FRACTION: '2'
