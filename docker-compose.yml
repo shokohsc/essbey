@@ -1497,8 +1497,9 @@ services:
         restart: ${RESTART_MODE}
         environment:
             JVM_MAX_RAM_FRACTION: '2'
-            RUNDECK_GRAILS_URL: "https://rundeck.${DOMAIN}"
+            RUNDECK_GRAILS_URL: "rundeck.${DOMAIN}"
             RUNDECK_SERVER_ADDRESS: 0.0.0.0
+            RUNDECK_WITH_SSL: 'true'
         volumes:
             - rundeck_data:/home/rundeck/server/data
         hostname: rundeck
