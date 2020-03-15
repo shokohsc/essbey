@@ -1493,13 +1493,15 @@ services:
 
     rundeck: # cronjobs
         container_name: rundeck
-        image: rundeck/rundeck:3.2.3
+        image: jordan/rundeck
         restart: ${RESTART_MODE}
         environment:
-            JVM_MAX_RAM_FRACTION: '2'
             RUNDECK_GRAILS_URL: "rundeck.${DOMAIN}"
-            RUNDECK_SERVER_ADDRESS: 0.0.0.0
-            RDECK_JVM_OPTS: '-Drundeck.jetty.connector.forwarded=true'
+            RUNDECK_WITH_SSL: 'true'
+            EXTERNAL_SERVER_URL: 'https://rundeck.${DOMAIN}'
+            HTTP_PROXY: 'http://rundeck.${DOMAIN}'
+            HTTPS_PROXY: 'https://rundeck.${DOMAIN}'
+            RDECK_JVM_SETTINGS: '-Djava.net.useSystemProxies=true'
         volumes:
             - rundeck_data:/home/rundeck/server/data
         hostname: rundeck
