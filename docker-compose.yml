@@ -1499,7 +1499,7 @@ services:
             JVM_MAX_RAM_FRACTION: '2'
             RUNDECK_GRAILS_URL: "rundeck.${DOMAIN}"
             RUNDECK_SERVER_ADDRESS: 0.0.0.0
-            RUNDECK_WITH_SSL: 'true'
+            RDECK_JVM_OPTS: '-Drundeck.jetty.connector.forwarded=true'
         volumes:
             - rundeck_data:/home/rundeck/server/data
         hostname: rundeck
