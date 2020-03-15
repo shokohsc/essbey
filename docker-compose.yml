@@ -1503,7 +1503,7 @@ services:
             HTTPS_PROXY: 'https://rundeck.${DOMAIN}'
             RDECK_JVM_SETTINGS: '-Djava.net.useSystemProxies=true'
         volumes:
-            - rundeck_data:/home/rundeck/server/data
+            - rundeck_data:/var/lib/mysql
         hostname: rundeck
         networks:
             - connected
