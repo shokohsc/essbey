@@ -33,8 +33,8 @@
     $> docker run \
     --rm \
     -ti \
-    -v "/home/sombra/seedbox/config/curator/config.yml:/curator/config.yml" \
-    -v "/home/sombra/seedbox/config/curator/action.yml:/curator/action.yml" \
+    -v "$(pwd)/config/curator/config.yml:/curator/config.yml" \
+    -v "$(pwd)/config/curator/action.yml:/curator/action.yml" \
     --network "seedbox_hidden" \
     praseodym/elasticsearch-curator \
     --config \
