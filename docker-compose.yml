@@ -37,7 +37,6 @@ volumes:
     jenkins_data: {}
     see-eye_data: {}
     chronograf_data: {}
-    # rundeck_data: {}
     # openvpn_data: {}
     # openvpn-tcp_data: {}
 
@@ -1490,25 +1489,3 @@ services:
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
-
-    # rundeck: # cronjobs
-    #     container_name: rundeck
-    #     image: jordan/rundeck
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         RUNDECK_GRAILS_URL: "rundeck.${DOMAIN}"
-    #         RUNDECK_WITH_SSL: 'true'
-    #         EXTERNAL_SERVER_URL: 'http://rundeck.${DOMAIN}'
-    #         HTTP_PROXY: 'http://rundeck.${DOMAIN}'
-    #         HTTPS_PROXY: 'http://rundeck.${DOMAIN}'
-    #         RDECK_JVM_SETTINGS: '-Djava.net.useSystemProxies=true'
-    #     volumes:
-    #         - rundeck_data:/var/lib/mysql
-    #     hostname: rundeck
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:rundeck.${DOMAIN}"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.port=4443"
