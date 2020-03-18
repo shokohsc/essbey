@@ -1,64 +1,77 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:cadvisor.
+    traefik.port: "8080"
   creationTimestamp: null
   labels:
     io.kompose.service: cadvisor
   name: cadvisor
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cadvisor
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:cadvisor.
+        traefik.port: "8080"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
         io.kompose.service: cadvisor
     spec:
       containers:
-      - image: google/cadvisor:v0.31.0
+      - image: gcr.io/google-containers/cadvisor
+        imagePullPolicy: ""
         name: cadvisor
         resources: {}
         volumeMounts:
-        - mountPath: /rootfs
-          name: cadvisor-claim0
-          readOnly: true
-        - mountPath: /var/run
-          name: cadvisor-claim1
-        - mountPath: /sys
-          name: cadvisor-claim2
+        - mountPath: /dev/disk
+          name: cadvisor-hostpath0
           readOnly: true
         - mountPath: /var/lib/docker
-          name: cadvisor-claim3
+          name: cadvisor-hostpath1
           readOnly: true
-        - mountPath: /cgroup
-          name: cadvisor-claim4
+        - mountPath: /sys
+          name: cadvisor-hostpath2
           readOnly: true
+        - mountPath: /var/run
+          name: cadvisor-hostpath3
+          readOnly: true
+        - mountPath: /rootfs
+          name: cadvisor-hostpath4
+          readOnly: true
+      hostname: cadvisor
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: cadvisor-claim0
-        persistentVolumeClaim:
-          claimName: cadvisor-claim0
-          readOnly: true
-      - name: cadvisor-claim1
-        persistentVolumeClaim:
-          claimName: cadvisor-claim1
-      - name: cadvisor-claim2
-        persistentVolumeClaim:
-          claimName: cadvisor-claim2
-          readOnly: true
-      - name: cadvisor-claim3
-        persistentVolumeClaim:
-          claimName: cadvisor-claim3
-          readOnly: true
-      - name: cadvisor-claim4
-        persistentVolumeClaim:
-          claimName: cadvisor-claim4
-          readOnly: true
+      - hostPath:
+          path: /dev/disk/
+        name: cadvisor-hostpath0
+      - hostPath:
+          path: /var/lib/docker/
+        name: cadvisor-hostpath1
+      - hostPath:
+          path: /sys
+        name: cadvisor-hostpath2
+      - hostPath:
+          path: /var/run
+        name: cadvisor-hostpath3
+      - hostPath:
+          path: /
+        name: cadvisor-hostpath4
 status: {}

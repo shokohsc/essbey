@@ -1,9 +1,9 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
     traefik.docker.network: ""
     traefik.enable: "true"
     traefik.frontend.rule: Host:chronograf.
@@ -14,25 +14,41 @@ metadata:
   name: chronograf
 spec:
   replicas: 1
-  strategy: {}
+  selector:
+    matchLabels:
+      io.kompose.service: chronograf
+  strategy:
+    type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
         traefik.docker.network: ""
         traefik.enable: "true"
         traefik.frontend.rule: Host:chronograf.
         traefik.port: "8888"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
         io.kompose.service: chronograf
     spec:
       containers:
       - args:
         - --influxdb-url=http://influxdb:8086
         image: chronograf
+        imagePullPolicy: ""
         name: chronograf
         resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/chronograf
+          name: src-chronograf-data
+      hostname: chronograf
       restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src
+        name: src-chronograf-data
 status: {}

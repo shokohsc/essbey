@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:filepizza.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: filepizza
+  name: filepizza
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: filepizza
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:filepizza.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: filepizza
+    spec:
+      containers:
+      - image: kern/filepizza:master
+        imagePullPolicy: ""
+        name: filepizza
+        resources: {}
+      hostname: filepizza
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

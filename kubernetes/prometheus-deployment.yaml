@@ -1,26 +1,37 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
-    traefik.enable: "false"
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:prometheus.
+    traefik.port: "9090"
   creationTimestamp: null
   labels:
     io.kompose.service: prometheus
   name: prometheus
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: prometheus
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
-        traefik.enable: "false"
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:prometheus.
+        traefik.port: "9090"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
         io.kompose.service: prometheus
     spec:
       containers:
@@ -29,22 +40,31 @@ spec:
         - --storage.tsdb.path=/prometheus
         - --web.console.libraries=/etc/prometheus/console_libraries
         - --web.console.templates=/etc/prometheus/consoles
-        - --storage.tsdb.retention=24h
+        - --storage.tsdb.retention.time=24h
         - --web.enable-lifecycle
-        image: prom/prometheus:v2.4.3
+        image: prom/prometheus
+        imagePullPolicy: ""
         name: prometheus
         resources: {}
         volumeMounts:
         - mountPath: /etc/prometheus/
-          name: prometheus-claim0
+          name: prometheus-hostpath0
+        - mountPath: /etc/ca/rootCA.pem
+          name: prometheus-hostpath1
+          readOnly: true
         - mountPath: /prometheus
-          name: app-prometheus-data
+          name: src-prometheus-data
+      hostname: prometheus
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: prometheus-claim0
-        persistentVolumeClaim:
-          claimName: prometheus-claim0
-      - name: app-prometheus-data
-        persistentVolumeClaim:
-          claimName: app-prometheus-data
+      - hostPath:
+          path: /src/config/prometheus
+        name: prometheus-hostpath0
+      - hostPath:
+          path: /src/config/traefik/certs/rootCA.pem
+        name: prometheus-hostpath1
+      - hostPath:
+          path: /src
+        name: src-prometheus-data
 status: {}

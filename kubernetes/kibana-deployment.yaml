@@ -1,9 +1,9 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
     traefik.docker.network: ""
     traefik.enable: "true"
     traefik.frontend.rule: Host:kibana.
@@ -14,18 +14,23 @@ metadata:
   name: kibana
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: kibana
   strategy: {}
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
         traefik.docker.network: ""
         traefik.enable: "true"
         traefik.frontend.rule: Host:kibana.
         traefik.port: "5601"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
         io.kompose.service: kibana
     spec:
       containers:
@@ -34,8 +39,12 @@ spec:
           value: "true"
         - name: SERVER_NAME
           value: kibana
-        image: docker.elastic.co/kibana/kibana:7.3.2
+        image: 'docker.elastic.co/kibana/kibana:'
+        imagePullPolicy: ""
         name: kibana
         resources: {}
+      hostname: kibana
       restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
 status: {}

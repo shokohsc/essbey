@@ -1,9 +1,9 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
     traefik.enable: "false"
   creationTimestamp: null
   labels:
@@ -11,40 +11,52 @@ metadata:
   name: sftp
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sftp
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
         traefik.enable: "false"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
         io.kompose.service: sftp
     spec:
       containers:
       - image: atmoz/sftp
+        imagePullPolicy: ""
         name: sftp
         ports:
         - containerPort: 22
         resources: {}
         volumeMounts:
         - mountPath: /home/shokohsc/upload/downloads
-          name: sftp-claim0
+          name: sftp-hostpath0
         - mountPath: /home/shokohsc/upload/shared
-          name: sftp-claim1
-        - mountPath: /home/shokohsc/upload/media
-          name: sftp-claim2
+          name: sftp-hostpath1
+        - mountPath: /home/shokohsc/upload/media/WD1To
+          name: sftp-hostpath2
+        - mountPath: /home/shokohsc/upload/media/WD2To
+          name: sftp-hostpath3
+      hostname: sftp
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: sftp-claim0
-        persistentVolumeClaim:
-          claimName: sftp-claim0
-      - name: sftp-claim1
-        persistentVolumeClaim:
-          claimName: sftp-claim1
-      - name: sftp-claim2
-        persistentVolumeClaim:
-          claimName: sftp-claim2
+      - hostPath:
+          path: /src/download/complete
+        name: sftp-hostpath0
+      - hostPath:
+          path: /src/shared
+        name: sftp-hostpath1
+      - hostPath:
+          path: /src
+        name: sftp-hostpath2
+      - hostPath:
+          path: /src
+        name: sftp-hostpath3
 status: {}

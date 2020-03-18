@@ -1,24 +1,28 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
   creationTimestamp: null
   labels:
     io.kompose.service: filebeat
   name: filebeat
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: filebeat
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
       creationTimestamp: null
       labels:
+        io.kompose.network/src_hidden: "true"
         io.kompose.service: filebeat
     spec:
       containers:
@@ -26,29 +30,30 @@ spec:
         - filebeat
         - -e
         - -strict.perms=false
-        image: docker.elastic.co/beats/filebeat:7.3.2
+        image: 'docker.elastic.co/beats/filebeat:'
+        imagePullPolicy: ""
         name: filebeat
         resources: {}
         volumeMounts:
         - mountPath: /var/run/docker.sock
-          name: filebeat-claim0
+          name: filebeat-hostpath0
         - mountPath: /var/lib/docker
-          name: filebeat-claim1
+          name: filebeat-hostpath1
           readOnly: true
         - mountPath: /usr/share/filebeat/filebeat.yml
-          name: filebeat-claim2
+          name: filebeat-hostpath2
           readOnly: true
+      hostname: filebeat-sombra
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: filebeat-claim0
-        persistentVolumeClaim:
-          claimName: filebeat-claim0
-      - name: filebeat-claim1
-        persistentVolumeClaim:
-          claimName: filebeat-claim1
-          readOnly: true
-      - name: filebeat-claim2
-        persistentVolumeClaim:
-          claimName: filebeat-claim2
-          readOnly: true
+      - hostPath:
+          path: /var/run/docker.sock
+        name: filebeat-hostpath0
+      - hostPath:
+          path: /var/lib/docker
+        name: filebeat-hostpath1
+      - hostPath:
+          path: /src/config/filebeat/filebeat.yml
+        name: filebeat-hostpath2
 status: {}

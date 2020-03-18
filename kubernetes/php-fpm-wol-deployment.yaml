@@ -1,45 +1,63 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
   creationTimestamp: null
   labels:
     io.kompose.service: php-fpm-wol
   name: php-fpm-wol
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: php-fpm-wol
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
         io.kompose.service: php-fpm-wol
     spec:
       containers:
       - env:
+        - name: DOCKER_CERT_PATH
+          value: /etc/ca
+        - name: DOCKER_HOST
+          value: tcp://lucio.home:2376
+        - name: DOCKER_TLS_VERIFY
+          value: "true"
+        - name: PEER_ID
         - name: PGID
         - name: PUID
         - name: TZ
         image: shokohsc/alpine-php-fpm
+        imagePullPolicy: ""
         name: php-fpm-wol
         resources: {}
         volumeMounts:
-        - mountPath: /var/run/docker.sock
-          name: php-fpm-wol-claim0
-        - mountPath: /var/www/symfony
-          name: wol-web-claim0
+        - mountPath: /etc/ca/cert.pem
+          name: php-fpm-wol-hostpath0
+          readOnly: true
+        - mountPath: /etc/ca/key.pem
+          name: php-fpm-wol-hostpath1
+          readOnly: true
+      hostname: php-fpm
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: php-fpm-wol-claim0
-        persistentVolumeClaim:
-          claimName: php-fpm-wol-claim0
-      - name: wol-web-claim0
-        persistentVolumeClaim:
-          claimName: wol-web-claim0
+      - hostPath:
+          path: /src/config/traefik/certs/lucio.home.pem
+        name: php-fpm-wol-hostpath0
+      - hostPath:
+          path: /src/config/traefik/certs/lucio.home-key.pem
+        name: php-fpm-wol-hostpath1
 status: {}

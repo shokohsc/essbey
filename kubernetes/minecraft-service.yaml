@@ -2,9 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
-    traefik.enable: "false"
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:minecraft.
+    traefik.port: "8123"
   creationTimestamp: null
   labels:
     io.kompose.service: minecraft

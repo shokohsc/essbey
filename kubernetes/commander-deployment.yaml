@@ -1,9 +1,9 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
     traefik.enable: "true"
     traefik.frontend.rule: Host:commander.
     traefik.port: "8000"
@@ -13,45 +13,57 @@ metadata:
   name: commander
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: commander
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
         traefik.enable: "true"
         traefik.frontend.rule: Host:commander.
         traefik.port: "8000"
       creationTimestamp: null
       labels:
+        io.kompose.network/src_connected: "true"
         io.kompose.service: commander
     spec:
       containers:
       - image: coderaiser/cloudcmd
+        imagePullPolicy: ""
         name: commander
         resources: {}
         volumeMounts:
         - mountPath: /mnt/fs
-          name: commander-claim0
+          name: commander-hostpath0
         - mountPath: /root/downloads
-          name: commander-claim1
+          name: commander-hostpath1
         - mountPath: /root/shared
-          name: commander-claim2
-        - mountPath: /root/media
-          name: commander-claim3
+          name: commander-hostpath2
+        - mountPath: /root/media/WD1To
+          name: commander-hostpath3
+        - mountPath: /root/media/WD2To
+          name: commander-hostpath4
+      hostname: commander
       restartPolicy: Always
+      serviceAccountName: ""
       volumes:
-      - name: commander-claim0
-        persistentVolumeClaim:
-          claimName: commander-claim0
-      - name: commander-claim1
-        persistentVolumeClaim:
-          claimName: commander-claim1
-      - name: commander-claim2
-        persistentVolumeClaim:
-          claimName: commander-claim2
-      - name: commander-claim3
-        persistentVolumeClaim:
-          claimName: commander-claim3
+      - hostPath:
+          path: /
+        name: commander-hostpath0
+      - hostPath:
+          path: /src/download/complete
+        name: commander-hostpath1
+      - hostPath:
+          path: /src/shared
+        name: commander-hostpath2
+      - hostPath:
+          path: /src
+        name: commander-hostpath3
+      - hostPath:
+          path: /src
+        name: commander-hostpath4
 status: {}

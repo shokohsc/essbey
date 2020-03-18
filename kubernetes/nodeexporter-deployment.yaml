@@ -1,58 +1,42 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -v -f docker-compose.yml
-    kompose.version: 1.19.0 (f63a961c)
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
   creationTimestamp: null
   labels:
     io.kompose.service: nodeexporter
   name: nodeexporter
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      io.kompose.service: nodeexporter
+  strategy: {}
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -v -f docker-compose.yml
-        kompose.version: 1.19.0 (f63a961c)
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
       creationTimestamp: null
       labels:
         io.kompose.service: nodeexporter
     spec:
       containers:
       - args:
-        - --path.procfs=/host/proc
-        - --path.sysfs=/host/sys
-        - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)
-        image: prom/node-exporter:v0.16.0
+        - --path.rootfs=/host
+        image: quay.io/prometheus/node-exporter
+        imagePullPolicy: ""
         name: nodeexporter
         resources: {}
         securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /host/proc
-          name: nodeexporter-claim0
-          readOnly: true
-        - mountPath: /host/sys
-          name: nodeexporter-claim1
-          readOnly: true
-        - mountPath: /rootfs
-          name: nodeexporter-claim2
-          readOnly: true
+          capabilities:
+            add:
+            - sys_time
       restartPolicy: Always
-      volumes:
-      - name: nodeexporter-claim0
-        persistentVolumeClaim:
-          claimName: nodeexporter-claim0
-          readOnly: true
-      - name: nodeexporter-claim1
-        persistentVolumeClaim:
-          claimName: nodeexporter-claim1
-          readOnly: true
-      - name: nodeexporter-claim2
-        persistentVolumeClaim:
-          claimName: nodeexporter-claim2
-          readOnly: true
+      securityContext:
+        hostPID: true
+      serviceAccountName: ""
+      volumes: null
 status: {}

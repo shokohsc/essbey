@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    autoheal: "true"
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cloudtorrent
+  name: cloudtorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: cloudtorrent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        autoheal: "true"
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: cloudtorrent
+    spec:
+      containers:
+      - image: shokohsc/cloud-torrent
+        imagePullPolicy: ""
+        name: cloudtorrent
+        resources: {}
+        volumeMounts:
+        - mountPath: /downloads
+          name: cloudtorrent-hostpath0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src/download/complete
+        name: cloudtorrent-hostpath0
+status: {}

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: wol-web
+  name: wol-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: wol-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: wol-web
+    spec:
+      containers:
+      - image: shokohsc/server-wol
+        imagePullPolicy: ""
+        name: wol-web
+        resources: {}
+        tty: true
+      hostname: wol-web
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
