@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sftp
+  name: sftp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sftp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: sftp
+    spec:
+      containers:
+      - image: atmoz/sftp
+        imagePullPolicy: ""
+        name: sftp
+        ports:
+        - containerPort: 22
+        resources: {}
+        volumeMounts:
+        - mountPath: /home/shokohsc/upload/downloads
+          name: sftp-hostpath0
+        - mountPath: /home/shokohsc/upload/shared
+          name: sftp-hostpath1
+        - mountPath: /home/shokohsc/upload/media/WD1To
+          name: sftp-hostpath2
+        - mountPath: /home/shokohsc/upload/media/WD2To
+          name: sftp-hostpath3
+      hostname: sftp
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src/download/complete
+        name: sftp-hostpath0
+      - hostPath:
+          path: /src/shared
+        name: sftp-hostpath1
+      - hostPath:
+          path: /src
+        name: sftp-hostpath2
+      - hostPath:
+          path: /src
+        name: sftp-hostpath3
+status: {}

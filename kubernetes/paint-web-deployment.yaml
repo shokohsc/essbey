@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:paint.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: paint-web
+  name: paint-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: paint-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:paint.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: paint-web
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: shokohsc/mini-paint
+        imagePullPolicy: ""
+        name: paint-web
+        resources: {}
+      hostname: paint-web
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

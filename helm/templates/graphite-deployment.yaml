@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:graphite.
+    traefik.port: "8080"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: graphite
+  name: graphite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: graphite
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:graphite.
+        traefik.port: "8080"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: graphite
+    spec:
+      containers:
+      - image: graphiteapp/graphite-statsd
+        imagePullPolicy: ""
+        name: graphite
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/graphite/storage
+          name: src-graphite-data
+      hostname: graphite
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src
+        name: src-graphite-data
+status: {}

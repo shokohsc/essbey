@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    autoheal: "true"
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.cloudtorrent.frontend.rule: Host:cloudtorrent.
+    traefik.cloudtorrent.port: "3000"
+    traefik.deluge.frontend.rule: Host:deluge.
+    traefik.deluge.port: "8112"
+    traefik.enable: "true"
+    traefik.peerflix.frontend.rule: Host:peerflix.
+    traefik.peerflix.port: "9000"
+    traefik.transmission.frontend.rule: Host:transmission.
+    traefik.transmission.port: "9091"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: vpn-client
+  name: vpn-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: vpn-client
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        autoheal: "true"
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.cloudtorrent.frontend.rule: Host:cloudtorrent.
+        traefik.cloudtorrent.port: "3000"
+        traefik.deluge.frontend.rule: Host:deluge.
+        traefik.deluge.port: "8112"
+        traefik.enable: "true"
+        traefik.peerflix.frontend.rule: Host:peerflix.
+        traefik.peerflix.port: "9000"
+        traefik.transmission.frontend.rule: Host:transmission.
+        traefik.transmission.port: "9091"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: vpn-client
+    spec:
+      containers:
+      - env:
+        - name: FIREWALL
+        - name: ROUTE
+          value: 10.164.18.0/24
+        - name: SIDEKICK_URL
+          value: http://sidekick:3000/api/ovpn
+        - name: TZ
+        - name: VPNPORT_1
+          value: "9091"
+        - name: VPNPORT_2
+          value: "9000"
+        - name: VPNPORT_3
+          value: "3000"
+        - name: VPNPORT_4
+          value: "8112"
+        image: shokohsc/openvpn-client
+        imagePullPolicy: ""
+        name: vpn-client
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - net_admin
+      hostname: vpn-client
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

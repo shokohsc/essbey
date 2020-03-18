@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    autoheal: "true"
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: peerflix
+  name: peerflix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: peerflix
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        autoheal: "true"
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: peerflix
+    spec:
+      containers:
+      - image: shokohsc/peerflix-server
+        imagePullPolicy: ""
+        name: peerflix
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

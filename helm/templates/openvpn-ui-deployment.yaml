@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:openvpn.
+    traefik.port: "8080"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: openvpn-ui
+  name: openvpn-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: openvpn-ui
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:openvpn.
+        traefik.port: "8080"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: openvpn-ui
+    spec:
+      containers:
+      - image: awalach/openvpn-web-ui
+        imagePullPolicy: ""
+        name: openvpn-ui
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/openvpn
+          name: openvpn-ui-hostpath0
+        - mountPath: /opt/openvpn-gui/db
+          name: src-openvpn-ui-data
+      hostname: openvpn-ui
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src/config/openvpn
+        name: openvpn-ui-hostpath0
+      - hostPath:
+          path: /src
+        name: src-openvpn-ui-data
+status: {}

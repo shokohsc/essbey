@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --volumes hostPath
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: openvpn
+  name: openvpn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: openvpn
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --volumes hostPath
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: openvpn
+    spec:
+      containers:
+      - image: kylemanna/openvpn
+        imagePullPolicy: ""
+        name: openvpn
+        ports:
+        - containerPort: 1194
+          protocol: UDP
+        - containerPort: 5555
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - net_admin
+        tty: true
+        volumeMounts:
+        - mountPath: /etc/openvpn
+          name: openvpn-hostpath0
+      hostname: openvpn
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - hostPath:
+          path: /src/config/openvpn
+        name: openvpn-hostpath0
+status: {}
