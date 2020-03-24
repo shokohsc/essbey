@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: src_hidden
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          io.kompose.network/src_hidden: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/src_hidden: "true"

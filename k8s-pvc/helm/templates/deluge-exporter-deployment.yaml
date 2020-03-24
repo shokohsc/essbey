@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: deluge-exporter
+  name: deluge-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: deluge-exporter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: deluge-exporter
+    spec:
+      containers:
+      - env:
+        - name: DELUGE_HOST
+          value: vpn-client
+        image: tobbez/deluge_exporter
+        imagePullPolicy: ""
+        name: deluge-exporter
+        resources: {}
+        volumeMounts:
+        - mountPath: /root/.config/deluge/
+          name: deluge-exporter-claim0
+      hostname: deluge-exporter
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: deluge-exporter-claim0
+        persistentVolumeClaim:
+          claimName: deluge-exporter-claim0
+status: {}

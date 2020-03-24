@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: elasticsearch-exporter
+  name: elasticsearch-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: elasticsearch-exporter
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: elasticsearch-exporter
+    spec:
+      containers:
+      - args:
+        - --es.uri=http://elasticsearch:9200
+        - --es.all
+        - --es.indices
+        image: justwatch/elasticsearch_exporter:1.1.0
+        imagePullPolicy: ""
+        name: elasticsearch-exporter
+        resources: {}
+      hostname: elasticsearch-exporter
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

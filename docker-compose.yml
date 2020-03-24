@@ -1,4 +1,4 @@
-version: "2.4"
+version: "2"
 
 networks:
 
@@ -279,12 +279,12 @@ services:
             - vpn-client
         labels:
             - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+        # healthcheck:
+        #     test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     start_period: 60s
+        #     retries: 5
 
     peerflix:
         image: shokohsc/peerflix-server
@@ -295,12 +295,12 @@ services:
             - vpn-client
         labels:
             - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+        # healthcheck:
+        #     test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     start_period: 60s
+        #     retries: 5
 
     cloudtorrent:
         image: shokohsc/cloud-torrent
@@ -313,12 +313,12 @@ services:
             - vpn-client
         labels:
             - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+        # healthcheck:
+        #     test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     start_period: 60s
+        #     retries: 5
 
     deluge:
         container_name: deluge
@@ -337,12 +337,12 @@ services:
             - vpn-client
         labels:
             - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+        # healthcheck:
+        #     test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     start_period: 60s
+        #     retries: 5
 
     traefik: # Reverse proxy
         container_name: traefik

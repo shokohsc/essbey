@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: redis
+    spec:
+      containers:
+      - image: redis
+        imagePullPolicy: ""
+        name: redis
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: src-redis-data
+      hostname: redis
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: src-redis-data
+        persistentVolumeClaim:
+          claimName: src-redis-data
+status: {}

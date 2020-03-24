@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:drawio.
+    traefik.port: "8080"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drawio
+  name: drawio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: drawio
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:drawio.
+        traefik.port: "8080"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: drawio
+    spec:
+      containers:
+      - image: jgraph/drawio
+        imagePullPolicy: ""
+        name: drawio
+        resources: {}
+      hostname: drawio
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

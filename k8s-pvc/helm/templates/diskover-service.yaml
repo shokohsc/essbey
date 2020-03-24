@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.21.0 (HEAD)
+    traefik.diskover.frontend.rule: Host:diskover.
+    traefik.diskover.port: "80"
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.rq.frontend.rule: Host:diskover-rq.
+    traefik.rq.port: "9181"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: diskover
+  name: diskover
+spec:
+  ports:
+  - name: "9999"
+    port: 9999
+    targetPort: 9999
+  selector:
+    io.kompose.service: diskover
+status:
+  loadBalancer: {}

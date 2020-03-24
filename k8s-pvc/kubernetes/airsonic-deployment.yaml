@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:music.
+    traefik.port: "4040"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: airsonic
+  name: airsonic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: airsonic
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:music.
+        traefik.port: "4040"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: airsonic
+    spec:
+      containers:
+      - env:
+        - name: PGID
+        - name: PUID
+        - name: TZ
+        image: linuxserver/airsonic
+        imagePullPolicy: ""
+        name: airsonic
+        resources: {}
+        volumeMounts:
+        - mountPath: /music
+          name: airsonic-claim0
+          readOnly: true
+      hostname: airsonic
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: airsonic-claim0
+        persistentVolumeClaim:
+          claimName: airsonic-claim0
+          readOnly: true
+status: {}

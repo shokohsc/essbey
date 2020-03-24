@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    autoheal: "true"
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:see-eye.
+    traefik.port: "3000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: see-eye
+  name: see-eye
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: see-eye
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        autoheal: "true"
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:see-eye.
+        traefik.port: "3000"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: see-eye
+    spec:
+      containers:
+      - env:
+        - name: DOCKER_AUTH_EMAIL
+        - name: DOCKER_AUTH_PASSWORD
+        - name: DOCKER_AUTH_USERNAME
+        - name: MATTERMOST_WEBHOOK_URL
+        - name: TZ
+        image: shokohsc/see-eye
+        imagePullPolicy: ""
+        name: see-eye
+        resources: {}
+        volumeMounts:
+        - mountPath: /app/data
+          name: src-see-eye-data
+        - mountPath: /var/run/docker.sock
+          name: see-eye-claim1
+          readOnly: true
+      hostname: see-eye
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: src-see-eye-data
+        persistentVolumeClaim:
+          claimName: src-see-eye-data
+      - name: see-eye-claim1
+        persistentVolumeClaim:
+          claimName: see-eye-claim1
+          readOnly: true
+status: {}

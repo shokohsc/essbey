@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: comic-reader
+  name: comic-reader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: comic-reader
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: comic-reader
+    spec:
+      containers:
+      - image: shokohsc/server-comic-reader
+        imagePullPolicy: ""
+        name: comic-reader
+        resources: {}
+        tty: true
+        volumeMounts:
+        - mountPath: /var/www/symfony
+          name: comic-reader-claim0
+        - mountPath: /var/www/symfony/public/files/weekly
+          name: comic-reader-claim1
+        - mountPath: /var/www/symfony/public/files/all
+          name: comic-reader-claim2
+      hostname: comic-reader
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: comic-reader-claim0
+        persistentVolumeClaim:
+          claimName: comic-reader-claim0
+      - name: comic-reader-claim1
+        persistentVolumeClaim:
+          claimName: comic-reader-claim1
+      - name: comic-reader-claim2
+        persistentVolumeClaim:
+          claimName: comic-reader-claim2
+status: {}

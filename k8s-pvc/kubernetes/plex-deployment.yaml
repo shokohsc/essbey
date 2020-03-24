@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:plex.
+    traefik.port: "32400"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: plex
+  name: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: plex
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:plex.
+        traefik.port: "32400"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: plex
+    spec:
+      containers:
+      - env:
+        - name: ADVERTISE_IP
+        - name: PGID
+        - name: PLEX_CLAIM
+        - name: PUID
+        - name: TZ
+        - name: VERSION
+          value: docker
+        image: plexinc/pms-docker
+        imagePullPolicy: ""
+        name: plex
+        ports:
+        - containerPort: 32400
+        - containerPort: 32400
+          protocol: UDP
+        - containerPort: 32469
+        - containerPort: 32469
+          protocol: UDP
+        - containerPort: 5353
+          protocol: UDP
+        - containerPort: 1900
+          protocol: UDP
+        - containerPort: 3005
+        - containerPort: 8324
+        - containerPort: 32410
+          protocol: UDP
+        - containerPort: 32412
+          protocol: UDP
+        - containerPort: 32413
+          protocol: UDP
+        - containerPort: 32414
+          protocol: UDP
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: plex-claim0
+        - mountPath: /data/WD1To
+          name: plex-claim1
+        - mountPath: /data/WD2To
+          name: plex-claim2
+        - mountPath: /data/downloads
+          name: plex-claim3
+      hostname: plex
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: plex-claim0
+        persistentVolumeClaim:
+          claimName: plex-claim0
+      - name: plex-claim1
+        persistentVolumeClaim:
+          claimName: plex-claim1
+      - name: plex-claim2
+        persistentVolumeClaim:
+          claimName: plex-claim2
+      - name: plex-claim3
+        persistentVolumeClaim:
+          claimName: plex-claim3
+status: {}
