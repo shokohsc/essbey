@@ -132,6 +132,24 @@ services:
         depends_on:
             - logstash
     
+    auditbeat: # Audit system
+        container_name: auditbeat
+        image: docker.elastic.co/beats/auditbeat:${ELK_VERSION}
+        restart: ${RESTART_MODE}
+        cap_add: :
+            - AUDIT_CONTROL
+            - AUDIT_READ
+        pid: host
+        command: auditbeat -e -strict.perms=false
+        user: root
+        volumes:
+            - ./config/beats/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
+        hostname: auditbeat-sombra
+        networks:
+            - hidden
+        depends_on:
+            - logstash
+        
     samba: # SMB server
         container_name: samba
         image: dperson/samba
