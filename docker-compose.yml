@@ -107,13 +107,31 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /var/lib/docker:/var/lib/docker:ro
-            - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+            - ./config/beats/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
         hostname: filebeat-sombra
         networks:
             - hidden
         depends_on:
             - logstash
 
+    journalbeat: # Logs system
+        container_name: journalbeat
+        image: docker.elastic.co/beats/journalbeat:${ELK_VERSION}
+        restart: ${RESTART_MODE}
+        command: journalbeat -e -strict.perms=false -E output.logstash.hosts=["logstash:5044"]
+        user: root
+        volumes:
+            - /var/log/journal:/var/log/journal:ro
+            - /etc/machine-id:/etc/machine-id:ro
+            - /run/systemd:/run/systemd:ro
+            - /etc/hostname:/etc/hostname:ro
+            - ./config/beats/journalbeat.yml:/usr/share/journalbeat/journalbeat.yml:ro
+        hostname: journalbeat-sombra
+        networks:
+            - hidden
+        depends_on:
+            - logstash
+    
     samba: # SMB server
         container_name: samba
         image: dperson/samba

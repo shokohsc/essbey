@@ -1,0 +1,2 @@
+setup.dashboards.enabled: true
+setup.kibana.host: 'kibana:5601'
