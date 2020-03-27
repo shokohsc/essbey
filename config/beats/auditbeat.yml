@@ -1,5 +1,5 @@
 output.logstash:
-hosts: ["logstash:5044"]
+    hosts: ["logstash:5044"]
 
 logging.json: true
 logging.metrics.enabled: false
