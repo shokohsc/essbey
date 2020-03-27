@@ -136,7 +136,7 @@ services:
         container_name: auditbeat
         image: docker.elastic.co/beats/auditbeat:${ELK_VERSION}
         restart: ${RESTART_MODE}
-        cap_add: :
+        cap_add:
             - AUDIT_CONTROL
             - AUDIT_READ
         pid: host
