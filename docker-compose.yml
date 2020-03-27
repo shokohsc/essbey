@@ -105,7 +105,7 @@ services:
         command: filebeat -e -strict.perms=false
         user: root
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
+            - /var/run/docker.sock:/var/run/docker.sock:ro
             - /var/lib/docker:/var/lib/docker:ro
             - ./config/beats/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
         hostname: filebeat-sombra
@@ -121,6 +121,7 @@ services:
         command: journalbeat -e -strict.perms=false
         user: root
         volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
             - /var/log/journal:/var/log/journal:ro
             - /etc/machine-id:/etc/machine-id:ro
             - /run/systemd:/run/systemd:ro
@@ -143,6 +144,7 @@ services:
         command: auditbeat -e -strict.perms=false
         user: root
         volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/beats/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
         hostname: auditbeat-sombra
         networks:
