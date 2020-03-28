@@ -35,4 +35,4 @@ logging.metrics.enabled: false
 logging.level: warning
 
 setup.dashboards.enabled: true
-setup.kibana.host: 'kibana:5601'
+setup.kibana.host: 'kibana.shokohsc.home'

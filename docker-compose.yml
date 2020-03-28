@@ -140,7 +140,7 @@ services:
         cap_add:
             - sys_ptrace
             - dac_read_search
-        command: metricbeat -e
+        command: metricbeat -e -strict.perms=false
         user: root
         volumes:
             - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
