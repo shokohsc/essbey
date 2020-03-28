@@ -29,4 +29,6 @@ logging.metrics.enabled: false
 logging.level: warning
 
 setup.dashboards.enabled: true
-setup.kibana.host: 'http://kibana.shokohsc.home:80'
+setup.kibana.host: 'https://kibana.shokohsc.home:443'
+setup.kibana.ssl.enabled: true
+setup.kibana.ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]

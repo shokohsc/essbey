@@ -150,6 +150,7 @@ services:
             - /:/hostfs:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/beats/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+            - ./config/traefik/certs/rootCA.pem:/etc/pki/root/ca.pem:ro
         hostname: metricbeat-sombra
         network_mode: host
         depends_on:
@@ -168,6 +169,7 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/beats/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro
+            - ./config/traefik/certs/rootCA.pem:/etc/pki/root/ca.pem:ro
         hostname: packetbeat-sombra
         network_mode: host
         depends_on:
