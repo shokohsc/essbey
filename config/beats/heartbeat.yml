@@ -1,19 +1,19 @@
-heartbeat.monitors:
-    - type: http
-      schedule: '@every 5s'
-      urls:
-        - http://vpn-client:9091
-        - http://vpn-client:9000
-        - http://vpn-client:8112
-        - http://vpn-client:3000
+# heartbeat.monitors:
+#     - type: http
+#       schedule: '@every 5s'
+#       urls:
+#         - http://vpn-client:9091
+#         - http://vpn-client:9000
+#         - http://vpn-client:8112
+#         - http://vpn-client:3000
 
-    - type: icmp
-      schedule: '@every 5s'
-      hosts:
-        - 10.164.18.43
-        - 10.164.18.53
-        - 10.164.18.73
-        - 10.164.18.1
+#     - type: icmp
+#       schedule: '@every 5s'
+#       hosts:
+#         - 10.164.18.43
+#         - 10.164.18.53
+#         - 10.164.18.73
+#         - 10.164.18.1
 
 processors:
     - add_docker_metadata:
