@@ -1,18 +1,58 @@
 heartbeat.monitors:
     - type: http
+      id: transmission
+      name: transmission
       schedule: '@every 5s'
       urls:
         - http://vpn-client:9091
+
+    - type: http
+      id: peerflix
+      name: peerflix
+      schedule: '@every 5s'
+      urls:
         - http://vpn-client:9000
+
+    - type: http
+      id: deluge
+      name: deluge
+      schedule: '@every 5s'
+      urls:
         - http://vpn-client:8112
+
+    - type: http
+      id: cloudtorrent
+      name: cloudtorrent
+      schedule: '@every 5s'
+      urls:
         - http://vpn-client:3000
 
     - type: icmp
+      id: chromecast
+      name: chromecast
       schedule: '@every 5s'
       hosts:
         - 10.164.18.43
+
+    - type: icmp
+      id: pi
+      name: pi
+      schedule: '@every 5s'
+      hosts:
         - 10.164.18.53
+
+    - type: icmp
+      id: lucio
+      name: lucio
+      schedule: '@every 5s'
+      hosts:
         - 10.164.18.73
+
+    - type: icmp
+      id: gateway
+      name: gateway
+      schedule: '@every 5s'
+      hosts:
         - 10.164.18.1
 
 processors:
