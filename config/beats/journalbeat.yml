@@ -2,9 +2,6 @@ journalbeat.inputs:
     - paths: []
       seek: cursor
 
-output.logstash:
-    hosts: ["logstash:5044"]
-
 processors:
     - add_docker_metadata:
         host: "unix:///var/run/docker.sock"
