@@ -132,7 +132,62 @@ services:
             - hidden
         depends_on:
             - logstash
-    
+
+    metricbeat: # Metrics system
+        container_name: metricbeat
+        image: docker.elastic.co/beats/metricbeat:${ELK_VERSION}
+        restart: ${RESTART_MODE}
+        cap_add:
+            - sys_ptrace
+            - dac_read_search
+        command: metricbeat -e
+        user: root
+        volumes:
+            - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+            - /proc:/hostfs/proc:ro
+            - /:/hostfs:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./config/beats/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+        hostname: metricbeat-sombra
+        network_mode: host
+        depends_on:
+            - logstash
+
+    packetbeat: # Network system
+        container_name: packetbeat
+        image: docker.elastic.co/beats/packetbeat:${ELK_VERSION}
+        restart: ${RESTART_MODE}
+        cap_add:
+            - NET_ADMIN
+            - NET_RAW
+        command: packetbeat -e -strict.perms=false
+        user: root
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./config/beats/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro
+        hostname: packetbeat-sombra
+        network_mode: host
+        depends_on:
+            - logstash
+
+    heartbeat: # Network system
+        container_name: heartbeat
+        image: docker.elastic.co/beats/heartbeat:${ELK_VERSION}
+        restart: ${RESTART_MODE}
+        command: heartbeat -e -strict.perms=false
+        user: root
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./config/beats/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
+        hostname: heartbeat-sombra
+        networks:
+            - connected
+            - hidden
+        depends_on:
+            - logstash
+        labels:
+            - "traefik.enable=false"
+
     auditbeat: # Audit system
         container_name: auditbeat
         image: docker.elastic.co/beats/auditbeat:${ELK_VERSION}

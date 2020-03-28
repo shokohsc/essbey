@@ -20,5 +20,4 @@ logging.metrics.enabled: false
 logging.level: warning
 
 setup.dashboards.enabled: true
-setup.dashboards.index: 'filebeat-7.4.2-*'
 setup.kibana.host: 'kibana:5601'

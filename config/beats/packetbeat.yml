@@ -1,23 +1,29 @@
-journalbeat.inputs:
-    - paths: []
-    seek: cursor
+packetbeat.interfaces.device: any
 
+packetbeat.flows:
+    timeout: 30s
+    period: 10s
 
-output.logstash:
-    hosts: ["logstash:5044"]
+packetbeat.protocols.dns:
+    ports: [53]
+    include_authorities: true
+    include_additionals: true
+
+packetbeat.protocols.http:
+    ports: [80]
 
 processors:
     - add_docker_metadata:
         host: "unix:///var/run/docker.sock"
-    
+
     - decode_json_fields:
         fields: ["message"]
         target: "json"
         overwrite_keys: true
 
 output.logstash:
-    hosts: ["logstash:5044"]
-
+    hosts: ["localhost:5044"]
+        
 logging.json: true
 logging.metrics.enabled: false
 logging.level: warning
