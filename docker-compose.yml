@@ -113,6 +113,7 @@ services:
             - hidden
         depends_on:
             - logstash
+            - kibana
 
     journalbeat: # Logs system
         container_name: journalbeat
@@ -132,6 +133,7 @@ services:
             - hidden
         depends_on:
             - logstash
+            - kibana
 
     metricbeat: # Metrics system
         container_name: metricbeat
@@ -152,6 +154,7 @@ services:
         network_mode: host
         depends_on:
             - logstash
+            - kibana
 
     packetbeat: # Network system
         container_name: packetbeat
@@ -169,6 +172,7 @@ services:
         network_mode: host
         depends_on:
             - logstash
+            - kibana
 
     heartbeat: # Network system
         container_name: heartbeat
@@ -185,6 +189,7 @@ services:
             - hidden
         depends_on:
             - logstash
+            - kibana
         labels:
             - "traefik.enable=false"
 
@@ -206,6 +211,7 @@ services:
             - hidden
         depends_on:
             - logstash
+            - kibana
         
     samba: # SMB server
         container_name: samba
