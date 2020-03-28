@@ -165,7 +165,7 @@ services:
             - NET_ADMIN
             - NET_RAW
         command: packetbeat -e -strict.perms=false
-        user: root
+        user: packetbeat
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/beats/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro
@@ -181,7 +181,7 @@ services:
         image: docker.elastic.co/beats/heartbeat:${ELK_VERSION}
         restart: ${RESTART_MODE}
         command: heartbeat -e -strict.perms=false
-        user: root
+        user: heartbeat
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/beats/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
