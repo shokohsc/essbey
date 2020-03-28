@@ -18,7 +18,7 @@ actions:
     filters:
     - filtertype: pattern
       kind: prefix
-      value: filebeat-7.4.2-
+      value: filebeat-
     - filtertype: age
       source: name
       direction: older
