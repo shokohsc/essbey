@@ -142,7 +142,7 @@ services:
         cap_add:
             - sys_ptrace
             - dac_read_search
-        command: metricbeat -e -strict.perms=false
+        command: metricbeat -e -strict.perms=false -system.hostfs=/hostfs
         user: root
         volumes:
             - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
