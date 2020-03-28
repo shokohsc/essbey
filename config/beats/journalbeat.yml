@@ -1,7 +1,6 @@
 journalbeat.inputs:
     - paths: []
-    seek: cursor
-
+      seek: cursor
 
 output.logstash:
     hosts: ["logstash:5044"]
