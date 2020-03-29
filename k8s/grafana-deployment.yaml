@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:grafana.
+    traefik.port: "3000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grafana
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: grafana
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:grafana.
+        traefik.port: "3000"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: grafana
+    spec:
+      containers:
+      - env:
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-piechart-panel,grafana-image-renderer
+        - name: GF_LOG_LEVEL
+          value: warn
+        - name: GF_SECURITY_ADMIN_PASSWORD
+        - name: GF_SERVER_ROOT_URL
+        - name: GF_SMTP_ENABLED
+        - name: GF_SMTP_FROM_ADDRESS
+        - name: GF_SMTP_FROM_NAME
+        - name: GF_SMTP_HOST
+        - name: GF_SMTP_PASSWORD
+        - name: GF_SMTP_USER
+        image: grafana/grafana
+        imagePullPolicy: ""
+        name: grafana
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: src-grafana-data
+      hostname: grafana
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: src-grafana-data
+        persistentVolumeClaim:
+          claimName: src-grafana-data
+status: {}

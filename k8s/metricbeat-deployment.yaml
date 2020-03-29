@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: metricbeat
+  name: metricbeat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: metricbeat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: metricbeat
+    spec:
+      containers:
+      - args:
+        - metricbeat
+        - -e
+        - -strict.perms=false
+        - -system.hostfs=/hostfs
+        image: 'docker.elastic.co/beats/metricbeat:'
+        imagePullPolicy: ""
+        name: metricbeat
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - sys_ptrace
+            - dac_read_search
+        volumeMounts:
+        - mountPath: /hostfs/sys/fs/cgroup
+          name: metricbeat-claim0
+          readOnly: true
+        - mountPath: /hostfs/proc
+          name: metricbeat-claim1
+          readOnly: true
+        - mountPath: /hostfs
+          name: metricbeat-claim2
+          readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: metricbeat-claim3
+          readOnly: true
+        - mountPath: /usr/share/metricbeat/metricbeat.yml
+          name: metricbeat-claim4
+          readOnly: true
+      hostname: metricbeat-sombra
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: metricbeat-claim0
+        persistentVolumeClaim:
+          claimName: metricbeat-claim0
+          readOnly: true
+      - name: metricbeat-claim1
+        persistentVolumeClaim:
+          claimName: metricbeat-claim1
+          readOnly: true
+      - name: metricbeat-claim2
+        persistentVolumeClaim:
+          claimName: metricbeat-claim2
+          readOnly: true
+      - name: metricbeat-claim3
+        persistentVolumeClaim:
+          claimName: metricbeat-claim3
+          readOnly: true
+      - name: metricbeat-claim4
+        persistentVolumeClaim:
+          claimName: metricbeat-claim4
+          readOnly: true
+status: {}

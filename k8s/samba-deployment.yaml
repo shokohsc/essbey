@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: samba
+  name: samba
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: samba
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: samba
+    spec:
+      containers:
+      - args:
+        - -s
+        - shared;/mount;yes;no;yes;all;none
+        - -p
+        image: dperson/samba
+        imagePullPolicy: ""
+        name: samba
+        ports:
+        - containerPort: 139
+        - containerPort: 445
+        resources: {}
+        volumeMounts:
+        - mountPath: /mount/downloads
+          name: samba-claim0
+        - mountPath: /mount/shared
+          name: samba-claim1
+        - mountPath: /mount/media/WD1To
+          name: samba-claim2
+        - mountPath: /mount/media/WD2To
+          name: samba-claim3
+      hostname: samba
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: samba-claim0
+        persistentVolumeClaim:
+          claimName: samba-claim0
+      - name: samba-claim1
+        persistentVolumeClaim:
+          claimName: samba-claim1
+      - name: samba-claim2
+        persistentVolumeClaim:
+          claimName: samba-claim2
+      - name: samba-claim3
+        persistentVolumeClaim:
+          claimName: samba-claim3
+status: {}

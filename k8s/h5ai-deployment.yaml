@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:h5ai.
+    traefik.port: "80"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: h5ai
+  name: h5ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: h5ai
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:h5ai.
+        traefik.port: "80"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.service: h5ai
+    spec:
+      containers:
+      - image: corfr/h5ai
+        imagePullPolicy: ""
+        name: h5ai
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/project
+          name: h5ai-claim0
+        - mountPath: /var/www/WD1To
+          name: h5ai-claim1
+        - mountPath: /var/www/WD2To
+          name: h5ai-claim2
+      hostname: h5ai
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: h5ai-claim0
+        persistentVolumeClaim:
+          claimName: h5ai-claim0
+      - name: h5ai-claim1
+        persistentVolumeClaim:
+          claimName: h5ai-claim1
+      - name: h5ai-claim2
+        persistentVolumeClaim:
+          claimName: h5ai-claim2
+status: {}

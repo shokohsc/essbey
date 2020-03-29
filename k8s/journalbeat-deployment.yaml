@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: journalbeat
+  name: journalbeat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: journalbeat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: journalbeat
+    spec:
+      containers:
+      - args:
+        - journalbeat
+        - -e
+        - -strict.perms=false
+        image: 'docker.elastic.co/beats/journalbeat:'
+        imagePullPolicy: ""
+        name: journalbeat
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: journalbeat-claim0
+          readOnly: true
+        - mountPath: /var/log/journal
+          name: journalbeat-claim1
+          readOnly: true
+        - mountPath: /etc/machine-id
+          name: journalbeat-claim2
+          readOnly: true
+        - mountPath: /run/systemd
+          name: journalbeat-claim3
+          readOnly: true
+        - mountPath: /etc/hostname
+          name: journalbeat-claim4
+          readOnly: true
+        - mountPath: /usr/share/journalbeat/journalbeat.yml
+          name: journalbeat-claim5
+          readOnly: true
+      hostname: journalbeat-sombra
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: journalbeat-claim0
+        persistentVolumeClaim:
+          claimName: journalbeat-claim0
+          readOnly: true
+      - name: journalbeat-claim1
+        persistentVolumeClaim:
+          claimName: journalbeat-claim1
+          readOnly: true
+      - name: journalbeat-claim2
+        persistentVolumeClaim:
+          claimName: journalbeat-claim2
+          readOnly: true
+      - name: journalbeat-claim3
+        persistentVolumeClaim:
+          claimName: journalbeat-claim3
+          readOnly: true
+      - name: journalbeat-claim4
+        persistentVolumeClaim:
+          claimName: journalbeat-claim4
+          readOnly: true
+      - name: journalbeat-claim5
+        persistentVolumeClaim:
+          claimName: journalbeat-claim5
+          readOnly: true
+status: {}

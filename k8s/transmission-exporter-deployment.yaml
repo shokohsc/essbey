@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "false"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: transmission-exporter
+  name: transmission-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: transmission-exporter
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.enable: "false"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: transmission-exporter
+    spec:
+      containers:
+      - env:
+        - name: TRANSMISSION_ADDR
+          value: http://vpn-client:9091
+        image: metalmatze/transmission-exporter
+        imagePullPolicy: ""
+        name: transmission-exporter
+        resources: {}
+      hostname: transmission-exporter
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

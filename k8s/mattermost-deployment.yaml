@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:mattermost.
+    traefik.port: "8000"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mattermost
+  name: mattermost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mattermost
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:mattermost.
+        traefik.port: "8000"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: mattermost
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: mysql
+        - name: DB_PORT_NUMBER
+          value: "3306"
+        - name: MM_DBNAME
+          value: mattermost
+        - name: MM_PASSWORD
+          value: mattermost
+        - name: MM_SQLSETTINGS_DATASOURCE
+          value: mattermost:mattermost@tcp(mysql:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+        - name: MM_SQLSETTINGS_DRIVERNAME
+          value: mysql
+        - name: MM_USERNAME
+          value: mattermost
+        image: mattermost
+        imagePullPolicy: ""
+        name: mattermost
+        resources: {}
+        volumeMounts:
+        - mountPath: /mattermost
+          name: src-mattermost-data
+        - mountPath: /etc/localtime
+          name: mattermost-claim1
+          readOnly: true
+      hostname: mattermost
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: src-mattermost-data
+        persistentVolumeClaim:
+          claimName: src-mattermost-data
+      - name: mattermost-claim1
+        persistentVolumeClaim:
+          claimName: mattermost-claim1
+          readOnly: true
+status: {}

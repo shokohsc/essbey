@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:minecraft.
+    traefik.port: "8123"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: minecraft
+  name: minecraft
+spec:
+  ports:
+  - name: "25565"
+    port: 25565
+    targetPort: 25565
+  selector:
+    io.kompose.service: minecraft
+status:
+  loadBalancer: {}

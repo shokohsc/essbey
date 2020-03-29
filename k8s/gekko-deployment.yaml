@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.21.0 (HEAD)
+    traefik.docker.network: ""
+    traefik.enable: "true"
+    traefik.frontend.rule: Host:gekko.
+    traefik.port: "443"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gekko
+  name: gekko
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gekko
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.21.0 (HEAD)
+        traefik.docker.network: ""
+        traefik.enable: "true"
+        traefik.frontend.rule: Host:gekko.
+        traefik.port: "443"
+      creationTimestamp: null
+      labels:
+        io.kompose.network/src_connected: "true"
+        io.kompose.network/src_hidden: "true"
+        io.kompose.service: gekko
+    spec:
+      containers:
+      - env:
+        - name: HOST
+          value: gekko.
+        - name: PORT
+          value: "443"
+        - name: USE_SSL
+          value: "1"
+        image: shokohsc/gekko
+        imagePullPolicy: ""
+        name: gekko
+        resources: {}
+        volumeMounts:
+        - mountPath: /app/config.js
+          name: gekko-claim0
+      hostname: gekko
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: gekko-claim0
+        persistentVolumeClaim:
+          claimName: gekko-claim0
+status: {}
