@@ -115,103 +115,103 @@ services:
             - logstash
             - kibana
 
-    journalbeat: # Logs system
-        container_name: journalbeat
-        image: docker.elastic.co/beats/journalbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        command: journalbeat -e -strict.perms=false
-        user: root
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /var/log/journal:/var/log/journal:ro
-            - /etc/machine-id:/etc/machine-id:ro
-            - /run/systemd:/run/systemd:ro
-            - /etc/hostname:/etc/hostname:ro
-            - ./config/beats/journalbeat.yml:/usr/share/journalbeat/journalbeat.yml:ro
-        hostname: journalbeat-sombra
-        networks:
-            - hidden
-        depends_on:
-            - logstash
-            - kibana
+    # journalbeat: # Logs system
+    #     container_name: journalbeat
+    #     image: docker.elastic.co/beats/journalbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     command: journalbeat -e -strict.perms=false
+    #     user: root
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - /var/log/journal:/var/log/journal:ro
+    #         - /etc/machine-id:/etc/machine-id:ro
+    #         - /run/systemd:/run/systemd:ro
+    #         - /etc/hostname:/etc/hostname:ro
+    #         - ./config/beats/journalbeat.yml:/usr/share/journalbeat/journalbeat.yml:ro
+    #     hostname: journalbeat-sombra
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - logstash
+    #         - kibana
 
-    metricbeat: # Metrics system
-        container_name: metricbeat
-        image: docker.elastic.co/beats/metricbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        cap_add:
-            - sys_ptrace
-            - dac_read_search
-        command: metricbeat -e -strict.perms=false -system.hostfs=/hostfs
-        user: root
-        volumes:
-            - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-            - /proc:/hostfs/proc:ro
-            - /:/hostfs:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./config/beats/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
-        hostname: metricbeat-sombra
-        network_mode: host
-        depends_on:
-            - logstash
-            - kibana
+    # metricbeat: # Metrics system
+    #     container_name: metricbeat
+    #     image: docker.elastic.co/beats/metricbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     cap_add:
+    #         - sys_ptrace
+    #         - dac_read_search
+    #     command: metricbeat -e -strict.perms=false -system.hostfs=/hostfs
+    #     user: root
+    #     volumes:
+    #         - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+    #         - /proc:/hostfs/proc:ro
+    #         - /:/hostfs:ro
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - ./config/beats/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+    #     hostname: metricbeat-sombra
+    #     network_mode: host
+    #     depends_on:
+    #         - logstash
+    #         - kibana
 
-    packetbeat: # Network system
-        container_name: packetbeat
-        image: docker.elastic.co/beats/packetbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        cap_add:
-            - NET_ADMIN
-            - NET_RAW
-        command: packetbeat -e -strict.perms=false
-        user: packetbeat
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./config/beats/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro
-        hostname: packetbeat-sombra
-        network_mode: host
-        depends_on:
-            - logstash
-            - kibana
+    # packetbeat: # Network system
+    #     container_name: packetbeat
+    #     image: docker.elastic.co/beats/packetbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     cap_add:
+    #         - NET_ADMIN
+    #         - NET_RAW
+    #     command: packetbeat -e -strict.perms=false
+    #     user: packetbeat
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - ./config/beats/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro
+    #     hostname: packetbeat-sombra
+    #     network_mode: host
+    #     depends_on:
+    #         - logstash
+    #         - kibana
 
-    heartbeat: # Network system
-        container_name: heartbeat
-        image: docker.elastic.co/beats/heartbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        command: heartbeat -e -strict.perms=false
-        user: heartbeat
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./config/beats/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
-        hostname: heartbeat-sombra
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - logstash
-            - kibana
-        labels:
-            - "traefik.enable=false"
+    # heartbeat: # Network system
+    #     container_name: heartbeat
+    #     image: docker.elastic.co/beats/heartbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     command: heartbeat -e -strict.perms=false
+    #     user: heartbeat
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - ./config/beats/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
+    #     hostname: heartbeat-sombra
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - logstash
+    #         - kibana
+    #     labels:
+    #         - "traefik.enable=false"
 
-    auditbeat: # Audit system
-        container_name: auditbeat
-        image: docker.elastic.co/beats/auditbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        cap_add:
-            - AUDIT_CONTROL
-            - AUDIT_READ
-        pid: host
-        command: auditbeat -e -strict.perms=false
-        user: root
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./config/beats/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
-        hostname: auditbeat-sombra
-        networks:
-            - hidden
-        depends_on:
-            - logstash
-            - kibana
+    # auditbeat: # Audit system
+    #     container_name: auditbeat
+    #     image: docker.elastic.co/beats/auditbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     cap_add:
+    #         - AUDIT_CONTROL
+    #         - AUDIT_READ
+    #     pid: host
+    #     command: auditbeat -e -strict.perms=false
+    #     user: root
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - ./config/beats/auditbeat.yml:/usr/share/auditbeat/auditbeat.yml:ro
+    #     hostname: auditbeat-sombra
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - logstash
+    #         - kibana
         
     samba: # SMB server
         container_name: samba
