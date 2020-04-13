@@ -1437,7 +1437,7 @@ services:
             - "traefik.port=443"
 
     theia:
-        image: theiaide/theia
+        image: theiaide/theia:1.0.0
         container_name: theia
         restart: ${RESTART_MODE}
         volumes:
