@@ -1441,6 +1441,8 @@ services:
         container_name: theia
         restart: ${RESTART_MODE}
         volumes:
+            - /var/run/docker:/var/run/docker:ro
+            - /usr/bin/docker:/usr/bin/docker
             - theia_data:/home/project:cached
         hostname: theia
         networks:
