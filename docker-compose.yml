@@ -1449,6 +1449,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
 
     jsbin:
