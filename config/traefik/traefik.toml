@@ -197,6 +197,12 @@ insecureSkipVerify = true
       url = "http://10.164.18.1"
       weight = 1
 
+  [backends.kind]
+    [backends.kind.servers]
+      [backends.kind.servers.server0]
+      url = "http://172.1.0.64"
+      weight = 1
+
 [frontends]
   [frontends.routeur]
   entryPoints = ["http", "https"]
@@ -205,3 +211,11 @@ insecureSkipVerify = true
   [frontends.routeur.routes]
     [frontends.routeur.routes.route0]
       rule = "Host:routeur.shokohsc.home"
+
+  [frontends.kind]
+  entryPoints = ["http", "https"]
+  backend = "kind"
+  passHostHeader = true
+  [frontends.kind.routes]
+    [frontends.kind.routes.route0]
+      rule = "Host:kind.shokohsc.home"
