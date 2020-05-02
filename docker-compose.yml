@@ -232,26 +232,6 @@ services:
         labels:
             - "traefik.enable=false"
 
-    nfs: # NFS server
-        container_name: nfs
-        image: gists/nfs-server
-        restart: ${RESTART_MODE}
-        cap_add:
-          - SYS_ADMIN
-          - SETPCAP
-        ports:
-            - "2049:2049"
-        volumes:
-            - ./download/complete:/nfs-share/downloads
-            - ./shared:/nfs-share/shared
-            - ${WD1To_PATH}:/nfs-share/media/WD1To
-            - ${WD2To_PATH}:/nfs-share/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
     sftp: # Sftp server
         container_name: sftp
         image: atmoz/sftp
