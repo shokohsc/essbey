@@ -232,26 +232,6 @@ services:
         labels:
             - "traefik.enable=false"
 
-    nfs: # NFS server
-        container_name: nfs
-        image: k8s.gcr.io/volume-nfs:0.8
-        restart: ${RESTART_MODE}
-        privileged: true
-        ports:
-            - "2049:2049"
-            - "20048:20048"
-            - "111:111"
-        volumes:
-            - ./download/complete:/exports/downloads
-            - ./shared:/exports/shared
-            - ${WD1To_PATH}:/exports/media/WD1To
-            - ${WD2To_PATH}:/exports/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
     sftp: # Sftp server
         container_name: sftp
         image: atmoz/sftp
