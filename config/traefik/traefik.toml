@@ -194,7 +194,7 @@ insecureSkipVerify = true
   [backends.routeur]
     [backends.routeur.servers]
       [backends.routeur.servers.server0]
-      url = "http://10.164.18.1"
+      url = "http://192.168.1.1"
       weight = 1
 
   [backends.kind]

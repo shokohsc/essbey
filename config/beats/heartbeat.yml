@@ -32,28 +32,28 @@ heartbeat.monitors:
       name: chromecast
       schedule: '@every 5s'
       hosts:
-        - 10.164.18.43
+        - 192.168.1.43
 
     - type: icmp
       id: pi
       name: pi
       schedule: '@every 5s'
       hosts:
-        - 10.164.18.53
+        - 192.168.1.53
 
     - type: icmp
       id: lucio
       name: lucio
       schedule: '@every 5s'
       hosts:
-        - 10.164.18.73
+        - 192.168.1.73
 
     - type: icmp
       id: gateway
       name: gateway
       schedule: '@every 5s'
       hosts:
-        - 10.164.18.1
+        - 192.168.1.1
 
 processors:
     - add_docker_metadata:
