@@ -219,7 +219,7 @@ services:
         restart: ${RESTART_MODE}
         privileged: true
         environment:
-            NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
+            NFS_EXPORT_0: '/mnt *(rw,insecure,no_subtree_check,sync)'
             NFS_DISABLE_VERSION_3: 'YES'
             NFS_LOG_LEVEL: DEBUG
         ports:
@@ -227,8 +227,8 @@ services:
         volumes:
             - ./download/complete:/export/downloads
             - ./shared:/export/shared
-            # - ${WD1To_PATH}:/export/media/WD1To
-            # - ${WD2To_PATH}:/export/media/WD2To
+            - ${WD1To_PATH}:/export/media/WD1To
+            - ${WD2To_PATH}:/export/media/WD2To
         hostname: nfs
         networks:
             - connected
