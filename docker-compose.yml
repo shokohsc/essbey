@@ -215,15 +215,16 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: erichough/nfs-server
+        image: fuzzle/docker-nfs-server
         restart: ${RESTART_MODE}
         privileged: true
         environment:
-            NFS_EXPORT_0: '/export *(rw,fsid=0,insecure,no_subtree_check,sync)'
-            NFS_DISABLE_VERSION_3: 'YES'
-            NFS_LOG_LEVEL: DEBUG
+            NFS_EXPORT_DIR_1: '/export'
+            NFS_EXPORT_DOMAIN_1: '*'
+            NFS_EXPORT_OPTIONS_1: 'rw,fsid=0,insecure,no_subtree_check,sync'
         ports:
             - "2049:2049"
+            - "2049:2049/udp"
         volumes:
             - ./download/complete:/export/downloads
             - ./shared:/export/shared
