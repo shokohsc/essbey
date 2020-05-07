@@ -215,17 +215,18 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: k8s.gcr.io/volume-nfs:0.8
+        image: itsthenetwork/nfs-server-alpine
         restart: ${RESTART_MODE}
         privileged: true
+        environment:
+            SHARED_DIRECTORY: /nfs.1
         ports:
             - "2049:2049"
-            - "20048:20048"
         volumes:
-            - ./download/complete:/exports/downloads
-            - ./shared:/exports/shared
-            - ${WD1To_PATH}:/exports/media/WD1To
-            - ${WD2To_PATH}:/exports/media/WD2To
+            - ./download/complete:/nfs.1/downloads
+            - ./shared:/nfs.1/shared
+            - ${WD1To_PATH}:/nfs.1/media/WD1To
+            - ${WD2To_PATH}:/nfs.1/media/WD2To
         hostname: nfs
         networks:
             - connected
