@@ -219,7 +219,7 @@ services:
         restart: ${RESTART_MODE}
         privileged: true
         environment:
-            NFS_EXPORT_0: '/mnt *(rw,insecure,no_subtree_check,sync)'
+            NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
             NFS_DISABLE_VERSION_3: 'YES'
             NFS_LOG_LEVEL: DEBUG
         ports:
