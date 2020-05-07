@@ -218,6 +218,8 @@ services:
         image: erichough/nfs-server
         restart: ${RESTART_MODE}
         privileged: true
+        security_opt:
+            - apparmor=erichough-nfs
         environment:
             NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
             NFS_DISABLE_VERSION_3: 'YES'
