@@ -221,7 +221,7 @@ services:
             - SYS_ADMIN
         environment:
             NFS_EXPORT_0: '/share *(rw,no_subtree_check,sync)'
-            NFS_DISABLE_VERSION_3: YES
+            NFS_DISABLE_VERSION_3: 'YES'
             NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
