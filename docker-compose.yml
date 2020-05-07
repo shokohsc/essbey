@@ -219,17 +219,15 @@ services:
         restart: ${RESTART_MODE}
         cap_add:
             - SYS_ADMIN
-        security_opt:
-            - apparmor=erichough-nfs
         environment:
-            NFS_EXPORT_0: '/nfsshare *(rw,no_subtree_check,sync)'
+            NFS_EXPORT_0: '/share *(rw,no_subtree_check,sync)'
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/nfsshare/downloads
-            - ./shared:/nfsshare/shared
-            - ${WD1To_PATH}:/nfsshare/media/WD1To
-            - ${WD2To_PATH}:/nfsshare/media/WD2To
+            - ./download/complete:/share/downloads
+            - ./shared:/share/shared
+            - ${WD1To_PATH}:/share/media/WD1To
+            - ${WD2To_PATH}:/share/media/WD2To
         hostname: nfs
         networks:
             - connected
