@@ -215,45 +215,25 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: itsthenetwork/nfs-server-alpine
+        image: erichough/nfs-server
         restart: ${RESTART_MODE}
         privileged: true
         environment:
-            SHARED_DIRECTORY: /nfs.1
+            NFS_EXPORT_0: '/data *(rw,no_subtree_check)'
+            NFS_DISABLE_VERSION_3: 'YES'
+            NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/nfs.1/downloads
-            - ./shared:/nfs.1/shared
-            - ${WD1To_PATH}:/nfs.1/media/WD1To
-            - ${WD2To_PATH}:/nfs.1/media/WD2To
+            - ./download/complete:/data/downloads
+            - ./shared:/data/shared
+            - ${WD1To_PATH}:/data/media/WD1To
+            - ${WD2To_PATH}:/data/media/WD2To
         hostname: nfs
         networks:
             - connected
         labels:
             - "traefik.enable=false"
-
-    # nfs: # NFS server
-    #     container_name: nfs
-    #     image: erichough/nfs-server
-    #     restart: ${RESTART_MODE}
-    #     privileged: true
-    #     environment:
-    #         NFS_EXPORT_0: '/data *(rw,no_subtree_check)'
-    #         NFS_DISABLE_VERSION_3: 'YES'
-    #         NFS_LOG_LEVEL: DEBUG
-    #     ports:
-    #         - "2049:2049"
-    #     volumes:
-    #         - ./download/complete:/data/downloads
-    #         - ./shared:/data/shared
-    #         - ${WD1To_PATH}:/data/media/WD1To
-    #         - ${WD2To_PATH}:/data/media/WD2To
-    #     hostname: nfs
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=false"
 
     samba: # SMB server
         container_name: samba
