@@ -213,6 +213,26 @@ services:
     #         - logstash
     #         - kibana
         
+    nfs: # NFS server
+        container_name: nfs
+        image: itsthenetwork/nfs-server-alpine
+        restart: ${RESTART_MODE}
+        privileged: true
+        environment:
+            SHARED_DIRECTORY: /nfsshare
+        ports:
+            - "2049:2049"
+        volumes:
+            - ./download/complete:/nfsshare/downloads
+            - ./shared:/nfsshare/shared
+            - ${WD1To_PATH}:/nfsshare/media/WD1To
+            - ${WD2To_PATH}:/nfsshare/media/WD2To
+        hostname: nfs
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
     samba: # SMB server
         container_name: samba
         image: dperson/samba
