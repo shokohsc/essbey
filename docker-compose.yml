@@ -215,11 +215,12 @@ services:
         
     nfs: # NFS server
         container_name: nfs
-        image: itsthenetwork/nfs-server-alpine
+        image: erichough/nfs-server
         restart: ${RESTART_MODE}
-        privileged: true
+        cap_add:
+            - SYS_ADMIN
         environment:
-            SHARED_DIRECTORY: /nfsshare
+            NFS_EXPORT_0: '/nfsshare *(rw,no_subtree_check)'
         ports:
             - "2049:2049"
         volumes:
