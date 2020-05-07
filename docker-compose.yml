@@ -212,28 +212,48 @@ services:
     #     depends_on:
     #         - logstash
     #         - kibana
-        
+
     nfs: # NFS server
         container_name: nfs
-        image: erichough/nfs-server
+        image: k8s.gcr.io/volume-nfs:0.8
         restart: ${RESTART_MODE}
         privileged: true
-        environment:
-            NFS_EXPORT_0: '/data *(rw,no_subtree_check)'
-            NFS_DISABLE_VERSION_3: 'YES'
-            NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
+            - "20048:20048"
+            - "111:111"
         volumes:
-            - ./download/complete:/data/downloads
-            - ./shared:/data/shared
-            - ${WD1To_PATH}:/data/media/WD1To
-            - ${WD2To_PATH}:/data/media/WD2To
+            - ./download/complete:/exports/downloads
+            - ./shared:/exports/shared
+            - ${WD1To_PATH}:/exports/media/WD1To
+            - ${WD2To_PATH}:/exports/media/WD2To
         hostname: nfs
         networks:
             - connected
         labels:
             - "traefik.enable=false"
+
+    # nfs: # NFS server
+    #     container_name: nfs
+    #     image: erichough/nfs-server
+    #     restart: ${RESTART_MODE}
+    #     privileged: true
+    #     environment:
+    #         NFS_EXPORT_0: '/data *(rw,no_subtree_check)'
+    #         NFS_DISABLE_VERSION_3: 'YES'
+    #         NFS_LOG_LEVEL: DEBUG
+    #     ports:
+    #         - "2049:2049"
+    #     volumes:
+    #         - ./download/complete:/data/downloads
+    #         - ./shared:/data/shared
+    #         - ${WD1To_PATH}:/data/media/WD1To
+    #         - ${WD2To_PATH}:/data/media/WD2To
+    #     hostname: nfs
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
 
     samba: # SMB server
         container_name: samba
