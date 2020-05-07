@@ -219,7 +219,7 @@ services:
         restart: ${RESTART_MODE}
         privileged: true
         environment:
-            NFS_EXPORT_0: '/data *(rw,no_subtree_check)'
+            NFS_EXPORT_0: '/data *(rw,no_subtree_check,fsid=0)'
             NFS_DISABLE_VERSION_3: 'YES'
             NFS_LOG_LEVEL: DEBUG
         ports:
