@@ -219,8 +219,10 @@ services:
         restart: ${RESTART_MODE}
         cap_add:
             - SYS_ADMIN
+        security_opt:
+            - apparmor=erichough-nfs
         environment:
-            NFS_EXPORT_0: '/nfsshare *(rw,no_subtree_check)'
+            NFS_EXPORT_0: '/nfsshare *(rw,no_subtree_check,sync)'
         ports:
             - "2049:2049"
         volumes:
