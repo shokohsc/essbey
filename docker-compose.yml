@@ -215,21 +215,17 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: fuzzle/docker-nfs-server
+        image: cpuguy83/nfs-server
+        command: '/nfs'
         restart: ${RESTART_MODE}
         privileged: true
-        environment:
-            NFS_EXPORT_DIR_1: '/export'
-            NFS_EXPORT_DOMAIN_1: '*'
-            NFS_EXPORT_OPTIONS_1: 'rw,fsid=0,insecure,no_subtree_check,sync'
         ports:
             - "2049:2049"
-            - "2049:2049/udp"
         volumes:
-            - ./download/complete:/export/downloads
-            - ./shared:/export/shared
-            - ${WD1To_PATH}:/export/media/WD1To
-            - ${WD2To_PATH}:/export/media/WD2To
+            - ./download/complete:/nfs/downloads
+            - ./shared:/nfs/shared
+            - ${WD1To_PATH}:/nfs/media/WD1To
+            - ${WD2To_PATH}:/nfs/media/WD2To
         hostname: nfs
         networks:
             - connected
