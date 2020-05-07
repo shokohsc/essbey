@@ -221,7 +221,6 @@ services:
         ports:
             - "2049:2049"
             - "20048:20048"
-            - "111:111"
         volumes:
             - ./download/complete:/exports/downloads
             - ./shared:/exports/shared
