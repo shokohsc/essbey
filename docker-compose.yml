@@ -217,8 +217,7 @@ services:
         container_name: nfs
         image: erichough/nfs-server
         restart: ${RESTART_MODE}
-        cap_add:
-            - SYS_ADMIN
+        privileged: true
         environment:
             NFS_EXPORT_0: '/share *(rw,no_subtree_check,sync)'
             NFS_DISABLE_VERSION_3: 'YES'
