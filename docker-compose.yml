@@ -215,23 +215,20 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: erichough/nfs-server
+        image: itsthenetwork/nfs-server-alpine
         restart: ${RESTART_MODE}
-        privileged: true
+        cap_add:
+            - SYS_ADMIN
+            - SETPCAP
         environment:
-            NFS_VERSION: "4.2"
-            NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
-            NFS_DISABLE_VERSION_3: 'true'
-            NFS_LOG_LEVEL: DEBUG
+            SHARED_DIRECTORY: /nfsshare
         ports:
-            - "111:111"
-            - "111:111/udp"
             - "2049:2049"
         volumes:
-            - ./download/complete:/export/downloads
-            - ./shared:/export/shared
-            - ${WD1To_PATH}:/export/media/WD1To
-            - ${WD2To_PATH}:/export/media/WD2To
+            - ./download/complete:/nfsshare/downloads
+            - ./shared:/nfsshare/shared
+            - ${WD1To_PATH}:/nfsshare/media/WD1To
+            - ${WD2To_PATH}:/nfsshare/media/WD2To
         hostname: nfs
         networks:
             - connected
