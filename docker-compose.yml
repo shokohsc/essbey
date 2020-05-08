@@ -215,18 +215,21 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: gists/nfs-server
+        image: erichough/nfs-server
         restart: ${RESTART_MODE}
-        cap_add: 
-            - SYS_ADMIN
-            - SETPCAP
+        privileged: true
+        environment:
+            NFS_VERSION: "4.2"
+            NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
+            NFS_DISABLE_VERSION_3: 'true'
+            NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/nfs-share/downloads
-            - ./shared:/nfs-share/shared
-            - ${WD1To_PATH}:/nfs-share/media/WD1To
-            - ${WD2To_PATH}:/nfs-share/media/WD2To
+            - ./download/complete:/export/downloads
+            - ./shared:/export/shared
+            - ${WD1To_PATH}:/export/media/WD1To
+            - ${WD2To_PATH}:/export/media/WD2To
         hostname: nfs
         networks:
             - connected
