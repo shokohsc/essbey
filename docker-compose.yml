@@ -213,50 +213,6 @@ services:
     #         - logstash
     #         - kibana
 
-    # nfs: # NFS server
-    #     container_name: nfs
-    #     image: gists/nfs-server
-    #     restart: ${RESTART_MODE}
-    #     privileged: true
-    #     environment:
-    #         NFS_DIR: /export
-    #         NFS_OPTION: 'rw,insecure,no_subtree_check,sync'
-    #     ports:
-    #         - "2049:2049"
-    #     volumes:
-    #         - ./download/complete:/export/downloads
-    #         - ./shared:/export/shared
-    #         - ${WD1To_PATH}:/export/media/WD1To
-    #         - ${WD2To_PATH}:/export/media/WD2To
-    #     hostname: nfs
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=false"
-
-    nfs: # NFS server
-        container_name: nfs
-        image: erichough/nfs-server
-        restart: ${RESTART_MODE}
-        privileged: true
-        environment:
-            NFS_VERSION: "4.2"
-            NFS_EXPORT_0: '/mnt *(rw,insecure,no_subtree_check,sync)'
-            NFS_DISABLE_VERSION_3: 'true'
-            NFS_LOG_LEVEL: DEBUG
-        ports:
-            - "2049:2049"
-        # volumes:
-        #     - ./download/complete:/export/downloads
-        #     - ./shared:/export/shared
-        #     - ${WD1To_PATH}:/export/media/WD1To
-        #     - ${WD2To_PATH}:/export/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
     samba: # SMB server
         container_name: samba
         image: dperson/samba
