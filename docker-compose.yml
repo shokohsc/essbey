@@ -242,12 +242,11 @@ services:
         environment:
             NFS_VERSION: 4.2
             NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
-            NFS_DISABLE_VERSION_3: 'YES'
+            NFS_DISABLE_VERSION_3: 'true'
             NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
         volumes:
-            - /lib/modules:/lib/modules:ro
             - ./download/complete:/export/downloads
             - ./shared:/export/shared
             - ${WD1To_PATH}:/export/media/WD1To
