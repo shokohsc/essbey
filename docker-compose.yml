@@ -238,18 +238,22 @@ services:
         container_name: nfs
         image: erichough/nfs-server
         restart: ${RESTART_MODE}
-        privileged: true
+        cap_add:
+            - SYS_ADMIN
+            - SYS_MODULE
         environment:
+            NFS_VERSION: 4.2
             NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
             NFS_DISABLE_VERSION_3: 'YES'
             NFS_LOG_LEVEL: DEBUG
         ports:
             - "2049:2049"
         volumes:
+            - /lib/modules:/lib/modules:ro
             - ./download/complete:/export/downloads
             - ./shared:/export/shared
-            # - ${WD1To_PATH}:/export/media/WD1To
-            # - ${WD2To_PATH}:/export/media/WD2To
+            - ${WD1To_PATH}:/export/media/WD1To
+            - ${WD2To_PATH}:/export/media/WD2To
         hostname: nfs
         networks:
             - connected
