@@ -224,6 +224,8 @@ services:
             NFS_DISABLE_VERSION_3: 'true'
             NFS_LOG_LEVEL: DEBUG
         ports:
+            - "111:111"
+            - "111:111/udp"
             - "2049:2049"
         volumes:
             - ./download/complete:/export/downloads
