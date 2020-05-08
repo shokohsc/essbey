@@ -238,9 +238,7 @@ services:
         container_name: nfs
         image: erichough/nfs-server
         restart: ${RESTART_MODE}
-        cap_add:
-            - SYS_ADMIN
-            - SYS_MODULE
+        privileged: true
         environment:
             NFS_VERSION: 4.2
             NFS_EXPORT_0: '/export *(rw,insecure,no_subtree_check,sync)'
