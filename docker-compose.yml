@@ -215,18 +215,18 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: janeczku/nfs-ganesha
+        image: gists/nfs-server
         restart: ${RESTART_MODE}
         cap_add: 
             - SYS_ADMIN
-            - DAC_READ_SEARCH
+            - SETPCAP
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/data/nfs/downloads
-            - ./shared:/data/nfs/shared
-            - ${WD1To_PATH}:/data/nfs/media/WD1To
-            - ${WD2To_PATH}:/data/nfs/media/WD2To
+            - ./download/complete:/nfs-share/downloads
+            - ./shared:/nfs-share/shared
+            - ${WD1To_PATH}:/nfs-share/media/WD1To
+            - ${WD2To_PATH}:/nfs-share/media/WD2To
         hostname: nfs
         networks:
             - connected
