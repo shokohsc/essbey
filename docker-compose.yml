@@ -399,7 +399,7 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
             interval: 30s
             timeout: 30s
             start_period: 60s
@@ -415,7 +415,7 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
             interval: 30s
             timeout: 30s
             start_period: 60s
@@ -433,7 +433,7 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
             interval: 30s
             timeout: 30s
             start_period: 60s
@@ -457,7 +457,7 @@ services:
         labels:
             - "autoheal=true"
         healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://ifconfig.co"]
+            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
             interval: 30s
             timeout: 30s
             start_period: 60s
