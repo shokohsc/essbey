@@ -200,7 +200,7 @@ insecureSkipVerify = true
   [backends.kind]
     [backends.kind.servers]
       [backends.kind.servers.server0]
-      url = "http://172.1.0.64"
+      url = "http://172.19.0.64"
       weight = 1
 
 [frontends]
