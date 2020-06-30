@@ -27,14 +27,14 @@ volumes:
     openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
-    graphite_data: {}
+    # graphite_data: {}
     thelounge_data: {}
     commafeed_data: {}
     redis_data: {}
     zenbot_data: {}
     theia_data: {}
     jsbin_data: {}
-    jenkins_data: {}
+    # jenkins_data: {}
     see-eye_data: {}
     chronograf_data: {}
     # openvpn_data: {}
@@ -593,7 +593,7 @@ services:
         depends_on:
             - prometheus
             - influxdb
-            - graphite
+            # - graphite
             - elasticsearch
         labels:
             - "traefik.enable=true"
@@ -1032,25 +1032,25 @@ services:
             - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
         depends_on:
             - influxdb
-            - graphite
+            # - graphite
             - elasticsearch
             # - mosquitto
         labels:
             - "traefik.enable=false"
 
-    graphite: # Graphite database
-        container_name: graphite
-        image: graphiteapp/graphite-statsd
-        restart: ${RESTART_MODE}
-        hostname: graphite
-        networks:
-            - connected
-        volumes:
-            - graphite_data:/opt/graphite/storage
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
-            - "traefik.port=8080"
+    # graphite: # Graphite database
+    #     container_name: graphite
+    #     image: graphiteapp/graphite-statsd
+    #     restart: ${RESTART_MODE}
+    #     hostname: graphite
+    #     networks:
+    #         - connected
+    #     volumes:
+    #         - graphite_data:/opt/graphite/storage
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
+    #         - "traefik.port=8080"
 
     influxdb: # Influx database
         container_name: influxdb
@@ -1434,27 +1434,27 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=5001"
 
-    gekko:
-        image: shokohsc/gekko
-        container_name: gekko
-        restart: ${RESTART_MODE}
-        environment:
-          HOST: gekko.${DOMAIN}
-          PORT: 443
-          USE_SSL: 1
-        volumes:
-            - ./config/gekko/config.js:/app/config.js
-        hostname: gekko
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - redis
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:gekko.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=443"
+    # gekko:
+    #     image: shokohsc/gekko
+    #     container_name: gekko
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #       HOST: gekko.${DOMAIN}
+    #       PORT: 443
+    #       USE_SSL: 1
+    #     volumes:
+    #         - ./config/gekko/config.js:/app/config.js
+    #     hostname: gekko
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - redis
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:gekko.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=443"
 
     theia:
         image: theiaide/theia:1.0.0
@@ -1514,20 +1514,20 @@ services:
             - "traefik.frontend.rule=Host:filepizza.${DOMAIN}"
             - "traefik.port=80"
 
-    jenkins:
-        image: jenkins/jenkins:lts
-        container_name: jenkins
-        restart: ${RESTART_MODE}
-        volumes:
-            - jenkins_data:/var/jenkins_home
-            - /usr/bin/docker:/usr/bin/docker
-        hostname: jenkins
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
-            - "traefik.port=8080"
+    # jenkins:
+    #     image: jenkins/jenkins:lts
+    #     container_name: jenkins
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - jenkins_data:/var/jenkins_home
+    #         - /usr/bin/docker:/usr/bin/docker
+    #     hostname: jenkins
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
+    #         - "traefik.port=8080"
 
     elasticsearch-diskover: # Json database
         container_name: elasticsearch-diskover
