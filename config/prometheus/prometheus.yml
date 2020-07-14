@@ -33,11 +33,11 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: pushgateway
-    scrape_interval: 10s
-    honor_labels: true
-    static_configs:
-      - targets: ['pushgateway:9091']
+  # - job_name: pushgateway
+  #   scrape_interval: 10s
+  #   honor_labels: true
+  #   static_configs:
+  #     - targets: ['pushgateway:9091']
 
   - job_name: traefik
     scrape_interval: 10s
@@ -78,46 +78,46 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
 
-  - job_name: mysql
-    static_configs:
-      - targets: ['mysqld-exporter:9104']
-
-  - job_name: redis
-    static_configs:
-    - targets: ['redis-exporter:9121']
-
-  - job_name: elasticsearch
-    scrape_interval: 60s
-    scrape_timeout:  30s
-    metrics_path: "/metrics"
-    static_configs:
-    - targets:
-      - elasticsearch-exporter:9114
-      labels:
-        service: elasticsearch
-    relabel_configs:
-    - source_labels: [__address__]
-      regex: '(.*)\:9114'
-      target_label:  'environment'
-      replacement:   '$1'
-
-  - job_name: transmission
-    static_configs:
-    - targets: ['transmission-exporter:19091']
-
-  - job_name: deluge
-    static_configs:
-    - targets: ['deluge-exporter:9354']
-
-  - job_name: minecraft
-    static_configs:
-    - targets: ['minecraft:9225']
-      labels:
-        server_name: 'minecraft'
-
-  - job_name: rabbitmq
-    static_configs:
-    - targets: ['rabbitmq-exporter:9419']
+  # - job_name: mysql
+  #   static_configs:
+  #     - targets: ['mysqld-exporter:9104']
+  #
+  # - job_name: redis
+  #   static_configs:
+  #   - targets: ['redis-exporter:9121']
+  #
+  # - job_name: elasticsearch
+  #   scrape_interval: 60s
+  #   scrape_timeout:  30s
+  #   metrics_path: "/metrics"
+  #   static_configs:
+  #   - targets:
+  #     - elasticsearch-exporter:9114
+  #     labels:
+  #       service: elasticsearch
+  #   relabel_configs:
+  #   - source_labels: [__address__]
+  #     regex: '(.*)\:9114'
+  #     target_label:  'environment'
+  #     replacement:   '$1'
+  #
+  # - job_name: transmission
+  #   static_configs:
+  #   - targets: ['transmission-exporter:19091']
+  #
+  # - job_name: deluge
+  #   static_configs:
+  #   - targets: ['deluge-exporter:9354']
+  #
+  # - job_name: minecraft
+  #   static_configs:
+  #   - targets: ['minecraft:9225']
+  #     labels:
+  #       server_name: 'minecraft'
+  #
+  # - job_name: rabbitmq
+  #   static_configs:
+  #   - targets: ['rabbitmq-exporter:9419']
 
   # - job_name: openvpn
   #   static_configs:

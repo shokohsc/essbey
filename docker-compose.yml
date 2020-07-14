@@ -640,96 +640,96 @@ services:
             - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
             - "traefik.port=9115"
 
-    mysqld-exporter: # Prometheus requirement
-        image: prom/mysqld-exporter
-        container_name: mysqld-exporter
-        restart: ${RESTART_MODE}
-        environment:
-            DATA_SOURCE_NAME: "root:${MYSQL_ROOT_PASSWORD}@(mysql:3306)/"
-        hostname: mysqld-exporter
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - prometheus
-            - mysql
-        labels:
-            - "traefik.enable=false"
-
-    redis-exporter: # Prometheus requirement
-        image: oliver006/redis_exporter:alpine
-        container_name: redis-exporter
-        restart: ${RESTART_MODE}
-        command: --redis.addr=redis:6379 --include-system-metrics
-        hostname: redis-exporter
-        networks:
-            - hidden
-        depends_on:
-            - prometheus
-            - redis
-
-    elasticsearch-exporter: # Prometheus requirement
-        image: justwatch/elasticsearch_exporter:1.1.0
-        container_name: elasticsearch-exporter
-        restart: ${RESTART_MODE}
-        command: '--es.uri=http://elasticsearch:9200 --es.all --es.indices'
-        hostname: elasticsearch-exporter
-        networks:
-            - hidden
-        depends_on:
-            - prometheus
-            - elasticsearch
-
-    transmission-exporter: # Prometheus requirement
-        image: metalmatze/transmission-exporter
-        container_name: transmission-exporter
-        restart: ${RESTART_MODE}
-        environment:
-            TRANSMISSION_ADDR: http://vpn-client:9091
-        hostname: transmission-exporter
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - prometheus
-            - transmission
-        labels:
-            - "traefik.enable=false"
-
-    deluge-exporter: # Prometheus requirement
-        image: tobbez/deluge_exporter
-        container_name: deluge-exporter
-        restart: ${RESTART_MODE}
-        environment:
-            DELUGE_HOST: vpn-client
-        volumes:
-            - ./config/deluge:/root/.config/deluge/
-        hostname: deluge-exporter
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - prometheus
-            - deluge
-        labels:
-            - "traefik.enable=false"
-
-    rabbitmq-exporter: # Prometheus requirement
-        image: kbudde/rabbitmq-exporter
-        container_name: rabbitmq-exporter
-        restart: ${RESTART_MODE}
-        environment:
-            RABBIT_URL: http://rabbitmq:15672
-            LOG_LEVEL: error
-        hostname: rabbitmq-exporter
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - prometheus
-            - rabbitmq
-        labels:
-            - "traefik.enable=false"
+    # mysqld-exporter: # Prometheus requirement
+    #     image: prom/mysqld-exporter
+    #     container_name: mysqld-exporter
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         DATA_SOURCE_NAME: "root:${MYSQL_ROOT_PASSWORD}@(mysql:3306)/"
+    #     hostname: mysqld-exporter
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - mysql
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # redis-exporter: # Prometheus requirement
+    #     image: oliver006/redis_exporter:alpine
+    #     container_name: redis-exporter
+    #     restart: ${RESTART_MODE}
+    #     command: --redis.addr=redis:6379 --include-system-metrics
+    #     hostname: redis-exporter
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - redis
+    #
+    # elasticsearch-exporter: # Prometheus requirement
+    #     image: justwatch/elasticsearch_exporter:1.1.0
+    #     container_name: elasticsearch-exporter
+    #     restart: ${RESTART_MODE}
+    #     command: '--es.uri=http://elasticsearch:9200 --es.all --es.indices'
+    #     hostname: elasticsearch-exporter
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - elasticsearch
+    #
+    # transmission-exporter: # Prometheus requirement
+    #     image: metalmatze/transmission-exporter
+    #     container_name: transmission-exporter
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         TRANSMISSION_ADDR: http://vpn-client:9091
+    #     hostname: transmission-exporter
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - transmission
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # deluge-exporter: # Prometheus requirement
+    #     image: tobbez/deluge_exporter
+    #     container_name: deluge-exporter
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         DELUGE_HOST: vpn-client
+    #     volumes:
+    #         - ./config/deluge:/root/.config/deluge/
+    #     hostname: deluge-exporter
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - deluge
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # rabbitmq-exporter: # Prometheus requirement
+    #     image: kbudde/rabbitmq-exporter
+    #     container_name: rabbitmq-exporter
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         RABBIT_URL: http://rabbitmq:15672
+    #         LOG_LEVEL: error
+    #     hostname: rabbitmq-exporter
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - rabbitmq
+    #     labels:
+    #         - "traefik.enable=false"
 
     # openvpn-exporter: # Prometheus requirement
     #     image: kumina/openvpn-exporter
@@ -748,24 +748,24 @@ services:
     #     labels:
     #         - "traefik.enable=false"
 
-    alertmanager: # Grafana requirement
-        image: prom/alertmanager
-        container_name: alertmanager
-        volumes:
-            - ./config/alertmanager/:/etc/alertmanager/
-        command:
-            - '--config.file=/etc/alertmanager/config.yml'
-            - '--storage.path=/alertmanager'
-            - '--cluster.listen-address='
-        restart: ${RESTART_MODE}
-        hostname: alertmanager
-        networks:
-            - connected
-        depends_on:
-            - prometheus
-            - mattermost
-        labels:
-            - "traefik.enable=false"
+    # alertmanager: # Grafana requirement
+    #     image: prom/alertmanager
+    #     container_name: alertmanager
+    #     volumes:
+    #         - ./config/alertmanager/:/etc/alertmanager/
+    #     command:
+    #         - '--config.file=/etc/alertmanager/config.yml'
+    #         - '--storage.path=/alertmanager'
+    #         - '--cluster.listen-address='
+    #     restart: ${RESTART_MODE}
+    #     hostname: alertmanager
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - prometheus
+    #         - mattermost
+    #     labels:
+    #         - "traefik.enable=false"
 
     # nodeexporter: # Grafana requirement
     #     image: quay.io/prometheus/node-exporter
@@ -820,15 +820,15 @@ services:
             - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
             - "traefik.port=8080"
 
-    pushgateway: # Grafana requirement
-        image: prom/pushgateway
-        container_name: pushgateway
-        restart: ${RESTART_MODE}
-        hostname: pushgateway
-        networks:
-            - hidden
-        depends_on:
-            - prometheus
+    # pushgateway: # Grafana requirement
+    #     image: prom/pushgateway
+    #     container_name: pushgateway
+    #     restart: ${RESTART_MODE}
+    #     hostname: pushgateway
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
 
     heimdall: # Heimdall
         image: linuxserver/heimdall
