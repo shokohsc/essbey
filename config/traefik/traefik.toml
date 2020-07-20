@@ -218,4 +218,4 @@ insecureSkipVerify = true
   passHostHeader = true
   [frontends.kind.routes]
     [frontends.kind.routes.route0]
-      rule = "Host:kind.shokohsc.home"
+      rule = "HostRegexp:{subdomain:[a-z]+}.kind.shokohsc.home"
