@@ -216,10 +216,10 @@ insecureSkipVerify = true
     [frontends.routeur.routes.route0]
       rule = "Host:routeur.shokohsc.home"
 
-  [frontends.kind]
-  entryPoints = ["http", "https"]
-  backend = "kind"
-  passHostHeader = true
-  [frontends.kind.routes]
-    [frontends.kind.routes.route0]
-      rule = "HostRegexp:{subdomain:[a-z]+}.kind.shokohsc.home,kind.shokohsc.home"
+#  [frontends.kind]
+#  entryPoints = ["http", "https"]
+#  backend = "kind"
+#  passHostHeader = true
+#  [frontends.kind.routes]
+#    [frontends.kind.routes.route0]
+#      rule = "HostRegexp:{subdomain:[a-z]+}.kind.shokohsc.home,kind.shokohsc.home"

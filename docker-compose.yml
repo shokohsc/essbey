@@ -544,16 +544,16 @@ services:
         ports:
             - "32400:32400/tcp"
             - "32400:32400/udp"
-            - "32469:32469/tcp"
-            - "32469:32469/udp"
-            - "5353:5353/udp"
-            - "1900:1900/udp"
-            - "3005:3005/tcp"
-            - "8324:8324/tcp"
-            - "32410:32410/udp"
-            - "32412:32412/udp"
-            - "32413:32413/udp"
-            - "32414:32414/udp"
+            # - "32469:32469/tcp"
+            # - "32469:32469/udp"
+            # - "5353:5353/udp"
+            # - "1900:1900/udp"
+            # - "3005:3005/tcp"
+            # - "8324:8324/tcp"
+            # - "32410:32410/udp"
+            # - "32412:32412/udp"
+            # - "32413:32413/udp"
+            # - "32414:32414/udp"
         devices:
             - "/dev/dri:/dev/dri"
         volumes:
@@ -1617,3 +1617,21 @@ services:
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+
+    nginx-kind:
+        container_name: nginx-kind
+        image: shokohsc/alpine-nginx
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        hostname: nginx-kind
+        volumes:
+            - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:HostRegexp:{subdomain:[a-z]+}.kind.${DOMAIN},kind.${DOMAIN}"
+            - "traefik.port=80"
