@@ -1633,5 +1633,7 @@ services:
             - connected
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:HostRegexp:{subdomain:[a-z]+}.kind.${DOMAIN},kind.${DOMAIN}"
+            - "traefik.frontend.rule=HostRegexp:{subdomain:[a-z]+}.kind.${DOMAIN},kind.${DOMAIN}"
+            # - "traefik.frontend.rule=Host:kind.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=80"
