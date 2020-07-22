@@ -1628,7 +1628,7 @@ services:
             TZ: ${TIMEZONE}
         hostname: nginx-kind
         volumes:
-            - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./config/kind/default.conf:/etc/nginx/conf.d/default.conf
         networks:
             - connected
         labels:
