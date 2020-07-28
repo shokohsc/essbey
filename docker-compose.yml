@@ -220,6 +220,7 @@ services:
         privileged: true
         restart: ${RESTART_MODE}
         entrypoint: /bin/sh
+        tty: true
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
