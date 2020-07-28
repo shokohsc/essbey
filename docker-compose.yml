@@ -233,58 +233,80 @@ services:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
-    nfs: # NFS server
-        container_name: nfs
-        image: erichough/nfs-server
-        privileged: true
-        restart: ${RESTART_MODE}
-        # entrypoint: /bin/sh
-        # tty: true
-        environment:
-            NFS_LOG_LEVEL: DEBUG
-            NFS_DISABLE_VERSION_3: "1"
-            # NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
-            # NFS_EXPORT_0: '/nfs *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)'
-            NFS_EXPORT_0: '/mnt *(rw,nohide,insecure,no_subtree_check,sync,fsid=0)'
-        ports:
-            # - "111:111"
-            # - "111:111/udp"
-            - "2049:2049"
-            # - "2049:2049/udp"
-            # - "32765:32765"
-            # - "32765:32765/udp"
-            # - "32767:32767"
-            # - "32767:32767/udp"
-        volumes:
-            - /lib/modules:/lib/modules:ro
-            # - ./download/complete:/nfs/downloads
-            # - ./shared:/nfs/shared
-            # - ${WD1To_PATH}:/nfs/media/WD1To
-            # - ${WD2To_PATH}:/nfs/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
-    #     image: itsthenetwork/nfs-server-alpine
+    #     image: gists/nfs-server
     #     privileged: true
     #     restart: ${RESTART_MODE}
     #     environment:
-    #         SHARED_DIRECTORY: /exports
+    #         NFS_DIR: /nfs
+    #         NFS_OPTION: "fsid=0,ro,sync,insecure,all_squash,anonuid=65534,anongid=65534,no_subtree_check,nohide"
     #     ports:
     #         - "2049:2049"
     #     volumes:
-    #         # - ./download/complete:/exports/downloads
-    #         - ./shared:/exports/shared
-    #         # - ${WD1To_PATH}:/exports/media/WD1To
-    #         # - ${WD2To_PATH}:/exports/media/WD2To
+    #         - /lib/modules:/lib/modules:ro
+    #         # - ./download/complete:/nfs/downloads
+    #         # - ./shared:/nfs/shared
+    #         # - ${WD1To_PATH}:/nfs/media/WD1To
+    #         # - ${WD2To_PATH}:/nfs/media/WD2To
     #     hostname: nfs
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
+    # nfs: # NFS server
+    #     container_name: nfs
+    #     image: erichough/nfs-server
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     # entrypoint: /bin/sh
+    #     # tty: true
+    #     environment:
+    #         NFS_LOG_LEVEL: DEBUG
+    #         NFS_DISABLE_VERSION_3: "1"
+    #         # NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
+    #         # NFS_EXPORT_0: '/nfs *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)'
+    #         NFS_EXPORT_0: '/mnt *(rw,nohide,insecure,no_subtree_check,sync,fsid=0)'
+    #     ports:
+    #         # - "111:111"
+    #         # - "111:111/udp"
+    #         - "2049:2049"
+    #         # - "2049:2049/udp"
+    #         # - "32765:32765"
+    #         # - "32765:32765/udp"
+    #         # - "32767:32767"
+    #         # - "32767:32767/udp"
+    #     volumes:
+    #         - /lib/modules:/lib/modules:ro
+    #         # - ./download/complete:/nfs/downloads
+    #         # - ./shared:/nfs/shared
+    #         # - ${WD1To_PATH}:/nfs/media/WD1To
+    #         # - ${WD2To_PATH}:/nfs/media/WD2To
+    #     hostname: nfs
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
+    nfs: # NFS server
+        container_name: nfs
+        image: itsthenetwork/nfs-server-alpine
+        privileged: true
+        restart: ${RESTART_MODE}
+        environment:
+            SHARED_DIRECTORY: /exports
+        ports:
+            - "2049:2049"
+        volumes:
+            - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
+            # - ./download/complete:/exports/downloads
+            - ./shared:/exports/shared
+            # - ${WD1To_PATH}:/exports/media/WD1To
+            # - ${WD2To_PATH}:/exports/media/WD2To
+        hostname: nfs
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
     #     image: k8s.gcr.io/volume-nfs:0.8
