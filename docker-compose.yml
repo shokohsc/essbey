@@ -222,7 +222,7 @@ services:
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
-            NFS_EXPORT_0: '/mnt/exports *(rw,crossmnt,no_root_squash,no_subtree_check,insecure_locks,async,insecure)'
+            NFS_EXPORT_0: '/mnt/exports *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
         ports:
             # - "111:111"
             # - "111:111/udp"
