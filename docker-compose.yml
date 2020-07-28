@@ -223,7 +223,7 @@ services:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
             # NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
-            NFS_EXPORT_0: '/nfs *(rw,nohide,insecure,no_subtree_check,sync)'
+            NFS_EXPORT_0: '/nfs *(rw,nohide,insecure,no_subtree_check,sync,fsid=0)'
         ports:
             # - "111:111"
             # - "111:111/udp"
