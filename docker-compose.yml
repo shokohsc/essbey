@@ -214,24 +214,24 @@ services:
     #         - kibana
 
 
-    nfs: # NFS server
-        container_name: nfs
-        image: centos:8
-        tty: true
-        privileged: true
-        restart: ${RESTART_MODE}
-        ports:
-            - "2049:2049"
-        volumes:
-            - ./download/complete:/nfs/downloads
-            - ./shared:/nfs/shared
-            - ${WD1To_PATH}:/nfs/media/WD1To
-            - ${WD2To_PATH}:/nfs/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+    # nfs: # NFS server
+    #     container_name: nfs
+    #     image: centos:8
+    #     tty: true
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     ports:
+    #         - "2049:2049"
+    #     volumes:
+    #         - ./download/complete:/nfs/downloads
+    #         - ./shared:/nfs/shared
+    #         - ${WD1To_PATH}:/nfs/media/WD1To
+    #         - ${WD2To_PATH}:/nfs/media/WD2To
+    #     hostname: nfs
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
     #     image: cpuguy83/nfs-server
