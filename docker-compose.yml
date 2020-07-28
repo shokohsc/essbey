@@ -214,6 +214,24 @@ services:
     #         - kibana
 
 
+    nfs: # NFS server
+        container_name: nfs
+        image: alpine
+        tty: true
+        privileged: true
+        restart: ${RESTART_MODE}
+        ports:
+            - "2049:2049"
+        volumes:
+            - ./download/complete:/nfs/downloads
+            - ./shared:/nfs/shared
+            - ${WD1To_PATH}:/nfs/media/WD1To
+            - ${WD2To_PATH}:/nfs/media/WD2To
+        hostname: nfs
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
     #     image: cpuguy83/nfs-server
@@ -287,26 +305,26 @@ services:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
-    nfs: # NFS server
-        container_name: nfs
-        image: itsthenetwork/nfs-server-alpine
-        privileged: true
-        restart: ${RESTART_MODE}
-        environment:
-            SHARED_DIRECTORY: /exports
-        ports:
-            - "2049:2049"
-        volumes:
-            - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
-            - ./download/complete:/exports/downloads
-            - ./shared:/exports/shared
-            - ${WD1To_PATH}:/exports/media/WD1To
-            - ${WD2To_PATH}:/exports/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+    # nfs: # NFS server
+    #     container_name: nfs
+    #     image: itsthenetwork/nfs-server-alpine
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         SHARED_DIRECTORY: /exports
+    #     ports:
+    #         - "2049:2049"
+    #     volumes:
+    #         - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
+    #         - ./download/complete:/exports/downloads
+    #         - ./shared:/exports/shared
+    #         - ${WD1To_PATH}:/exports/media/WD1To
+    #         - ${WD2To_PATH}:/exports/media/WD2To
+    #     hostname: nfs
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
     #     image: k8s.gcr.io/volume-nfs:0.8
