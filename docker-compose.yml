@@ -246,34 +246,15 @@ services:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
-    # nfs: # NFS server
-    #     container_name: nfs
-    #     image: itsthenetwork/nfs-server-alpine
-    #     privileged: true
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         SHARED_DIRECTORY: /exports
-    #     ports:
-    #         - "2049:2049"
-    #     volumes:
-    #         - ./download/complete:/exports/downloads
-    #         - ./shared:/exports/shared
-    #         - ${WD1To_PATH}:/exports/media/WD1To
-    #         - ${WD2To_PATH}:/exports/media/WD2To
-    #     hostname: nfs
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=false"
     nfs: # NFS server
         container_name: nfs
-        image: k8s.gcr.io/volume-nfs:0.8
+        image: itsthenetwork/nfs-server-alpine
         privileged: true
         restart: ${RESTART_MODE}
+        environment:
+            SHARED_DIRECTORY: /exports
         ports:
-            # - "111:111"
             - "2049:2049"
-            # - "20048:20048"
         volumes:
             # - ./download/complete:/exports/downloads
             - ./shared:/exports/shared
@@ -284,6 +265,25 @@ services:
             - connected
         labels:
             - "traefik.enable=false"
+    # nfs: # NFS server
+    #     container_name: nfs
+    #     image: k8s.gcr.io/volume-nfs:0.8
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     ports:
+    #         # - "111:111"
+    #         - "2049:2049"
+    #         # - "20048:20048"
+    #     volumes:
+    #         # - ./download/complete:/exports/downloads
+    #         - ./shared:/exports/shared
+    #         # - ${WD1To_PATH}:/exports/media/WD1To
+    #         # - ${WD2To_PATH}:/exports/media/WD2To
+    #     hostname: nfs
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
 
     samba: # SMB server
         container_name: samba
