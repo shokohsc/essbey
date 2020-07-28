@@ -214,49 +214,16 @@ services:
     #         - kibana
 
 
-    nfs: # NFS server
-        container_name: nfs
-        image: cpuguy83/nfs-server
-        command: /nfs
-        privileged: true
-        restart: ${RESTART_MODE}
-        ports:
-            # - "111:111/udp"
-            - "2049:2049"
-        volumes:
-            # - ./download/complete:/nfs/downloads
-            - ./shared:/nfs/shared
-            # - ${WD1To_PATH}:/nfs/media/WD1To
-            # - ${WD2To_PATH}:/nfs/media/WD2To
-        hostname: nfs
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
-    #     image: erichough/nfs-server
+    #     image: cpuguy83/nfs-server
+    #     command: "/nfs"
     #     privileged: true
     #     restart: ${RESTART_MODE}
-    #     entrypoint: /bin/sh
-    #     tty: true
-    #     environment:
-    #         NFS_LOG_LEVEL: DEBUG
-    #         NFS_DISABLE_VERSION_3: "1"
-    #         # NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
-    #         # NFS_EXPORT_0: '/nfs *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)'
-    #         NFS_EXPORT_0: '/nfs *(rw,nohide,insecure,no_subtree_check,sync,fsid=0)'
     #     ports:
-    #         # - "111:111"
     #         # - "111:111/udp"
     #         - "2049:2049"
-    #         # - "2049:2049/udp"
-    #         # - "32765:32765"
-    #         # - "32765:32765/udp"
-    #         # - "32767:32767"
-    #         # - "32767:32767/udp"
     #     volumes:
-    #         - /lib/modules:/lib/modules:ro
     #         # - ./download/complete:/nfs/downloads
     #         - ./shared:/nfs/shared
     #         # - ${WD1To_PATH}:/nfs/media/WD1To
@@ -266,6 +233,39 @@ services:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
+    nfs: # NFS server
+        container_name: nfs
+        image: erichough/nfs-server
+        privileged: true
+        restart: ${RESTART_MODE}
+        entrypoint: /bin/sh
+        tty: true
+        environment:
+            NFS_LOG_LEVEL: DEBUG
+            NFS_DISABLE_VERSION_3: "1"
+            # NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,fsid=0,no_subtree_check,insecure_locks,async,insecure)'
+            # NFS_EXPORT_0: '/nfs *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)'
+            NFS_EXPORT_0: '/mnt *(rw,nohide,insecure,no_subtree_check,sync,fsid=0)'
+        ports:
+            # - "111:111"
+            # - "111:111/udp"
+            - "2049:2049"
+            # - "2049:2049/udp"
+            # - "32765:32765"
+            # - "32765:32765/udp"
+            # - "32767:32767"
+            # - "32767:32767/udp"
+        volumes:
+            - /lib/modules:/lib/modules:ro
+            # - ./download/complete:/nfs/downloads
+            # - ./shared:/nfs/shared
+            # - ${WD1To_PATH}:/nfs/media/WD1To
+            # - ${WD2To_PATH}:/nfs/media/WD2To
+        hostname: nfs
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
     # nfs: # NFS server
     #     container_name: nfs
     #     image: itsthenetwork/nfs-server-alpine
