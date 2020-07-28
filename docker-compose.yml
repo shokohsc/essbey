@@ -298,10 +298,10 @@ services:
             - "2049:2049"
         volumes:
             - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
-            # - ./download/complete:/exports/downloads
+            - ./download/complete:/exports/downloads
             - ./shared:/exports/shared
-            # - ${WD1To_PATH}:/exports/media/WD1To
-            # - ${WD2To_PATH}:/exports/media/WD2To
+            - ${WD1To_PATH}:/exports/media/WD1To
+            - ${WD2To_PATH}:/exports/media/WD2To
         hostname: nfs
         networks:
             - connected
