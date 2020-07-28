@@ -220,7 +220,7 @@ services:
         privileged: true
         restart: ${RESTART_MODE}
         environment:
-            NFS_EXPORT_0: '/exports *(rw,crossmnt,no_root_squash,no_subtree_check,insecure_locks,async,insecure)'
+            NFS_EXPORT_0: '/nfs *(rw,crossmnt,no_root_squash,no_subtree_check,insecure_locks,async,insecure)'
         ports:
             # - "111:111"
             # - "111:111/udp"
@@ -231,10 +231,10 @@ services:
             # - "32767:32767"
             # - "32767:32767/udp"
         volumes:
-            - ./download/complete:/exports/downloads
-            - ./shared:/exports/shared
-            - ${WD1To_PATH}:/exports/media/WD1To
-            - ${WD2To_PATH}:/exports/media/WD2To
+            - ./download/complete:/nfs/downloads
+            - ./shared:/nfs/shared
+            - ${WD1To_PATH}:/nfs/media/WD1To
+            - ${WD2To_PATH}:/nfs/media/WD2To
         hostname: nfs
         networks:
             - connected
