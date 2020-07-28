@@ -219,6 +219,7 @@ services:
         image: erichough/nfs-server
         privileged: true
         restart: ${RESTART_MODE}
+        entrypoint: /bin/sh
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
