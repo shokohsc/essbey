@@ -233,8 +233,8 @@ services:
         volumes:
             - ./download/complete:/nfs/downloads
             - ./shared:/nfs/shared
-            - ${WD1To_PATH}:/nfs/media/WD1To
-            - ${WD2To_PATH}:/nfs/media/WD2To
+            # - ${WD1To_PATH}:/nfs/media/WD1To
+            # - ${WD2To_PATH}:/nfs/media/WD2To
         hostname: nfs
         networks:
             - connected
