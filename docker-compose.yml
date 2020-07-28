@@ -216,7 +216,7 @@ services:
 
     nfs: # NFS server
         container_name: nfs
-        image: alpine
+        image: centos:8
         tty: true
         privileged: true
         restart: ${RESTART_MODE}
