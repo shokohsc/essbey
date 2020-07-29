@@ -221,10 +221,10 @@ services:
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
-            NFS_EXPORT_0: /downloads *(rw,fsid=0)
-            NFS_EXPORT_1: /shared    *(rw,fsid=0)
-            NFS_EXPORT_2: /WD1To     *(rw,fsid=0,crossmnt)
-            NFS_EXPORT_3: /WD2To     *(rw,fsid=0,crossmnt)
+            NFS_EXPORT_0: /downloads *(rw,fsid=0,nohide,subtree_check)
+            NFS_EXPORT_1: /shared    *(rw,fsid=0,nohide,subtree_check)
+            NFS_EXPORT_2: /WD1To     *(rw,fsid=0,nohide,subtree_check,crossmnt)
+            NFS_EXPORT_3: /WD2To     *(rw,fsid=0,nohide,subtree_check)
         ports:
             - "2049:2049"
         volumes:
