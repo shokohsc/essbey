@@ -213,7 +213,7 @@ services:
     #         - logstash
     #         - kibana
 
-    # nfs: # NFS server, ugh, have to double it
+    # nfs: # NFS server, ugh, works only v3
     #     container_name: nfs
     #     image: erichough/nfs-server
     #     privileged: true
@@ -237,7 +237,6 @@ services:
     #         - "32767:32767"
     #         - "32767:32767/udp"
     #     volumes:
-    #         # - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
     #         # - ${WD1To_PATH}:/srv
     #         - ./download/complete:/srv/downloads
     #         - ./shared:/srv/shared
