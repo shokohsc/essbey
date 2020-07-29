@@ -222,15 +222,16 @@ services:
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
-            NFS_EXPORT_0: '/srv/nfs *(crossmnt,fsid=0,insecure,insecure_locks,no_subtree_check,nohide,no_root_squash,rw,sync)'
+            # NFS_EXPORT_0: '/nfs/data *(crossmnt,fsid=0,insecure,insecure_locks,no_subtree_check,nohide,no_root_squash,rw,sync)'
+            NFS_EXPORT_0: '/nfs/data *(ro,no_subtree_check,crossmnt,fsid=0)'
         ports:
             - "2049:2049"
         volumes:
             - /lib/modules:/lib/modules:ro
-            - ./download/complete:/srv/nfs/downloads
-            - ./shared:/srv/nfs/shared
-            - ${WD1To_PATH}:/srv/nfs/media/WD1To
-            - ${WD2To_PATH}:/srv/nfs/media/WD2To
+            - ./download/complete:/nfs/data/downloads
+            - ./shared:/nfs/data/shared
+            - ${WD1To_PATH}:/nfs/data/media/WD1To
+            - ${WD2To_PATH}:/nfs/data/media/WD2To
         hostname: nfs
         networks:
             - connected
