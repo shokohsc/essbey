@@ -221,8 +221,9 @@ services:
         restart: ${RESTART_MODE}
         environment:
             NFS_LOG_LEVEL: DEBUG
-            NFS_DISABLE_VERSION_3: "1"
-            NFS_EXPORT_0: /srv           *(rw,insecure,no_auth_nlm,hide,no_subtree_check,root_squash,fsid=0)
+            NFS_VERSION: '3'
+            # NFS_DISABLE_VERSION_3: "1"
+            # NFS_EXPORT_0: /srv           *(rw,insecure,no_auth_nlm,hide,no_subtree_check,root_squash,fsid=0)
             NFS_EXPORT_1: /srv/downloads *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
             NFS_EXPORT_2: /srv/shared    *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
             NFS_EXPORT_3: /srv/WD1To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash,crossmnt)
