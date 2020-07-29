@@ -126,7 +126,7 @@ while true; do
       /usr/sbin/exportfs
     else
       echo "Export validation failed, exiting..."
-      exit 1
+    #   exit 1
     fi
     echo "Starting Mountd in the background..."
     /usr/sbin/rpc.mountd --debug all --no-udp --no-nfs-version 2 --no-nfs-version 3
