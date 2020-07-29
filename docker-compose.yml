@@ -226,17 +226,19 @@ services:
             # NFS_EXPORT_1: /shared    *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
             # NFS_EXPORT_2: /WD1To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash,crossmnt)
             # NFS_EXPORT_3: /WD2To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
-            SHARED_DIRECTORY: /shared
-            SHARED_DIRECTORY_2: /downloads
+            SHARED_DIRECTORY: /nfs
+            SHARED_DIRECTORY_1: /downloads
+            SHARED_DIRECTORY_2: /shared
             SHARED_DIRECTORY_3: /WD1To
             SHARED_DIRECTORY_4: /WD2To
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/downloads
-            - ./shared:/shared
-            - ${WD1To_PATH}:/WD1To
-            - ${WD2To_PATH}:/WD2To
+            - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
+            - ./download/complete:/nfs/downloads
+            - ./shared:/nfs/shared
+            - ${WD1To_PATH}:/nfs/WD1To
+            - ${WD2To_PATH}:/nfs/WD2To
         hostname: nfs
         networks:
             - connected
