@@ -221,19 +221,23 @@ services:
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
-            NFS_EXPORT_0: '/export              *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
+            NFS_EXPORT_0: '/export            *(rw,fsid=0,insecure,no_root_squash,no_subtree_check,crossmnt)'
+            NFS_EXPORT_1: '/export/data       *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
             # NFS_EXPORT_0: '/export/downloads    *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
-            NFS_EXPORT_1: '/export/shared       *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
             # NFS_EXPORT_1: '/export/shared       *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
             # NFS_EXPORT_2: '/export/media/WD1To  *(rw,fsid=0,insecure,no_root_squash,no_subtree_check,crossmnt)'
             # NFS_EXPORT_3: '/export/media/WD2To  *(rw,fsid=0,insecure,no_root_squash,no_subtree_check,crossmnt)'
         ports:
             - "2049:2049"
         volumes:
-            - ./download/complete:/export/downloads
-            - ./shared:/export/shared
-            - ${WD1To_PATH}:/export/media/WD1To
-            - ${WD2To_PATH}:/export/media/WD2To
+            - ./download/complete:/export/data/downloads
+            - ./shared:/export/data/shared
+            - ${WD1To_PATH}:/export/data/WD1To
+            - ${WD2To_PATH}:/export/data/WD2To
+            # - ./download/complete:/export/downloads
+            # - ./shared:/export/shared
+            # - ${WD1To_PATH}:/export/media/WD1To
+            # - ${WD2To_PATH}:/export/media/WD2To
         hostname: nfs
         networks:
             - connected
