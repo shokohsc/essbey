@@ -34,7 +34,7 @@ fi
 # Any additional shares MUST be subdirectories of the root directory specified
 # by SHARED_DIRECTORY.
 
-# Check if the SHARED_DIRECTORY_2 variable is empty
+# Check if the SHARED_DIRECTORY_1 variable is empty
 if [ ! -z "${SHARED_DIRECTORY_1}" ]; then
   echo "Writing SHARED_DIRECTORY_1 to /etc/exports file"
   echo "{{SHARED_DIRECTORY_1}} {{PERMITTED}}({{READ_ONLY}},{{SYNC}},no_subtree_check,no_auth_nlm,insecure,no_root_squash)" >> /etc/exports
@@ -126,7 +126,7 @@ while true; do
       /usr/sbin/exportfs
     else
       echo "Export validation failed, exiting..."
-      exit 1
+    #   exit 1
     fi
     echo "Starting Mountd in the background..."These
     /usr/sbin/rpc.mountd --debug all --no-udp --no-nfs-version 2 --no-nfs-version 3
