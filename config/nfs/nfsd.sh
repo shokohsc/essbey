@@ -47,12 +47,12 @@ if [ ! -z "${SHARED_DIRECTORY_2}" ]; then
 fi
 if [ ! -z "${SHARED_DIRECTORY_3}" ]; then
   echo "Writing SHARED_DIRECTORY_3 to /etc/exports file"
-  echo "{{SHARED_DIRECTORY_3}} {{PERMITTED}}({{READ_ONLY}},{{SYNC}},no_subtree_check,no_auth_nlm,insecure,no_root_squash)" >> /etc/exports
+  echo "{{SHARED_DIRECTORY_3}} {{PERMITTED}}({{READ_ONLY}},{{SYNC}},no_subtree_check,no_auth_nlm,insecure,no_root_squash,crossmnt)" >> /etc/exports
   /bin/sed -i "s@{{SHARED_DIRECTORY_3}}@${SHARED_DIRECTORY_3}@g" /etc/exports
 fi
 if [ ! -z "${SHARED_DIRECTORY_4}" ]; then
   echo "Writing SHARED_DIRECTORY_4 to /etc/exports file"
-  echo "{{SHARED_DIRECTORY_4}} {{PERMITTED}}({{READ_ONLY}},{{SYNC}},no_subtree_check,no_auth_nlm,insecure,no_root_squash)" >> /etc/exports
+  echo "{{SHARED_DIRECTORY_4}} {{PERMITTED}}({{READ_ONLY}},{{SYNC}},no_subtree_check,no_auth_nlm,insecure,no_root_squash,crossmnt)" >> /etc/exports
   /bin/sed -i "s@{{SHARED_DIRECTORY_4}}@${SHARED_DIRECTORY_4}@g" /etc/exports
 fi
 
