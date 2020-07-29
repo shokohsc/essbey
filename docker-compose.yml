@@ -213,7 +213,6 @@ services:
     #         - logstash
     #         - kibana
 
-
     nfs: # NFS server
         container_name: nfs
         image: erichough/nfs-server
@@ -222,16 +221,17 @@ services:
         environment:
             NFS_LOG_LEVEL: DEBUG
             NFS_DISABLE_VERSION_3: "1"
-            # NFS_EXPORT_0: '/nfs/data *(crossmnt,fsid=0,insecure,insecure_locks,no_subtree_check,nohide,no_root_squash,rw,sync)'
-            NFS_EXPORT_0: '/exports *(rw,fsid=0,insecure,no_root_squash)'
+            NFS_EXPORT_0: '/export/downloads    *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
+            NFS_EXPORT_1: '/export/shared       *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'
+            NFS_EXPORT_2: '/export/media/WD1To  *(rw,fsid=0,insecure,no_root_squash,no_subtree_check,crossmnt)'
+            NFS_EXPORT_3: '/export/media/WD2To  *(rw,fsid=0,insecure,no_root_squash,no_subtree_check,crossmnt)'
         ports:
             - "2049:2049"
         volumes:
-            - /lib/modules:/lib/modules:ro
-            - ./download/complete:/exports/seedbox/downloads
-            - ./shared:/exports/seedbox/shared
-            - ${WD1To_PATH}:/exports/wd/media/WD1To
-            - ${WD2To_PATH}:/exports/wd/media/WD2To
+            - ./download/complete:/export/downloads
+            - ./shared:/export/shared
+            - ${WD1To_PATH}:/export/media/WD1To
+            - ${WD2To_PATH}:/export/media/WD2To
         hostname: nfs
         networks:
             - connected
