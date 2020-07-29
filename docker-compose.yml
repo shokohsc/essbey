@@ -215,18 +215,19 @@ services:
 
     nfs: # NFS server, ugh, have to double it
         container_name: nfs
-        # image: erichough/nfs-server
-        image: itsthenetwork/nfs-server-alpine
+        image: erichough/nfs-server
+        # image: itsthenetwork/nfs-server-alpine
         privileged: true
         restart: ${RESTART_MODE}
         environment:
-            # NFS_LOG_LEVEL: DEBUG
-            # NFS_DISABLE_VERSION_3: "1"
-            # NFS_EXPORT_0: /downloads *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
-            # NFS_EXPORT_1: /shared    *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
-            # NFS_EXPORT_2: /WD1To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash,crossmnt)
-            # NFS_EXPORT_3: /WD2To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
-            SHARED_DIRECTORY: /srv
+            NFS_LOG_LEVEL: DEBUG
+            NFS_DISABLE_VERSION_3: "1"
+            NFS_EXPORT_0: /srv           *(rw,insecure,no_auth_nlm,hide,no_subtree_check,root_squash,fsid=0)
+            NFS_EXPORT_1: /srv/downloads *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
+            NFS_EXPORT_2: /srv/shared    *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash)
+            NFS_EXPORT_3: /srv/WD1To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash,crossmnt)
+            NFS_EXPORT_4: /srv/WD2To     *(rw,insecure,no_auth_nlm,nohide,no_subtree_check,no_root_squash,crossmnt)
+            # SHARED_DIRECTORY: /srv
             # SHARED_DIRECTORY_1: /srv/downloads
             # SHARED_DIRECTORY_2: /srv/shared
             # SHARED_DIRECTORY_3: /srv/WD1To
@@ -234,12 +235,12 @@ services:
         ports:
             - "2049:2049"
         volumes:
-            - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
-            - ${WD1To_PATH}:/srv
-            # - ./download/complete:/srv/downloads
-            # - ./shared:/srv/shared
-            # - ${WD1To_PATH}:/srv/WD1To
-            # - ${WD2To_PATH}:/srv/WD2To
+            # - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
+            # - ${WD1To_PATH}:/srv
+            - ./download/complete:/srv/downloads
+            - ./shared:/srv/shared
+            - ${WD1To_PATH}:/srv/WD1To
+            - ${WD2To_PATH}:/srv/WD2To
         hostname: nfs
         networks:
             - connected
