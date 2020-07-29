@@ -235,6 +235,13 @@ services:
             # SHARED_DIRECTORY_4: /srv/WD2To
         ports:
             - "2049:2049"
+            - "2049:2049/udp"
+            - "111:111"
+            - "111:111/udp"
+            - "32765:32765"
+            - "32765:32765/udp"
+            - "32767:32767"
+            - "32767:32767/udp"
         volumes:
             # - ./config/nfs/nfsd.sh:/usr/bin/nfsd.sh
             # - ${WD1To_PATH}:/srv
