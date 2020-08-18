@@ -16,6 +16,10 @@ networks:
         name: seedbox_hidden
         internal: true
 
+    pihole:
+        external:
+            name: pihole
+
 volumes:
     elasticsearch_data: {}
     elasticsearch-diskover_data: {}
@@ -493,6 +497,7 @@ services:
         hostname: traefik
         networks:
             - connected
+            - pihole
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
