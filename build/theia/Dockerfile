@@ -15,7 +15,7 @@ USER theia
 RUN \
 bash -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
 sed -i 's/robbyrussell/xiong-chiamiov-plus/g' /home/theia/.zshrc && \
-echo 'alias ll="ls -lah"' >> /home/theia/.zshrc && \
+echo "alias ll='ls -lah'" >> /home/theia/.zshrc && \
 git config --global user.email "shokohsc@gmail.com" && \
 git config --global user.name "shokohsc"
 
