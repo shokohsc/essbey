@@ -1179,6 +1179,24 @@ services:
             - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
             - "traefik.port=8123"
 
+    minecraft-backup:
+        image: itzg/mc-backup
+        environment:
+            BACKUP_INTERVAL: "24h"
+            PRUNE_BACKUPS_DAYS: 2
+            RCON_HOST: minecraft
+            RCON_PORT: ${RCON_PORT}
+            RCON_PASSWORD: ${RCON_PASSWORD}
+            EXCLUDES: "*.jar,cache,logs"
+        volumes:
+            - ./config/minecraft:/data:ro
+            - ${WD1To_PATH}/backup/minecraft:/backups
+        hostname: minecraft-backup
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=false"
+
     mongo: # Wekan requirement
         image: mongo
         container_name: mongo
@@ -1188,6 +1206,21 @@ services:
         hostname: mongo
         networks:
             - hidden
+
+    mongo-backup: # Backup mongo
+        image: "istepanov/mongodump"
+        container_name: mongo-backup
+        restart: ${RESTART_MODE}
+        environment:
+            MONGO_URI: "mongodb://mongo:27017"
+            CRON_SCHEDULE: "0 1 * * *"
+        volumes:
+            - ${WD1To_PATH}/backup/mongo:/backup
+        hostname: mongo-backup
+        networks:
+            - hidden
+        depends_on:
+            - mongo
 
     wekan: # Wekan
         image: wekanteam/wekan:v3.50
