@@ -1181,6 +1181,7 @@ services:
 
     minecraft-backup:
         image: itzg/mc-backup
+        container_name: minecraft-backup
         environment:
             BACKUP_INTERVAL: "24h"
             PRUNE_BACKUPS_DAYS: 2
