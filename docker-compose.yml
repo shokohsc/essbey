@@ -1194,6 +1194,8 @@ services:
         hostname: minecraft-backup
         networks:
             - connected
+        depends_on:
+            - minecraft
         labels:
             - "traefik.enable=false"
 
