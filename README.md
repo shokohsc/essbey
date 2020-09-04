@@ -11,6 +11,7 @@
         -e 'push "redirect-gateway def1 bypass-dhcp"' \
         -e 'management 0.0.0.0 5555' \
         -e 'push "comp-lzo no"' \
+        -e 'route $LAN_SUBNET' \
         -e 'push "route $LAN_SUBNET"'
     $> docker-compose run --rm openvpn ovpn_initpki
     $> sudo chown -R $(whoami): ./config/openvpn
