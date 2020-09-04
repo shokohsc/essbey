@@ -281,12 +281,9 @@ services:
             - "32767:1194/udp"
         volumes:
             - ./config/openvpn:/etc/openvpn
-            # - openvpn_data:/tmp
         hostname: openvpn
         networks:
             - connected
-        logging:
-            driver: none
         labels:
             - "traefik.enable=false"
 
@@ -301,12 +298,9 @@ services:
             - "32767:1194/tcp"
         volumes:
             - ./config/openvpn:/etc/openvpn
-            # - openvpn-tcp_data:/tmp
         hostname: openvpn-tcp
         networks:
             - connected
-        logging:
-            driver: none
         labels:
             - "traefik.enable=false"
 
@@ -1440,7 +1434,7 @@ services:
             - "traefik.frontend.rule=Host:rss.${DOMAIN}"
             - "traefik.port=8082"
 
-    backup-commafeed: 
+    backup-commafeed:
         container_name: backup-commafeed
         image: futurice/docker-volume-backup
         volumes:
