@@ -16,6 +16,12 @@ networks:
         name: seedbox_hidden
         internal: true
 
+    nfs:
+        name: seedbox_nfs
+        driver: bridge
+        ipam:
+            driver: default
+
     pihole:
         external:
             name: pihole
@@ -256,19 +262,23 @@ services:
 
     nfs-proxy: # NFS proxy server for media disks
         container_name: nfs-proxy
-        image: nginx
+        image: traefik:chevrotin
         restart: ${RESTART_MODE}
+        command: --providers.docker=true --accessLog --api --insecure
         ports:
             - "2049:2049"
         volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/traefik/certs:/etc/ssl/certs:ro
-            - ./config/nfs/nginx.conf:/etc/nginx/nginx.conf:ro
-            # - ./config/nfs/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
         hostname: nfs-proxy
         networks:
-            - connected
+            - seedbox_connected
+            - nfs
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
         depends_on:
             - nfs-wd1to
             - nfs-wd2to
@@ -283,9 +293,7 @@ services:
             - ${WD1To_PATH}:/mnt/wd1to
         hostname: nfs-wd1to
         networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+            - nfs
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
@@ -297,9 +305,7 @@ services:
             - ${WD2To_PATH}:/mnt/wd2to
         hostname: nfs-wd2to
         networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+            - nfs
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
