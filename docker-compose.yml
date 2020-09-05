@@ -294,6 +294,10 @@ services:
         hostname: nfs-wd1to
         networks:
             - nfs
+        labels:
+            - "traefik.tcp.routers.nfs.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
+            - "traefik.tcp.routers.nfs.tls=true"
+            - "traefik.tcp.services.wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
