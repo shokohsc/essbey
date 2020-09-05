@@ -310,6 +310,8 @@ services:
         hostname: nfs-wd2to
         networks:
             - nfs
+        labels:
+            - "traefik.enable=true"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
