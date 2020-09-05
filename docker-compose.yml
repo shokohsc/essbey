@@ -299,15 +299,17 @@ services:
         volumes:
             - ${WD1To_PATH}:/mnt
         hostname: nfs-wd1to
+        expose:
+            - 2049
         networks:
             - nfs
         labels:
             - "traefik.enable=true"
-            - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
-            - "traefik.tcp.routers.nfs-wd1to.tls=true"
-            - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
-            - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
+            # - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
+            # - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
+            # - "traefik.tcp.routers.nfs-wd1to.tls=true"
+            # - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
+            # - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
