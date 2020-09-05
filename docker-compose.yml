@@ -260,37 +260,37 @@ services:
         labels:
             - "traefik.enable=false"
 
-    # nfs-proxy: # NFS proxy server for media disks
-    #     container_name: nfs-proxy
-    #     image: traefik:chevrotin
-    #     restart: ${RESTART_MODE}
-    #     command:
-    #         - --api
-    #         - --api.insecure=true
-    #         - --accessLog
-    #         - --providers.docker=true
-    #         - --providers.docker.exposedByDefault=false
-    #         - --providers.docker.network=seedbox_nfs
-    #         - --entrypoints.nfs-wd1to.address=:32771
-    #         - --entrypoints.nfs-wd2to.address=:32772
-    #     ports:
-    #         - "32771:32771"
-    #         - "32772:32772"
-    #     volumes:
-    #         - /var/run/docker.sock:/var/run/docker.sock:ro
-    #         - ./config/traefik/certs:/etc/ssl/certs:ro
-    #     hostname: nfs-proxy
-    #     networks:
-    #         - connected
-    #         - nfs
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.port=8080"
-    #     depends_on:
-    #         - nfs-wd1to
-    #         - nfs-wd2to
+    nfs-proxy: # NFS proxy server for media disks
+        container_name: nfs-proxy
+        image: traefik:chevrotin
+        restart: ${RESTART_MODE}
+        command:
+            - --api
+            - --api.insecure=true
+            - --accessLog
+            - --providers.docker=true
+            - --providers.docker.exposedByDefault=false
+            - --providers.docker.network=seedbox_nfs
+            - --entrypoints.nfs-wd1to.address=:32771
+            - --entrypoints.nfs-wd2to.address=:32772
+        ports:
+            - "32771:32771"
+            - "32772:32772"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./config/traefik/certs:/etc/ssl/certs:ro
+        hostname: nfs-proxy
+        networks:
+            - connected
+            - nfs
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
+            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.port=8080"
+        depends_on:
+            - nfs-wd1to
+            - nfs-wd2to
 
     nfs-wd1to: # NFS server for media disks
         container_name: nfs-wd1to
@@ -303,8 +303,8 @@ services:
         hostname: nfs-wd1to
         networks:
             - nfs
-        ports:
-            - "32771:2049"
+        # ports:
+        #     - "32771:2049"
         labels:
             - "traefik.enable=false"
             - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs-wd1to"
@@ -324,8 +324,8 @@ services:
         hostname: nfs-wd2to
         networks:
             - nfs
-        ports:
-            - "32772:2049"
+        # ports:
+        #     - "32772:2049"
         labels:
             - "traefik.enable=false"
             - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs-wd2to"
