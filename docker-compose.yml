@@ -304,7 +304,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
+            - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.nfs-wd1to.tls=true"
             - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
             - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
@@ -321,7 +321,7 @@ services:
         networks:
             - nfs
         labels:
-            - "traefik.enable=true"
+            - "traefik.enable=false"
             - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.${DOMAIN}`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
