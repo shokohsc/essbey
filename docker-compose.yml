@@ -293,11 +293,11 @@ services:
     nfs-wd1to: # NFS server for media disks
         container_name: nfs-wd1to
         image: shokohsc/volume-nfs:v0.0.2
-        command: /mnt/wd1to
+        command: /mnt
         restart: ${RESTART_MODE}
         privileged: true
         volumes:
-            - ${WD1To_PATH}:/mnt/wd1to
+            - ${WD1To_PATH}:/mnt
         hostname: nfs-wd1to
         networks:
             - nfs
@@ -305,20 +305,26 @@ services:
             - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
             - "traefik.tcp.routers.nfs-wd1to.tls=true"
-            - "traefik.tcp.routers.nfs-wd1to.service=nfs"
-            - "traefik.tcp.services.nfs.loadbalancer.server.port=2049"
+            # - "traefik.tcp.routers.nfs-wd1to.service=nfs"
+            # - "traefik.tcp.services.nfs.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
         image: shokohsc/volume-nfs:v0.0.2
-        command: /mnt/wd2to
+        command: /mnt
         restart: ${RESTART_MODE}
         privileged: true
         volumes:
-            - ${WD2To_PATH}:/mnt/wd2to
+            - ${WD2To_PATH}:/mnt
         hostname: nfs-wd2to
         networks:
             - nfs
+        labels:
+            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
+            - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.${DOMAIN}`)"
+            - "traefik.tcp.routers.nfs-wd2to.tls=true"
+            # - "traefik.tcp.routers.nfs-wd2to.service=nfs"
+            # - "traefik.tcp.services.nfs.loadbalancer.server.port=2049"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
