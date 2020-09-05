@@ -271,9 +271,11 @@ services:
             - --providers.docker=true
             - --providers.docker.exposedByDefault=false
             - --providers.docker.network=seedbox_nfs
-            - --entrypoints.nfs.address=:2049
+            - --entrypoints.nfs-wd1to.address=:32771
+            - --entrypoints.nfs-wd2to.address=:32772
         ports:
-            - "2049:2049"
+            - "32771:32771"
+            - "32772:32772"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./config/traefik/certs:/etc/ssl/certs:ro
@@ -299,17 +301,15 @@ services:
         volumes:
             - ${WD1To_PATH}:/mnt
         hostname: nfs-wd1to
-        expose:
-            - 2049
         networks:
             - nfs
         labels:
             - "traefik.enable=true"
-            # - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
-            # - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
-            # - "traefik.tcp.routers.nfs-wd1to.tls=true"
-            # - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
-            # - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
+            - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs-wd1to"
+            - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
+            - "traefik.tcp.routers.nfs-wd1to.tls=true"
+            - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
+            - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
@@ -324,8 +324,8 @@ services:
             - nfs
         labels:
             - "traefik.enable=false"
-            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.${DOMAIN}`)"
+            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs-wd2to"
+            - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
             - "traefik.tcp.routers.nfs-wd2to.service=nfs-wd2to"
             - "traefik.tcp.services.nfs-wd2to.loadbalancer.server.port=2049"
