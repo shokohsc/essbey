@@ -323,7 +323,7 @@ services:
         networks:
             - nfs
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
             - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs-wd2to"
             - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
