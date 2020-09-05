@@ -278,6 +278,7 @@ services:
         image: shokohsc/volume-nfs:v0.0.2
         command: /mnt/wd1to
         restart: ${RESTART_MODE}
+        privileged: true
         volumes:
             - ${WD1To_PATH}:/mnt/wd1to
         hostname: nfs-wd1to
@@ -291,6 +292,7 @@ services:
         image: shokohsc/volume-nfs:v0.0.2
         command: /mnt/wd2to
         restart: ${RESTART_MODE}
+        privileged: true
         volumes:
             - ${WD2To_PATH}:/mnt/wd2to
         hostname: nfs-wd2to
