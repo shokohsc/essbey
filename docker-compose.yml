@@ -387,6 +387,7 @@ services:
     backup-openvpn:
         container_name: backup-openvpn
         image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
         environment:
             INFLUXDB_URL: influxdb
             INFLUXDB_DB: backups
@@ -924,6 +925,7 @@ services:
     backup-heimdall:
         container_name: backup-heimdall
         image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
         environment:
             INFLUXDB_URL: influxdb
             INFLUXDB_DB: backups
@@ -1280,8 +1282,9 @@ services:
             - "traefik.port=8123"
 
     minecraft-backup:
-        image: itzg/mc-backup
         container_name: minecraft-backup
+        image: itzg/mc-backup
+        restart: ${RESTART_MODE}
         environment:
             BACKUP_INTERVAL: "24h"
             PRUNE_BACKUPS_DAYS: 2
@@ -1498,6 +1501,7 @@ services:
     backup-thelounge:
         container_name: backup-thelounge
         image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
         environment:
             INFLUXDB_URL: influxdb
             INFLUXDB_DB: backups
@@ -1526,6 +1530,7 @@ services:
     backup-commafeed:
         container_name: backup-commafeed
         image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
         environment:
             INFLUXDB_URL: influxdb
             INFLUXDB_DB: backups
