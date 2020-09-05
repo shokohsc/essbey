@@ -272,7 +272,7 @@ services:
             - ./config/traefik/certs:/etc/ssl/certs:ro
         hostname: nfs-proxy
         networks:
-            - seedbox_connected
+            - connected
             - nfs
         labels:
             - "traefik.enable=true"
