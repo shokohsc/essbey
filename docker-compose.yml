@@ -306,7 +306,7 @@ services:
         # ports:
         #     - "32771:2049"
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
             - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs-wd1to"
             - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.nfs-wd1to.tls=true"
@@ -327,7 +327,7 @@ services:
         # ports:
         #     - "32772:2049"
         labels:
-            - "traefik.enable=false"
+            - "traefik.enable=true"
             - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs-wd2to"
             - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
