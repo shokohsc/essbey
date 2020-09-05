@@ -305,8 +305,8 @@ services:
             - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
             - "traefik.tcp.routers.nfs-wd1to.tls=true"
-            - "traefik.tcp.routers.nfs-wd1to.service=nfs"
-            - "traefik.tcp.services.nfs.loadbalancer.server.port=2049"
+            - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
+            - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
@@ -323,8 +323,8 @@ services:
             - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.${DOMAIN}`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
-            - "traefik.tcp.routers.nfs-wd2to.service=nfs"
-            - "traefik.tcp.services.nfs.loadbalancer.server.port=2049"
+            - "traefik.tcp.routers.nfs-wd2to.service=nfs-wd2to"
+            - "traefik.tcp.services.nfs-wd2to.loadbalancer.server.port=2049"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
