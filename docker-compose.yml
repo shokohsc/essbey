@@ -278,7 +278,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=80"
+            - "traefik.port=8080"
         depends_on:
             - nfs-wd1to
             - nfs-wd2to
