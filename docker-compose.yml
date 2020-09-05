@@ -309,7 +309,7 @@ services:
         #     - "32771:2049"
         labels:
             - "traefik.enable=true"
-            - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs-wd1to"
+            - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`nfs-wd1to.shokohsc.home`)"
             - "traefik.tcp.routers.nfs-wd1to.tls=true"
             - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
@@ -330,7 +330,7 @@ services:
         #     - "32772:2049"
         labels:
             - "traefik.enable=true"
-            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs-wd2to"
+            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
             - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.shokohsc.home`)"
             - "traefik.tcp.routers.nfs-wd2to.tls=true"
             - "traefik.tcp.routers.nfs-wd2to.service=nfs-wd2to"
