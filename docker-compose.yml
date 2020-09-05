@@ -264,7 +264,14 @@ services:
         container_name: nfs-proxy
         image: traefik:chevrotin
         restart: ${RESTART_MODE}
-        command: --providers.docker=true --providers.docker.exposedByDefault=false --accessLog --api --api.insecure=true --providers.docker.network=seedbox_nfs
+        command:
+            - --api
+            - --api.insecure=true
+            - --accessLog
+            - --providers.docker=true
+            - --providers.docker.exposedByDefault=false
+            - --providers.docker.network=seedbox_nfs
+            - --entrypoints.nfs.address=:2049
         ports:
             - "2049:2049"
         volumes:
@@ -295,8 +302,10 @@ services:
         networks:
             - nfs
         labels:
+            - "traefik.tcp.routers.nfs.entrypoints=nfs"
             - "traefik.tcp.routers.nfs.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
             - "traefik.tcp.routers.nfs.tls=true"
+            - "traefik.tcp.routers.nfs.service=wd1to"
             - "traefik.tcp.services.wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
@@ -310,8 +319,6 @@ services:
         hostname: nfs-wd2to
         networks:
             - nfs
-        labels:
-            - "traefik.enable=true"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
