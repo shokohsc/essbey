@@ -264,7 +264,7 @@ services:
         container_name: nfs-proxy
         image: traefik:chevrotin
         restart: ${RESTART_MODE}
-        command: --providers.docker=true --accessLog --api
+        command: --providers.docker=true --providers.docker.exposedByDefault=false --accessLog --api --api.insecure=true --providers.docker.network=seedbox_nfs
         ports:
             - "2049:2049"
         volumes:
@@ -278,7 +278,7 @@ services:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8080"
+            - "traefik.port=80"
         depends_on:
             - nfs-wd1to
             - nfs-wd2to
