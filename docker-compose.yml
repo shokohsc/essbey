@@ -302,10 +302,10 @@ services:
         networks:
             - nfs
         labels:
-            - "traefik.tcp.routers.nfs.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
-            - "traefik.tcp.routers.nfs.tls=true"
-            - "traefik.tcp.routers.nfs.service=wd1to"
+            - "traefik.tcp.routers.wd1to.entrypoints=nfs"
+            - "traefik.tcp.routers.wd1to.rule=HostSNI(`nfs-wd1to.${DOMAIN}`)"
+            - "traefik.tcp.routers.wd1to.tls=true"
+            - "traefik.tcp.routers.wd1to.service=wd1to"
             - "traefik.tcp.services.wd1to.loadbalancer.server.port=2049"
 
     nfs-wd2to: # NFS server for media disks
