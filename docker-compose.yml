@@ -264,7 +264,7 @@ services:
         container_name: nfs-proxy
         image: traefik:chevrotin
         restart: ${RESTART_MODE}
-        command: --providers.docker=true --accessLog --api --insecure
+        command: --providers.docker=true --accessLog --api --insecure=true
         ports:
             - "2049:2049"
         volumes:
