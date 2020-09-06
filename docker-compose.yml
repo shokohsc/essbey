@@ -366,6 +366,7 @@ services:
         hostname: openvpn
         networks:
             - connected
+            - pihole
         labels:
             - "traefik.enable=false"
 
@@ -383,6 +384,7 @@ services:
         hostname: openvpn-tcp
         networks:
             - connected
+            - pihole
         labels:
             - "traefik.enable=false"
 

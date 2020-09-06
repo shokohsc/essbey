@@ -2,17 +2,14 @@
 
     $> export CIPHER="AES-256-CBC"
     $> export OPENVPN_URL="udp://VPN.SERVERNAME.COM:PORT"
-    $> export DNS_IP_ADDRESS="PIHOLE_IP"
-    $> export LAN_SUBNET="SUBNET MASK"
+    $> export DNS_IP_ADDRESS="PIHOLE_IP_IN_PIHOLE_DOCKER_NETWORK"
     $> docker-compose run --rm openvpn ovpn_genconfig \
         -u $OPENVPN_URL \
         -C $CIPHER \
         -n $DNS_IP_ADDRESS \
         -e 'push "redirect-gateway def1 bypass-dhcp"' \
         -e 'management 0.0.0.0 5555' \
-        -e 'push "comp-lzo no"' \
-        -e 'route $LAN_SUBNET' \
-        -e 'push "route $LAN_SUBNET"'
+        -e 'push "comp-lzo no"'
     $> docker-compose run --rm openvpn ovpn_initpki
     $> sudo chown -R $(whoami): ./config/openvpn
     $> docker-compose up -d openvpn
