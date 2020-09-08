@@ -1774,3 +1774,18 @@ services:
             - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+
+    rotate-backup: # ci api
+        container_name: rotate-backup
+        image: eyjhb/backup-rotate
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        volumes:
+            - ./config/rotate-backup/rotate-backup.ini:/config/rotate-backup.ini
+            - ${WD1To_PATH}/backup:/media
+        hostname: rotate-backup
+        networks:
+            - hidden
