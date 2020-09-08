@@ -1775,7 +1775,7 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
 
-    rotate-backup: # ci api
+    rotate-backup: # rotate backups
         container_name: rotate-backup
         image: eyjhb/backup-rotate
         restart: ${RESTART_MODE}
