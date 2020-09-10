@@ -254,23 +254,6 @@ services:
         labels:
             - "traefik.enable=false"
 
-    # nfs-ganesha: # NFS ganesha server proxy for media disks
-    #     container_name: nfs-ganesha
-    #     build:
-    #         context: build/nfs-ganesha
-    #     restart: ${RESTART_MODE}
-    #     privileged: true
-    #     ports:
-    #         - "2049:2049"
-    #     hostname: nfs-ganesha
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=false"
-    #     depends_on:
-    #         - nfs-wd1to
-    #         - nfs-wd2to
-
     nfs-wd1to: # NFS server for media disks
         container_name: nfs-wd1to
         image: shokohsc/volume-nfs:v0.0.2
