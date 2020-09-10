@@ -16,12 +16,6 @@ networks:
         name: seedbox_hidden
         internal: true
 
-    nfs:
-        name: seedbox_nfs
-        driver: bridge
-        ipam:
-            driver: default
-
     pihole:
         external:
             name: pihole
@@ -260,39 +254,22 @@ services:
         labels:
             - "traefik.enable=false"
 
-    nfs-proxy: # NFS proxy server for media disks
-        container_name: nfs-proxy
-        image: traefik:chevrotin
-        restart: ${RESTART_MODE}
-        command:
-            - --api
-            - --api.insecure=true
-            - --accessLog
-            - --providers.docker=true
-            - --providers.docker.exposedByDefault=false
-            - --providers.docker.network=seedbox_nfs
-            - --entrypoints.nfs.address=:2049
-            # - --entrypoints.nfs-wd1to.address=:32771
-            # - --entrypoints.nfs-wd2to.address=:32772
-        ports:
-            - "2049:2049"
-            # - "32771:32771"
-            # - "32772:32772"
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./config/traefik/certs:/etc/ssl/certs:ro
-        hostname: nfs-proxy
-        networks:
-            - connected
-            - nfs
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:nfs-proxy.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8080"
-        depends_on:
-            - nfs-wd1to
-            - nfs-wd2to
+    # nfs-ganesha: # NFS ganesha server proxy for media disks
+    #     container_name: nfs-ganesha
+    #     build:
+    #         context: build/nfs-ganesha
+    #     restart: ${RESTART_MODE}
+    #     privileged: true
+    #     ports:
+    #         - "2049:2049"
+    #     hostname: nfs-ganesha
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
+    #     depends_on:
+    #         - nfs-wd1to
+    #         - nfs-wd2to
 
     nfs-wd1to: # NFS server for media disks
         container_name: nfs-wd1to
@@ -300,20 +277,15 @@ services:
         command: /mnt
         restart: ${RESTART_MODE}
         privileged: true
+        ports:
+            - "32049:2049"
         volumes:
             - ${WD1To_PATH}:/mnt
         hostname: nfs-wd1to
         networks:
-            - nfs
-        # ports:
-        #     - "32771:2049"
+            - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.tcp.routers.nfs-wd1to.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs-wd1to.rule=HostSNI(`nfs-wd1to.shokohsc.home`)"
-            - "traefik.tcp.routers.nfs-wd1to.tls=true"
-            - "traefik.tcp.routers.nfs-wd1to.service=nfs-wd1to"
-            - "traefik.tcp.services.nfs-wd1to.loadbalancer.server.port=2049"
+            - "traefik.enable=false"
 
     nfs-wd2to: # NFS server for media disks
         container_name: nfs-wd2to
@@ -321,20 +293,15 @@ services:
         command: /mnt
         restart: ${RESTART_MODE}
         privileged: true
+        ports:
+            - "32050:2049"
         volumes:
             - ${WD2To_PATH}:/mnt
         hostname: nfs-wd2to
         networks:
-            - nfs
-        # ports:
-        #     - "32772:2049"
+            - connected
         labels:
-            - "traefik.enable=true"
-            - "traefik.tcp.routers.nfs-wd2to.entrypoints=nfs"
-            - "traefik.tcp.routers.nfs-wd2to.rule=HostSNI(`nfs-wd2to.shokohsc.home`)"
-            - "traefik.tcp.routers.nfs-wd2to.tls=true"
-            - "traefik.tcp.routers.nfs-wd2to.service=nfs-wd2to"
-            - "traefik.tcp.services.nfs-wd2to.loadbalancer.server.port=2049"
+            - "traefik.enable=false"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
