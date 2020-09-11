@@ -254,37 +254,37 @@ services:
         labels:
             - "traefik.enable=false"
 
-    nfs-wd1to: # NFS server for media disks
-        container_name: nfs-wd1to
-        image: shokohsc/volume-nfs:v0.0.2
-        command: /mnt
-        restart: ${RESTART_MODE}
-        privileged: true
-        ports:
-            - "32049:2049"
-        volumes:
-            - ${WD1To_PATH}:/mnt
-        hostname: nfs-wd1to
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
-    nfs-wd2to: # NFS server for media disks
-        container_name: nfs-wd2to
-        image: shokohsc/volume-nfs:v0.0.2
-        command: /mnt
-        restart: ${RESTART_MODE}
-        privileged: true
-        ports:
-            - "32050:2049"
-        volumes:
-            - ${WD2To_PATH}:/mnt
-        hostname: nfs-wd2to
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
+    # nfs-wd1to: # NFS server for media disks
+    #     container_name: nfs-wd1to
+    #     image: shokohsc/volume-nfs:v0.0.2
+    #     command: /mnt
+    #     restart: ${RESTART_MODE}
+    #     privileged: true
+    #     ports:
+    #         - "32049:2049"
+    #     volumes:
+    #         - ${WD1To_PATH}:/mnt
+    #     hostname: nfs-wd1to
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # nfs-wd2to: # NFS server for media disks
+    #     container_name: nfs-wd2to
+    #     image: shokohsc/volume-nfs:v0.0.2
+    #     command: /mnt
+    #     restart: ${RESTART_MODE}
+    #     privileged: true
+    #     ports:
+    #         - "32050:2049"
+    #     volumes:
+    #         - ${WD2To_PATH}:/mnt
+    #     hostname: nfs-wd2to
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
 
     duckdns: # Dynamic IP <-> Domain
         container_name: duckdns
