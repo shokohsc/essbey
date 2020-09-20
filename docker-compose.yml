@@ -119,26 +119,26 @@ services:
             - logstash
             - kibana
 
-    journalbeat: # Logs system
-        container_name: journalbeat
-        image: docker.elastic.co/beats/journalbeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        command: journalbeat -e -strict.perms=false
-        user: root
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /var/log/journal:/var/log/journal:ro
-            - /etc/machine-id:/etc/machine-id:ro
-            - /run/systemd:/run/systemd:ro
-            - /etc/hostname:/etc/hostname:ro
-            - ./config/beats/journalbeat.yml:/usr/share/journalbeat/journalbeat.yml:ro
-        hostname: journalbeat-sombra
-        networks:
-            - hidden
-        depends_on:
-            - logstash
-            - kibana
-
+    # journalbeat: # Logs system
+    #     container_name: journalbeat
+    #     image: docker.elastic.co/beats/journalbeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     command: journalbeat -e -strict.perms=false
+    #     user: root
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - /var/log/journal:/var/log/journal:ro
+    #         - /etc/machine-id:/etc/machine-id:ro
+    #         - /run/systemd:/run/systemd:ro
+    #         - /etc/hostname:/etc/hostname:ro
+    #         - ./config/beats/journalbeat.yml:/usr/share/journalbeat/journalbeat.yml:ro
+    #     hostname: journalbeat-sombra
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - logstash
+    #         - kibana
+    
     # metricbeat: # Metrics system
     #     container_name: metricbeat
     #     image: docker.elastic.co/beats/metricbeat:${ELK_VERSION}
