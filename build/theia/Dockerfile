@@ -9,7 +9,7 @@ ARG STEP_VERSION="0.15.2"
 
 USER root
 RUN \
-apk add --no-cache bash curl wget docker zsh git vim openssl unzip gnupg netcat-openbsd
+apk add --no-cache bash curl wget docker zsh git vim openssl unzip gnupg netcat-openbsd jq
 
 USER theia
 RUN \

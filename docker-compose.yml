@@ -138,7 +138,7 @@ services:
     #     depends_on:
     #         - logstash
     #         - kibana
-    
+
     # metricbeat: # Metrics system
     #     container_name: metricbeat
     #     image: docker.elastic.co/beats/metricbeat:${ELK_VERSION}
@@ -431,63 +431,63 @@ services:
             start_period: 60s
             retries: 5
 
-    peerflix:
-        image: shokohsc/peerflix-server
-        container_name: peerflix
-        restart: ${RESTART_MODE}
-        network_mode: "service:vpn-client"
-        depends_on:
-            - vpn-client
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-
-    cloudtorrent:
-        image: shokohsc/cloud-torrent
-        container_name: cloudtorrent
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./download/complete:/downloads
-        network_mode: "service:vpn-client"
-        depends_on:
-            - vpn-client
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-
-    deluge:
-        container_name: deluge
-        image: linuxserver/deluge
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-            DELUGE_LOGLEVEL: error
-        volumes:
-            - ./config/deluge:/config
-            - ./download:/downloads
-        network_mode: "service:vpn-client"
-        depends_on:
-            - vpn-client
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
+    # peerflix:
+    #     image: shokohsc/peerflix-server
+    #     container_name: peerflix
+    #     restart: ${RESTART_MODE}
+    #     network_mode: "service:vpn-client"
+    #     depends_on:
+    #         - vpn-client
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
+    #
+    # cloudtorrent:
+    #     image: shokohsc/cloud-torrent
+    #     container_name: cloudtorrent
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./download/complete:/downloads
+    #     network_mode: "service:vpn-client"
+    #     depends_on:
+    #         - vpn-client
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
+    #
+    # deluge:
+    #     container_name: deluge
+    #     image: linuxserver/deluge
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #         DELUGE_LOGLEVEL: error
+    #     volumes:
+    #         - ./config/deluge:/config
+    #         - ./download:/downloads
+    #     network_mode: "service:vpn-client"
+    #     depends_on:
+    #         - vpn-client
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
 
     traefik: # Reverse proxy
         container_name: traefik
@@ -890,45 +890,45 @@ services:
         networks:
             - hidden
 
-    monitor: # Openvpn monitor
-        image: ruimarinho/openvpn-monitor
-        container_name: monitor
-        restart: ${RESTART_MODE}
-        environment:
-            OPENVPNMONITOR_DEFAULT_MAPS: "True"
-            OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT: ${OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT}
-            OPENVPNMONITOR_DEFAULT_LATITUDE: ${OPENVPNMONITOR_DEFAULT_LATITUDE}
-            OPENVPNMONITOR_DEFAULT_LONGITUDE: ${OPENVPNMONITOR_DEFAULT_LONGITUDE}
-            OPENVPNMONITOR_DEFAULT_SITE: ${OPENVPNMONITOR_DEFAULT_SITE}
-            OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
-            OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
-            OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
-        hostname: monitor
-        networks:
-            - connected
-        depends_on:
-            - openvpn
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
-            - "traefik.port=80"
-
-    openvpn-ui:
-        container_name: openvpn-ui
-        image: awalach/openvpn-web-ui
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-            - openvpn-ui_data:/opt/openvpn-gui/db
-        hostname: openvpn-ui
-        networks:
-            - connected
-        depends_on:
-            - openvpn-tcp
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
-            - "traefik.port=8080"
+    # monitor: # Openvpn monitor
+    #     image: ruimarinho/openvpn-monitor
+    #     container_name: monitor
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         OPENVPNMONITOR_DEFAULT_MAPS: "True"
+    #         OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT: ${OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT}
+    #         OPENVPNMONITOR_DEFAULT_LATITUDE: ${OPENVPNMONITOR_DEFAULT_LATITUDE}
+    #         OPENVPNMONITOR_DEFAULT_LONGITUDE: ${OPENVPNMONITOR_DEFAULT_LONGITUDE}
+    #         OPENVPNMONITOR_DEFAULT_SITE: ${OPENVPNMONITOR_DEFAULT_SITE}
+    #         OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
+    #         OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
+    #         OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
+    #     hostname: monitor
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - openvpn
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
+    #         - "traefik.port=80"
+    #
+    # openvpn-ui:
+    #     container_name: openvpn-ui
+    #     image: awalach/openvpn-web-ui
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/openvpn:/etc/openvpn
+    #         - openvpn-ui_data:/opt/openvpn-gui/db
+    #     hostname: openvpn-ui
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - openvpn-tcp
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
+    #         - "traefik.port=8080"
 
     comic-reader:
         container_name: comic-reader
@@ -1045,21 +1045,21 @@ services:
             - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
             - "traefik.port=80"
 
-    paint-web:
-        container_name: paint-web
-        image: shokohsc/mini-paint
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        hostname: paint-web
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:paint.${DOMAIN}"
-            - "traefik.port=80"
+    # paint-web:
+    #     container_name: paint-web
+    #     image: shokohsc/mini-paint
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     hostname: paint-web
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:paint.${DOMAIN}"
+    #         - "traefik.port=80"
 
     telegraf: # Telegraf
         container_name: telegraf
@@ -1110,24 +1110,24 @@ services:
         volumes:
             - influx_data:/var/lib/influxdb
 
-    chronograf: # InfluxDB Admin UI
-        image: chronograf
-        container_name: chronograf
-        restart: ${RESTART_MODE}
-        command: --influxdb-url=http://influxdb:8086
-        hostname: chronograf
-        volumes:
-            - chronograf_data:/var/lib/chronograf
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - influxdb
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8888"
+    # chronograf: # InfluxDB Admin UI
+    #     image: chronograf
+    #     container_name: chronograf
+    #     restart: ${RESTART_MODE}
+    #     command: --influxdb-url=http://influxdb:8086
+    #     hostname: chronograf
+    #     volumes:
+    #         - chronograf_data:/var/lib/chronograf
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - influxdb
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=8888"
     #
     # mosquitto: # Mosquitto mqtt broker
     #     container_name: mosquitto
@@ -1362,23 +1362,23 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=8000"
 
-    adminer:
-        image: adminer
-        container_name: adminer
-        restart: ${RESTART_MODE}
-        environment:
-            ADMINER_DESIGN: konya
-        hostname: adminer
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - mysql
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8080"
+    # adminer:
+    #     image: adminer
+    #     container_name: adminer
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         ADMINER_DESIGN: konya
+    #     hostname: adminer
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - mysql
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=8080"
 
     stackedit:
         image: benweet/stackedit
@@ -1392,39 +1392,39 @@ services:
             - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
             - "traefik.port=8080"
 
-    airsonic:
-        image: linuxserver/airsonic
-        container_name: airsonic
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ${WD2To_PATH}/music:/music:ro
-        hostname: airsonic
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:music.${DOMAIN}"
-            - "traefik.port=4040"
-
-    h5ai:
-        image: corfr/h5ai
-        container_name: h5ai
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./:/var/www/project
-            - ${WD1To_PATH}:/var/www/WD1To
-            - ${WD2To_PATH}:/var/www/WD2To
-        hostname: h5ai
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
-            - "traefik.port=80"
+    # airsonic:
+    #     image: linuxserver/airsonic
+    #     container_name: airsonic
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes:
+    #         - ${WD2To_PATH}/music:/music:ro
+    #     hostname: airsonic
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:music.${DOMAIN}"
+    #         - "traefik.port=4040"
+    #
+    # h5ai:
+    #     image: corfr/h5ai
+    #     container_name: h5ai
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./:/var/www/project
+    #         - ${WD1To_PATH}:/var/www/WD1To
+    #         - ${WD2To_PATH}:/var/www/WD2To
+    #     hostname: h5ai
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
+    #         - "traefik.port=80"
 
     rabbitmq:
         image: rabbitmq:management-alpine
@@ -1438,107 +1438,107 @@ services:
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
             - "traefik.port=15672"
 
-    thelounge:
-        image: thelounge/thelounge
-        container_name: thelounge
-        restart: ${RESTART_MODE}
-        volumes:
-            - thelounge_data:/var/opt/thelounge
-        hostname: thelounge
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
-            - "traefik.irc.port=9000"
+    # thelounge:
+    #     image: thelounge/thelounge
+    #     container_name: thelounge
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - thelounge_data:/var/opt/thelounge
+    #     hostname: thelounge
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
+    #         - "traefik.irc.port=9000"
+    #
+    # backup-thelounge:
+    #     container_name: backup-thelounge
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         INFLUXDB_URL: influxdb
+    #         INFLUXDB_DB: backups
+    #     volumes:
+    #         - thelounge_data:/backup/thelounge:ro
+    #         - ${WD1To_PATH}/backup/thelounge:/archive
+    #     hostname: backup-thelounge
+    #     networks:
+    #         - hidden
+    #
+    # commafeed:
+    #     image: saggio/commafeed
+    #     container_name: commafeed
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - commafeed_data:/data
+    #         - ./config/commafeed/config.yml:/config/config.yml
+    #     hostname: commafeed
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:rss.${DOMAIN}"
+    #         - "traefik.port=8082"
+    #
+    # backup-commafeed:
+    #     container_name: backup-commafeed
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         INFLUXDB_URL: influxdb
+    #         INFLUXDB_DB: backups
+    #     volumes:
+    #         - commafeed_data:/backup/commafeed:ro
+    #         - ${WD1To_PATH}/backup/commafeed:/archive
+    #     hostname: backup-commafeed
+    #     networks:
+    #         - hidden
 
-    backup-thelounge:
-        container_name: backup-thelounge
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
-        volumes:
-            - thelounge_data:/backup/thelounge:ro
-            - ${WD1To_PATH}/backup/thelounge:/archive
-        hostname: backup-thelounge
-        networks:
-            - hidden
-
-    commafeed:
-        image: saggio/commafeed
-        container_name: commafeed
-        restart: ${RESTART_MODE}
-        volumes:
-            - commafeed_data:/data
-            - ./config/commafeed/config.yml:/config/config.yml
-        hostname: commafeed
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:rss.${DOMAIN}"
-            - "traefik.port=8082"
-
-    backup-commafeed:
-        container_name: backup-commafeed
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
-        volumes:
-            - commafeed_data:/backup/commafeed:ro
-            - ${WD1To_PATH}/backup/commafeed:/archive
-        hostname: backup-commafeed
-        networks:
-            - hidden
-
-    zenbot:
-        image: deviavir/zenbot
-        container_name: zenbot
-        restart: ${RESTART_MODE}
-        volumes:
-            - zenbot_data:/data
-            - ./config/zenbot/conf.js:/app/conf.js
-        hostname: zenbot
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - mongo
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=17365"
-
-    redis:
-        image: redis
-        container_name: redis
-        restart: ${RESTART_MODE}
-        volumes:
-            - redis_data:/data
-        hostname: redis
-        networks:
-            - hidden
-
-    redis-ui:
-        image: marian/rebrow
-        container_name: redis-ui
-        restart: ${RESTART_MODE}
-        hostname: redis-ui
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - redis
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:redis.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=5001"
+    # zenbot:
+    #     image: deviavir/zenbot
+    #     container_name: zenbot
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - zenbot_data:/data
+    #         - ./config/zenbot/conf.js:/app/conf.js
+    #     hostname: zenbot
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - mongo
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:zenbot.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=17365"
+    #
+    # redis:
+    #     image: redis
+    #     container_name: redis
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - redis_data:/data
+    #     hostname: redis
+    #     networks:
+    #         - hidden
+    #
+    # redis-ui:
+    #     image: marian/rebrow
+    #     container_name: redis-ui
+    #     restart: ${RESTART_MODE}
+    #     hostname: redis-ui
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - redis
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:redis.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=5001"
 
     # gekko:
     #     image: shokohsc/gekko
@@ -1579,35 +1579,35 @@ services:
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
 
-    jsbin:
-        image: robbash/jsbin
-        container_name: jsbin
-        restart: ${RESTART_MODE}
-        environment:
-            JSBIN_CONFIG: /jsbin.json
-            PORT: 443
-        volumes:
-            - jsbin_data:/home/project:cached
-            - ./config/jsbin/config.json:/jsbin.json:cached
-        hostname: jsbin
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
-            - "traefik.port=443"
-
-    regex:
-        image: gufertum/regexr
-        container_name: regex
-        restart: ${RESTART_MODE}
-        hostname: regex
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:regex.${DOMAIN}"
-            - "traefik.port=8080"
+    # jsbin:
+    #     image: robbash/jsbin
+    #     container_name: jsbin
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         JSBIN_CONFIG: /jsbin.json
+    #         PORT: 443
+    #     volumes:
+    #         - jsbin_data:/home/project:cached
+    #         - ./config/jsbin/config.json:/jsbin.json:cached
+    #     hostname: jsbin
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:jsbin.${DOMAIN}"
+    #         - "traefik.port=443"
+    #
+    # regex:
+    #     image: gufertum/regexr
+    #     container_name: regex
+    #     restart: ${RESTART_MODE}
+    #     hostname: regex
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:regex.${DOMAIN}"
+    #         - "traefik.port=8080"
 
     # filepizza:
     #     image: kern/filepizza:master
@@ -1636,94 +1636,94 @@ services:
     #         - "traefik.frontend.rule=Host:jenkins.${DOMAIN}"
     #         - "traefik.port=8080"
 
-    elasticsearch-diskover: # Json database
-        container_name: elasticsearch-diskover
-        image: docker.elastic.co/elasticsearch/elasticsearch:5.6.16
-        restart: ${RESTART_MODE}
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: "-Xmx512m -Xms512m"
-          xpack.security.enabled: "false"
-        volumes:
-            - elasticsearch-diskover_data:/usr/share/elasticsearch/data
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-        hostname: elasticsearch-diskover
-        networks:
-            - hidden
+    # elasticsearch-diskover: # Json database
+    #     container_name: elasticsearch-diskover
+    #     image: docker.elastic.co/elasticsearch/elasticsearch:5.6.16
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #       discovery.type: single-node
+    #       ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+    #       xpack.security.enabled: "false"
+    #     volumes:
+    #         - elasticsearch-diskover_data:/usr/share/elasticsearch/data
+    #     ulimits:
+    #         memlock:
+    #             soft: -1
+    #             hard: -1
+    #     hostname: elasticsearch-diskover
+    #     networks:
+    #         - hidden
 
-    diskover:
-        container_name: diskover
-        image: linuxserver/diskover
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-            REDIS_HOST: redis
-            REDIS_PORT: 6379
-            ES_HOST: elasticsearch-diskover
-            ES_PORT: 9200
-            RUN_ON_START: 'true'
-            USE_CRON: 'true'
-        ports:
-            - 9999:9999/tcp
-        volumes:
-            - ./config/diskover:/config
-            - /:/data
-            - /dev/null:/data/proc/kcore
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - elasticsearch-diskover
-            - redis
-        hostname: diskover
-        labels:
-            - "traefik.enable=true"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.diskover.frontend.rule=Host:diskover.${DOMAIN}"
-            - "traefik.diskover.port=80"
-            - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
-            - "traefik.rq.port=9181"
+    # diskover:
+    #     container_name: diskover
+    #     image: linuxserver/diskover
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #         REDIS_HOST: redis
+    #         REDIS_PORT: 6379
+    #         ES_HOST: elasticsearch-diskover
+    #         ES_PORT: 9200
+    #         RUN_ON_START: 'true'
+    #         USE_CRON: 'true'
+    #     ports:
+    #         - 9999:9999/tcp
+    #     volumes:
+    #         - ./config/diskover:/config
+    #         - /:/data
+    #         - /dev/null:/data/proc/kcore
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - elasticsearch-diskover
+    #         - redis
+    #     hostname: diskover
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.diskover.frontend.rule=Host:diskover.${DOMAIN}"
+    #         - "traefik.diskover.port=80"
+    #         - "traefik.rq.frontend.rule=Host:diskover-rq.${DOMAIN}"
+    #         - "traefik.rq.port=9181"
 
-    drawio:
-        image: jgraph/drawio
-        container_name: drawio
-        restart: ${RESTART_MODE}
-        hostname: drawio
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:drawio.${DOMAIN}"
-            - "traefik.port=8080"
-
-    see-eye: # ci api
-        container_name: see-eye
-        image: shokohsc/see-eye
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
-            DOCKER_AUTH_USERNAME: ${DOCKER_AUTH_USERNAME}
-            DOCKER_AUTH_EMAIL: ${DOCKER_AUTH_EMAIL}
-            DOCKER_AUTH_PASSWORD: ${DOCKER_AUTH_PASSWORD}
-        volumes:
-            - see-eye_data:/app/data
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-        hostname: see-eye
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
+    # drawio:
+    #     image: jgraph/drawio
+    #     container_name: drawio
+    #     restart: ${RESTART_MODE}
+    #     hostname: drawio
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:drawio.${DOMAIN}"
+    #         - "traefik.port=8080"
+    #
+    # see-eye: # ci api
+    #     container_name: see-eye
+    #     image: shokohsc/see-eye
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         TZ: ${TIMEZONE}
+    #         MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
+    #         DOCKER_AUTH_USERNAME: ${DOCKER_AUTH_USERNAME}
+    #         DOCKER_AUTH_EMAIL: ${DOCKER_AUTH_EMAIL}
+    #         DOCKER_AUTH_PASSWORD: ${DOCKER_AUTH_PASSWORD}
+    #     volumes:
+    #         - see-eye_data:/app/data
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #     hostname: see-eye
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     labels:
+    #         - "autoheal=true"
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:see-eye.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=3000"
 
     rotate-backup: # rotate backups
         container_name: rotate-backup
