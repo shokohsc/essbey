@@ -24,7 +24,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   2:
     action: delete_indices
@@ -44,7 +44,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   3:
     action: delete_indices
@@ -64,7 +64,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   4:
     action: delete_indices
@@ -84,7 +84,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   5:
     action: delete_indices
@@ -104,7 +104,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   6:
     action: delete_indices
@@ -124,7 +124,7 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
 
   7:
     action: delete_indices
@@ -144,4 +144,4 @@ actions:
       direction: older
       timestring: '%Y.%m.%d'
       unit: days
-      unit_count: 4
+      unit_count: 2
