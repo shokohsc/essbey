@@ -612,7 +612,7 @@ services:
             - "8096:8096/tcp"
             - "8920:8920/tcp" #optional
             - "7359:7359/udp" #optional
-            - "1900:1900/udp" #optional
+            # - "1900:1900/udp" #optional DLNA port
         devices:
             - /dev/dri:/dev/dri #optional
             - /dev/vcsm:/dev/vcsm #optional
