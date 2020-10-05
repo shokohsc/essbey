@@ -615,11 +615,11 @@ services:
             # - "1900:1900/udp" #optional DLNA port
         devices:
             - /dev/dri:/dev/dri #optional
-            - /dev/vcsm:/dev/vcsm #optional
-            - /dev/vchiq:/dev/vchiq #optional
-            - /dev/video10:/dev/video10 #optional
-            - /dev/video11:/dev/video11 #optional
-            - /dev/video12:/dev/video12 #optional
+            # - /dev/vcsm:/dev/vcsm #optional
+            # - /dev/vchiq:/dev/vchiq #optional
+            # - /dev/video10:/dev/video10 #optional
+            # - /dev/video11:/dev/video11 #optional
+            # - /dev/video12:/dev/video12 #optional
 
     grafana: # Monitoring tool connected server
         container_name: grafana
