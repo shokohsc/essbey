@@ -610,7 +610,7 @@ services:
             - ${WD2To_PATH}:/data/WD2To
         ports:
             - "8096:8096/tcp"
-            - "8920:8920/tcp" #optional
+            # - "8920:8920/tcp" #optional
             - "7359:7359/udp" #optional
             # - "1900:1900/udp" #optional DLNA port
         devices:
@@ -620,6 +620,13 @@ services:
             # - /dev/video10:/dev/video10 #optional
             # - /dev/video11:/dev/video11 #optional
             # - /dev/video12:/dev/video12 #optional
+        networks:
+            - connected
+        hostname: jellyfin
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
+            - "traefik.port=8096"
 
     grafana: # Monitoring tool connected server
         container_name: grafana
