@@ -8,8 +8,7 @@
         -C $CIPHER \
         -n $DNS_IP_ADDRESS \
         -e 'push "redirect-gateway def1 bypass-dhcp"' \
-        -e 'management 0.0.0.0 5555' \
-        -e 'push "comp-lzo no"'
+        -e 'management 0.0.0.0 5555'
     $> docker-compose run --rm openvpn ovpn_initpki
     $> sudo chown -R $(whoami): ./config/openvpn
     $> docker-compose up -d openvpn
