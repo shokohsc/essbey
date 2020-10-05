@@ -1490,22 +1490,22 @@ services:
         hostname: backup-thelounge
         networks:
             - hidden
-    #
-    # commafeed:
-    #     image: saggio/commafeed
-    #     container_name: commafeed
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - commafeed_data:/data
-    #         - ./config/commafeed/config.yml:/config/config.yml
-    #     hostname: commafeed
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:rss.${DOMAIN}"
-    #         - "traefik.port=8082"
-    #
+
+    commafeed:
+        image: saggio/commafeed
+        container_name: commafeed
+        restart: ${RESTART_MODE}
+        volumes:
+            - commafeed_data:/data
+            - ./config/commafeed/config.yml:/config/config.yml
+        hostname: commafeed
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:rss.${DOMAIN}"
+            - "traefik.port=8082"
+
     backup-commafeed:
         container_name: backup-commafeed
         image: futurice/docker-volume-backup
