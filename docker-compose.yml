@@ -22,7 +22,7 @@ networks:
 
 volumes:
     elasticsearch_data: {}
-    elasticsearch-diskover_data: {}
+    # elasticsearch-diskover_data: {}
     grafana_data: {}
     influx_data: {}
     mongo_data: {}
