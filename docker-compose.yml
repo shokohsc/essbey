@@ -28,19 +28,19 @@ volumes:
     mongo_data: {}
     # mosquitto_data: {}
     prometheus_data: {}
-    openvpn-ui_data: {}
+    # openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
     # graphite_data: {}
     thelounge_data: {}
     commafeed_data: {}
-    redis_data: {}
-    zenbot_data: {}
+    # redis_data: {}
+    # zenbot_data: {}
     theia_data: {}
-    jsbin_data: {}
+    # jsbin_data: {}
     # jenkins_data: {}
-    see-eye_data: {}
-    chronograf_data: {}
+    # see-eye_data: {}
+    # chronograf_data: {}
     # openvpn_data: {}
     # openvpn-tcp_data: {}
 
@@ -342,9 +342,6 @@ services:
         container_name: backup-openvpn
         image: futurice/docker-volume-backup
         restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
         volumes:
             - ./config/openvpn:/backup/openvpn:ro
             - ${WD1To_PATH}/backup/openvpn:/archive
@@ -912,9 +909,6 @@ services:
         container_name: backup-heimdall
         image: futurice/docker-volume-backup
         restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
         volumes:
             - ./config/heimdall:/backup/heimdall:ro
             - ${WD1To_PATH}/backup/heimdall:/archive
@@ -1470,27 +1464,24 @@ services:
             - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
             - "traefik.port=15672"
 
-    # thelounge:
-    #     image: thelounge/thelounge
-    #     container_name: thelounge
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - thelounge_data:/var/opt/thelounge
-    #     hostname: thelounge
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
-    #         - "traefik.irc.port=9000"
-    #
+    thelounge:
+        image: thelounge/thelounge
+        container_name: thelounge
+        restart: ${RESTART_MODE}
+        volumes:
+            - thelounge_data:/var/opt/thelounge
+        hostname: thelounge
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
+            - "traefik.irc.port=9000"
+
     backup-thelounge:
         container_name: backup-thelounge
         image: futurice/docker-volume-backup
         restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
         volumes:
             - thelounge_data:/backup/thelounge:ro
             - ${WD1To_PATH}/backup/thelounge:/archive
@@ -1517,9 +1508,6 @@ services:
         container_name: backup-commafeed
         image: futurice/docker-volume-backup
         restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_URL: influxdb
-            INFLUXDB_DB: backups
         volumes:
             - commafeed_data:/backup/commafeed:ro
             - ${WD1To_PATH}/backup/commafeed:/archive
@@ -1610,6 +1598,17 @@ services:
             - "traefik.frontend.rule=Host:theia.${DOMAIN}"
             - "traefik.docker.network=${EXPOSED_NETWORK}"
             - "traefik.port=3000"
+
+    backup-theia:
+        container_name: backup-theia
+        image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
+        volumes:
+            - theia_data:/backup/theia:ro
+            - ${WD1To_PATH}/backup/theia:/archive
+        hostname: backup-theia
+        networks:
+            - hidden
 
     # jsbin:
     #     image: robbash/jsbin
@@ -1769,5 +1768,16 @@ services:
             - ./config/rotate-backup/rotate-backup.ini:/config/rotate-backup.ini
             - ${WD1To_PATH}/backup:/media
         hostname: rotate-backup
+        networks:
+            - hidden
+
+    backup-shared:
+        container_name: backup-shared
+        image: futurice/docker-volume-backup
+        restart: ${RESTART_MODE}
+        volumes:
+            - ./shared:/backup/shared:ro
+            - ${WD1To_PATH}/backup/shared:/archive
+        hostname: backup-shared
         networks:
             - hidden
