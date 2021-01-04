@@ -49,4 +49,4 @@
     action.yml
 
 my ipv4 -> `dig +short TXT o-o.myaddr.l.google.com @ns3.google.com |sed 's/\"//g'`
-what is registered at duckdns.org -> `dig +short mydomain.duckdns.org @1.1.1.1 `
+what is registered at duckdns.org -> `dig +short mydomain.duckdns.org @1.1.1.1`
