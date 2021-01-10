@@ -16,7 +16,8 @@ scrape_configs:
   - job_name: nodeexporter
     scrape_interval: 5s
     static_configs:
-      - targets: ['sombra.home:9100', 'lucio.home:9100']
+      # - targets: ['sombra.home:9100', 'lucio.home:9100']
+      - targets: ['sombra.home:9100']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -24,7 +25,8 @@ scrape_configs:
   - job_name: cadvisor
     scrape_interval: 5s
     static_configs:
-      - targets: ['cadvisor:8080', 'cadvisor.lucio.home']
+      # - targets: ['cadvisor:8080', 'cadvisor.lucio.home']
+      - targets: ['cadvisor:8080']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
@@ -43,14 +45,16 @@ scrape_configs:
     scrape_interval: 10s
     honor_labels: true
     static_configs:
-      - targets: ['traefik:8080', 'traefik.lucio.home']
+      # - targets: ['traefik:8080', 'traefik.lucio.home']
+      - targets: ['traefik:8080']
     tls_config:
       ca_file: '/etc/ca/rootCA.pem'
 
   - job_name: docker
     scrape_interval: 10s
     static_configs:
-      - targets: ['sombra.home:42375', 'lucio.home:42375']
+      # - targets: ['sombra.home:42375', 'lucio.home:42375']
+      - targets: ['sombra.home:42375']
 
   # - job_name: jenkins
   #   metrics_path: '/prometheus/'
@@ -64,9 +68,9 @@ scrape_configs:
     static_configs:
       - targets:
         - http://vpn-client:9091
-        - http://vpn-client:9000
-        - http://vpn-client:3000
-        - http://vpn-client:8112
+        # - http://vpn-client:9000
+        # - http://vpn-client:3000
+        # - http://vpn-client:8112
         # - http://prometheus.io    # Target to probe with http.
         # - https://prometheus.io   # Target to probe with https.
         # - http://example.com:8080 # Target to probe with http on port 8080.
