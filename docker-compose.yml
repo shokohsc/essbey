@@ -1071,21 +1071,21 @@ services:
             - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
             - "traefik.port=80"
 
-    # paint-web:
-    #     container_name: paint-web
-    #     image: shokohsc/mini-paint
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         TZ: ${TIMEZONE}
-    #     hostname: paint-web
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:paint.${DOMAIN}"
-    #         - "traefik.port=80"
+    paint-web:
+        container_name: paint-web
+        image: shokohsc/mini-paint
+        restart: ${RESTART_MODE}
+        environment:
+            PGID: ${PGID}
+            PUID: ${PUID}
+            TZ: ${TIMEZONE}
+        hostname: paint-web
+        networks:
+            - connected
+        labels:
+            - "traefik.enable=true"
+            - "traefik.frontend.rule=Host:paint.${DOMAIN}"
+            - "traefik.port=80"
 
     telegraf: # Telegraf
         container_name: telegraf
