@@ -32,28 +32,28 @@ heartbeat.monitors:
       name: chromecast
       schedule: '@every 5s'
       hosts:
-        - 192.168.1.43
+        - 192.168.254.43
 
     - type: icmp
       id: pi
       name: pi
       schedule: '@every 5s'
       hosts:
-        - 192.168.1.53
+        - 192.168.254.53
 
     - type: icmp
       id: lucio
       name: lucio
       schedule: '@every 5s'
       hosts:
-        - 192.168.1.73
+        - 192.168.254.73
 
     - type: icmp
       id: gateway
       name: gateway
       schedule: '@every 5s'
       hosts:
-        - 192.168.1.1
+        - 192.168.254.1
 
 processors:
     - add_docker_metadata:
@@ -66,7 +66,7 @@ processors:
 
 output.logstash:
     hosts: ["logstash:5044"]
-        
+
 logging.json: true
 logging.metrics.enabled: false
 logging.level: warning

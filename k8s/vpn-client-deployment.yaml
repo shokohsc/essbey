@@ -48,7 +48,7 @@ spec:
       - env:
         - name: FIREWALL
         - name: ROUTE
-          value: 192.168.1.0/24
+          value: 192.168.254.0/24
         - name: SIDEKICK_URL
           value: http://sidekick:3000/api/ovpn
         - name: TZ
