@@ -195,10 +195,15 @@ insecureSkipVerify = true
   watch = true
 
 [backends]
+  [backends.box]
+    [backends.box.servers]
+      [backends.box.servers.server0]
+      url = "http://192.168.1.1"
+      weight = 1
   [backends.routeur]
     [backends.routeur.servers]
       [backends.routeur.servers.server0]
-      url = "http://192.168.1.1"
+      url = "http://192.168.254.1"
       weight = 1
 
  [backends.kind]
@@ -208,6 +213,13 @@ insecureSkipVerify = true
      weight = 1
 
 [frontends]
+  [frontends.box]
+  entryPoints = ["http", "https"]
+  backend = "box"
+  passHostHeader = true
+  [frontends.box.routes]
+    [frontends.box.routes.route0]
+      rule = "Host:box.shokohsc.home"
   [frontends.routeur]
   entryPoints = ["http", "https"]
   backend = "routeur"
