@@ -1,11 +1,9 @@
 FROM theiaide/theia:1.0.0
 
-ARG KIND_VERSION="v0.9.0"
+ARG KIND_VERSION="v0.10.0"
 ARG K9S_VERSION="v0.24.2"
-ARG HELM_VERSION="v3.4.1"
-ARG TERRAFORM_VERSION="0.14.3"
-ARG SOPS_VERSION="v3.6.1"
-ARG STEP_VERSION="0.15.3"
+ARG HELM_VERSION="v3.5.1"
+ARG TERRAFORM_VERSION="0.14.5"
 
 USER root
 RUN \
@@ -51,14 +49,5 @@ wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${T
 unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 mv terraform /usr/bin/terraform && \
 rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-# SOPS https://github.com/mozilla/sops
-wget https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux && \
-mv sops-${SOPS_VERSION}.linux /usr/bin/sops && \
-chmod +x /usr/bin/sops && \
-# STEP https://github.com/smallstep/cli
-wget https://github.com/smallstep/cli/releases/download/v${STEP_VERSION}/step_linux_${STEP_VERSION}_amd64.tar.gz && \
-tar xzf step_linux_${STEP_VERSION}_amd64.tar.gz && \
-mv step_${STEP_VERSION}/bin/step /usr/bin/step && \
-rm -rf step_linux_${STEP_VERSION}_amd64.tar.gz
 
 USER theia
