@@ -898,7 +898,6 @@ services:
             - ./config/heimdall:/config
             - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
         hostname: heimdall
-        dns: 192.168.254.63
         networks:
             - connected
         labels:
