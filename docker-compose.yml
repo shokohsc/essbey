@@ -899,8 +899,8 @@ services:
             - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
         hostname: heimdall
         dns:
-          # - 127.0.0.11
-          - 192.168.254.63
+            # - 127.0.0.11
+            - 192.168.254.63
         networks:
             - connected
         labels:
