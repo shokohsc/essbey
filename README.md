@@ -8,7 +8,9 @@
         -C $CIPHER \
         -n $DNS_IP_ADDRESS \
         -e 'push "redirect-gateway def1 bypass-dhcp"' \
-        -e 'management 0.0.0.0 5555'
+        -e 'management 0.0.0.0 5555' \
+        -s 10.0.0.0/24 \
+        -r 192.168.254.0
     $> docker-compose run --rm openvpn ovpn_initpki
     $> sudo chown -R $(whoami): ./config/openvpn
     $> docker-compose up -d openvpn
