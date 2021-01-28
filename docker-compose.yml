@@ -391,7 +391,7 @@ services:
         networks:
             connected:
                 ipv4_address: 172.1.0.63
-        dns: 8.8.8.8
+        dns: 1.1.1.1
         labels:
             - "autoheal=true"
             - "traefik.enable=true"
@@ -898,9 +898,7 @@ services:
             - ./config/heimdall:/config
             - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
         hostname: heimdall
-        dns:
-            # - 127.0.0.11
-            - 192.168.254.63
+        dns: 1.1.1.1
         networks:
             - connected
         labels:
