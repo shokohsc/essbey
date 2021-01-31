@@ -48,6 +48,6 @@ rm -rf linux-amd64 && \
 wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 mv terraform /usr/bin/terraform && \
-rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 USER theia
