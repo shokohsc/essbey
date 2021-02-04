@@ -4,10 +4,12 @@ ARG KIND_VERSION="v0.10.0"
 ARG K9S_VERSION="v0.24.2"
 ARG HELM_VERSION="v3.5.1"
 ARG TERRAFORM_VERSION="0.14.5"
+ARG CHART_TESTING_VERSION="3.3.1"
 
 USER root
 RUN \
-apk add --no-cache bash curl wget docker zsh git vim openssl unzip gnupg netcat-openbsd jq
+apk add --no-cache bash curl wget docker zsh git vim openssl unzip gnupg netcat-openbsd jq python3 && \
+pip3 install --no-cache --upgrade pip setuptools wheel
 
 USER theia
 RUN \
@@ -23,7 +25,7 @@ apk add --no-cache bash curl wget docker zsh git vim openssl unzip gnupg netcat-
 grep -qxF 'docker' /etc/group || addgroup -g 998 docker && \
 groups theia |grep docker || addgroup theia docker && \
 groups theia |grep root || addgroup theia root && \
-sed -i 's/docker:x:101:theia/docker:x:998:theia/g' /etc/group && \
+sed -i 's/docker:x:101:theia/docker:x:999:theia/g' /etc/group && \
 # KIND https://github.com/kubernetes-sigs/kind
 wget https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64 && \
 chmod +x kind-linux-amd64 && \
@@ -48,6 +50,12 @@ rm -rf linux-amd64 && \
 wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 mv terraform /usr/bin/terraform && \
-rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+# CHART TESTING https://github.com/helm/chart-testing/
+pip install yamllint yamale && \
+wget https://github.com/helm/chart-testing/releases/download/v${CHART_TESTING_VERSION}/chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
+tar xzf chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
+mv ct /usr/bin/ct && \
+rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md
 
 USER theia
