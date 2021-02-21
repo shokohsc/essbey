@@ -2,9 +2,12 @@ FROM theiaide/theia:1.0.0
 
 ARG KIND_VERSION="v0.10.0"
 ARG K9S_VERSION="v0.24.2"
-ARG HELM_VERSION="v3.5.1"
+ARG HELM_VERSION="v3.5.2"
 ARG TERRAFORM_VERSION="0.14.5"
 ARG CHART_TESTING_VERSION="3.3.1"
+ARG KUBESEAL_VERSION="v0.15.0"
+
+ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 
 USER root
 RUN \
@@ -56,6 +59,9 @@ pip install yamllint yamale && \
 wget https://github.com/helm/chart-testing/releases/download/v${CHART_TESTING_VERSION}/chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
 tar xzf chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
 mv ct /usr/bin/ct && \
-rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md
+rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md && \
+# KUBESEAL https://github.com/bitnami-labs/sealed-secrets/
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
+install -m 755 kubeseal /usr/bin/kubeseal
 
 USER theia
