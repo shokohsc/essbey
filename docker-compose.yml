@@ -1583,34 +1583,34 @@ services:
     #         - "traefik.docker.network=${EXPOSED_NETWORK}"
     #         - "traefik.port=443"
 
-    theia:
-        build:
-            context: build/theia
-            network: host
-        container_name: theia
-        restart: ${RESTART_MODE}
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - theia_data:/home/project:cached
-        hostname: theia
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:theia.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
-
-    backup-theia:
-        container_name: backup-theia
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - theia_data:/backup/theia:ro
-            - ${WD1To_PATH}/backup/theia:/archive
-        hostname: backup-theia
-        networks:
-            - hidden
+    # theia:
+    #     build:
+    #         context: build/theia
+    #         network: host
+    #     container_name: theia
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - theia_data:/home/project:cached
+    #     hostname: theia
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:theia.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=3000"
+    #
+    # backup-theia:
+    #     container_name: backup-theia
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - theia_data:/backup/theia:ro
+    #         - ${WD1To_PATH}/backup/theia:/archive
+    #     hostname: backup-theia
+    #     networks:
+    #         - hidden
 
     # jsbin:
     #     image: robbash/jsbin
