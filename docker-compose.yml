@@ -46,78 +46,78 @@ volumes:
 
 services:
 
-    elasticsearch: # Json database
-        container_name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
-        volumes:
-            - elasticsearch_data:/usr/share/elasticsearch/data
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-        hostname: elasticsearch
-        networks:
-            - hidden
-
-    kibana: # Elasticsearch data UI
-        container_name: kibana
-        image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        environment:
-            SERVER_NAME: kibana
-            LOGGING_QUIET: 'true'
-        hostname: kibana
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - elasticsearch
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=5601"
-
-    logstash: # Logs watcher
-        container_name: logstash
-        image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        environment:
-            LOG_LEVEL: warn
-        volumes:
-            - ./config/logstash:/usr/share/logstash/pipeline
-        ports:
-            - '5044:5044/tcp'
-        hostname: logstash
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - rabbitmq
-            - elasticsearch
-        labels:
-            - "traefik.enable=false"
-
-    filebeat: # Logs watcher
-        container_name: filebeat
-        image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
-        restart: ${RESTART_MODE}
-        command: filebeat -e -strict.perms=false
-        user: root
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /var/lib/docker:/var/lib/docker:ro
-            - ./config/beats/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-        hostname: filebeat-sombra
-        networks:
-            - hidden
-        depends_on:
-            - logstash
-            - kibana
+    # elasticsearch: # Json database
+    #     container_name: elasticsearch
+    #     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #       discovery.type: single-node
+    #       ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+    #     volumes:
+    #         - elasticsearch_data:/usr/share/elasticsearch/data
+    #     ulimits:
+    #         memlock:
+    #             soft: -1
+    #             hard: -1
+    #     hostname: elasticsearch
+    #     networks:
+    #         - hidden
+    #
+    # kibana: # Elasticsearch data UI
+    #     container_name: kibana
+    #     image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         SERVER_NAME: kibana
+    #         LOGGING_QUIET: 'true'
+    #     hostname: kibana
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - elasticsearch
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:kibana.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=5601"
+    #
+    # logstash: # Logs watcher
+    #     container_name: logstash
+    #     image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         LOG_LEVEL: warn
+    #     volumes:
+    #         - ./config/logstash:/usr/share/logstash/pipeline
+    #     ports:
+    #         - '5044:5044/tcp'
+    #     hostname: logstash
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - rabbitmq
+    #         - elasticsearch
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # filebeat: # Logs watcher
+    #     container_name: filebeat
+    #     image: docker.elastic.co/beats/filebeat:${ELK_VERSION}
+    #     restart: ${RESTART_MODE}
+    #     command: filebeat -e -strict.perms=false
+    #     user: root
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock:ro
+    #         - /var/lib/docker:/var/lib/docker:ro
+    #         - ./config/beats/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    #     hostname: filebeat-sombra
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - logstash
+    #         - kibana
 
     # journalbeat: # Logs system
     #     container_name: journalbeat
@@ -625,76 +625,76 @@ services:
     #         - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
     #         - "traefik.port=8096"
 
-    grafana: # Monitoring tool connected server
-        container_name: grafana
-        image: grafana/grafana:6.7.3
-        restart: ${RESTART_MODE}
-        environment:
-            GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-            GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-            GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
-            GF_SMTP_HOST: ${GF_SMTP_HOST}
-            GF_SMTP_USER: ${GF_SMTP_USER}
-            GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
-            GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
-            GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
-            GF_INSTALL_PLUGINS: grafana-piechart-panel
-            GF_LOG_LEVEL: warn
-        volumes:
-            - grafana_data:/var/lib/grafana
-        hostname: grafana
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - prometheus
-            - influxdb
-            # - graphite
-            - elasticsearch
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=3000"
-
-    prometheus: # Database, grafana requirement
-        image: prom/prometheus
-        container_name: prometheus
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/prometheus/:/etc/prometheus/
-            - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
-            - prometheus_data:/prometheus
-        command:
-            - '--config.file=/etc/prometheus/prometheus.yml'
-            - '--storage.tsdb.path=/prometheus'
-            - '--web.console.libraries=/etc/prometheus/console_libraries'
-            - '--web.console.templates=/etc/prometheus/consoles'
-            - '--storage.tsdb.retention.time=24h'
-            - '--web.enable-lifecycle'
-        hostname: prometheus
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "traefik.enable=true"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
-            - "traefik.port=9090"
-
-    blackbox: # Prometheus requirement
-        image: prom/blackbox-exporter:master
-        container_name: blackbox
-        restart: ${RESTART_MODE}
-        hostname: blackbox
-        networks:
-            - connected
-        depends_on:
-            - prometheus
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
-            - "traefik.port=9115"
+    # grafana: # Monitoring tool connected server
+    #     container_name: grafana
+    #     image: grafana/grafana:6.7.3
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+    #         GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
+    #         GF_SMTP_HOST: ${GF_SMTP_HOST}
+    #         GF_SMTP_USER: ${GF_SMTP_USER}
+    #         GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
+    #         GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
+    #         GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
+    #         GF_INSTALL_PLUGINS: grafana-piechart-panel
+    #         GF_LOG_LEVEL: warn
+    #     volumes:
+    #         - grafana_data:/var/lib/grafana
+    #     hostname: grafana
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - prometheus
+    #         - influxdb
+    #         # - graphite
+    #         - elasticsearch
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=3000"
+    #
+    # prometheus: # Database, grafana requirement
+    #     image: prom/prometheus
+    #     container_name: prometheus
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/prometheus/:/etc/prometheus/
+    #         - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
+    #         - prometheus_data:/prometheus
+    #     command:
+    #         - '--config.file=/etc/prometheus/prometheus.yml'
+    #         - '--storage.tsdb.path=/prometheus'
+    #         - '--web.console.libraries=/etc/prometheus/console_libraries'
+    #         - '--web.console.templates=/etc/prometheus/consoles'
+    #         - '--storage.tsdb.retention.time=24h'
+    #         - '--web.enable-lifecycle'
+    #     hostname: prometheus
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
+    #         - "traefik.port=9090"
+    #
+    # blackbox: # Prometheus requirement
+    #     image: prom/blackbox-exporter:master
+    #     container_name: blackbox
+    #     restart: ${RESTART_MODE}
+    #     hostname: blackbox
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - prometheus
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
+    #         - "traefik.port=9115"
 
     # mysqld-exporter: # Prometheus requirement
     #     image: prom/mysqld-exporter
@@ -843,38 +843,38 @@ services:
     #     networks:
     #         - hidden
     #
-    nodeexporter: # Grafana requirement
-        image: quay.io/prometheus/node-exporter
-        container_name: nodeexporter
-        restart: ${RESTART_MODE}
-        cap_add:
-            - sys_time
-        volumes:
-            - /:/host:ro,rslave
-        command:
-            - '--path.rootfs=/host'
-        pid: host
-        network_mode: host
-
-    cadvisor: # Grafana requirement
-        image: gcr.io/google-containers/cadvisor
-        container_name: cadvisor
-        restart: ${RESTART_MODE}
-        volumes:
-            - /dev/disk/:/dev/disk:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-            - /sys:/sys:ro
-            - /var/run:/var/run:ro
-            - /:/rootfs:ro
-        hostname: cadvisor
-        networks:
-            - connected
-            - hidden
-        labels:
-            - "traefik.enable=true"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
-            - "traefik.port=8080"
+    # nodeexporter: # Grafana requirement
+    #     image: quay.io/prometheus/node-exporter
+    #     container_name: nodeexporter
+    #     restart: ${RESTART_MODE}
+    #     cap_add:
+    #         - sys_time
+    #     volumes:
+    #         - /:/host:ro,rslave
+    #     command:
+    #         - '--path.rootfs=/host'
+    #     pid: host
+    #     network_mode: host
+    #
+    # cadvisor: # Grafana requirement
+    #     image: gcr.io/google-containers/cadvisor
+    #     container_name: cadvisor
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /dev/disk/:/dev/disk:ro
+    #         - /var/lib/docker/:/var/lib/docker:ro
+    #         - /sys:/sys:ro
+    #         - /var/run:/var/run:ro
+    #         - /:/rootfs:ro
+    #     hostname: cadvisor
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
+    #         - "traefik.port=8080"
 
     # pushgateway: # Grafana requirement
     #     image: prom/pushgateway
@@ -1010,66 +1010,66 @@ services:
             - "traefik.frontend.rule=Host:comics.${DOMAIN}"
             - "traefik.port=80"
 
-    wol-web:
-        container_name: wol-web
-        image: shokohsc/server-wol
-        restart: ${RESTART_MODE}
-        tty: true
-        hostname: wol-web
-        networks:
-            - hidden
-        logging:
-            driver: none
-
-    php-fpm-wol:
-        container_name: php-fpm-wol
-        image: shokohsc/alpine-php-fpm
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-            DOCKER_HOST: 'tcp://lucio.home:2376'
-            DOCKER_TLS_VERIFY: 'true'
-            DOCKER_CERT_PATH: /etc/ca
-            PEER_ID: ${PEER_ID}
-        volumes:
-            # - '/var/run/docker.sock:/var/run/docker.sock'
-            # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
-            - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
-            - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
-        volumes_from:
-            - wol-web
-        hostname: php-fpm
-        networks:
-            - connected
-        depends_on:
-            - wol-web
-        labels:
-            - "traefik.enable=false"
-
-    nginx-wol:
-        container_name: nginx-wol
-        image: shokohsc/alpine-nginx
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes_from:
-            - wol-web
-        hostname: nginx-wol
-        networks:
-            - connected
-        links:
-            - "php-fpm-wol:php-fpm"
-        depends_on:
-            - php-fpm-wol
-            - wol-web
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
-            - "traefik.port=80"
+    # wol-web:
+    #     container_name: wol-web
+    #     image: shokohsc/server-wol
+    #     restart: ${RESTART_MODE}
+    #     tty: true
+    #     hostname: wol-web
+    #     networks:
+    #         - hidden
+    #     logging:
+    #         driver: none
+    #
+    # php-fpm-wol:
+    #     container_name: php-fpm-wol
+    #     image: shokohsc/alpine-php-fpm
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #         DOCKER_HOST: 'tcp://lucio.home:2376'
+    #         DOCKER_TLS_VERIFY: 'true'
+    #         DOCKER_CERT_PATH: /etc/ca
+    #         PEER_ID: ${PEER_ID}
+    #     volumes:
+    #         # - '/var/run/docker.sock:/var/run/docker.sock'
+    #         # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
+    #         - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
+    #         - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
+    #     volumes_from:
+    #         - wol-web
+    #     hostname: php-fpm
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - wol-web
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # nginx-wol:
+    #     container_name: nginx-wol
+    #     image: shokohsc/alpine-nginx
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes_from:
+    #         - wol-web
+    #     hostname: nginx-wol
+    #     networks:
+    #         - connected
+    #     links:
+    #         - "php-fpm-wol:php-fpm"
+    #     depends_on:
+    #         - php-fpm-wol
+    #         - wol-web
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
+    #         - "traefik.port=80"
 
     # paint-web:
     #     container_name: paint-web
@@ -1087,23 +1087,23 @@ services:
     #         - "traefik.frontend.rule=Host:paint.${DOMAIN}"
     #         - "traefik.port=80"
 
-    telegraf: # Telegraf
-        container_name: telegraf
-        image: telegraf
-        restart: ${RESTART_MODE}
-        hostname: telegraf
-        networks:
-            - connected
-            - hidden
-        volumes:
-            - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-        depends_on:
-            - influxdb
-            # - graphite
-            - elasticsearch
-            # - mosquitto
-        labels:
-            - "traefik.enable=false"
+    # telegraf: # Telegraf
+    #     container_name: telegraf
+    #     image: telegraf
+    #     restart: ${RESTART_MODE}
+    #     hostname: telegraf
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     volumes:
+    #         - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    #     depends_on:
+    #         - influxdb
+    #         # - graphite
+    #         - elasticsearch
+    #         # - mosquitto
+    #     labels:
+    #         - "traefik.enable=false"
 
     # graphite: # Graphite database
     #     container_name: graphite
@@ -1119,22 +1119,22 @@ services:
     #         - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
     #         - "traefik.port=8080"
 
-    influxdb: # Influx database
-        container_name: influxdb
-        image: influxdb
-        restart: ${RESTART_MODE}
-        environment:
-            INFLUXDB_DB: miflora
-            INFLUXDB_USER: miflora
-            INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-            INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
-            INFLUXDB_HTTP_LOG_ENABLED: 'false'
-            INFLUXDB_LOGGING_LEVEL: warn
-        hostname: influxdb
-        networks:
-            - hidden
-        volumes:
-            - influx_data:/var/lib/influxdb
+    # influxdb: # Influx database
+    #     container_name: influxdb
+    #     image: influxdb
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         INFLUXDB_DB: miflora
+    #         INFLUXDB_USER: miflora
+    #         INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    #         INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
+    #         INFLUXDB_HTTP_LOG_ENABLED: 'false'
+    #         INFLUXDB_LOGGING_LEVEL: warn
+    #     hostname: influxdb
+    #     networks:
+    #         - hidden
+    #     volumes:
+    #         - influx_data:/var/lib/influxdb
 
     # chronograf: # InfluxDB Admin UI
     #     image: chronograf
