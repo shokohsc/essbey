@@ -1,4 +1,4 @@
-FROM theiaide/theia:1.0.0
+FROM theiaide/theia:1.10.0
 
 ARG KIND_VERSION="v0.10.0"
 ARG K9S_VERSION="v0.24.2"
