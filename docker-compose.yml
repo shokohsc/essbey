@@ -1597,7 +1597,7 @@ services:
             - lucio
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:theia.kind.lucio.home"
+            - "traefik.frontend.rule=Host:theia.lucio.home"
             - "traefik.docker.network=lucio"
             - "traefik.port=3000"
     #
