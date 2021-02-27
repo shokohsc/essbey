@@ -2,38 +2,38 @@ version: "2.4"
 
 networks:
 
-    connected:
-        name: seedbox_connected
-        driver: bridge
-        ipam:
-            driver: default
-            config: # http://www.subnet-calculator.com/subnet.php?net_class=B
-            - subnet: 172.1.0.0/25 # 172.1.0.1 - 172.1.0.126
-              gateway: 172.1.0.126
-              ip_range: 172.1.0.0/26 # 172.1.0.1 - 172.1.0.62
+    # connected:
+    #     name: seedbox_connected
+    #     driver: bridge
+    #     ipam:
+    #         driver: default
+    #         config: # http://www.subnet-calculator.com/subnet.php?net_class=B
+    #         - subnet: 172.1.0.0/25 # 172.1.0.1 - 172.1.0.126
+    #           gateway: 172.1.0.126
+    #           ip_range: 172.1.0.0/26 # 172.1.0.1 - 172.1.0.62
 
-    hidden:
-        name: seedbox_hidden
-        internal: true
+    # hidden:
+    #     name: seedbox_hidden
+    #     internal: true
 
-    pihole:
+    lucio:
         external:
-            name: pihole
+            name: lucio
 
 volumes:
     # elasticsearch_data: {}
     # elasticsearch-diskover_data: {}
     # grafana_data: {}
     # influx_data: {}
-    mongo_data: {}
+    # mongo_data: {}
     # mosquitto_data: {}
     # prometheus_data: {}
     # openvpn-ui_data: {}
-    mattermost_data: {}
-    mysql_data: {}
+    # mattermost_data: {}
+    # mysql_data: {}
     # graphite_data: {}
-    thelounge_data: {}
-    commafeed_data: {}
+    # thelounge_data: {}
+    # commafeed_data: {}
     # redis_data: {}
     # zenbot_data: {}
     theia_data: {}
@@ -217,839 +217,778 @@ services:
     #         - logstash
     #         - kibana
 
-    samba: # SMB server
-        container_name: samba
-        image: dperson/samba
-        command: '-s "shared;/mount;yes;no;yes;all;none" -p'
-        restart: ${RESTART_MODE}
-        ports:
-            - "139:139"
-            - "445:445"
-        volumes:
-            - ./download/complete:/mount/downloads
-            - ./shared:/mount/shared
-            - ${WD1To_PATH}:/mount/media/WD1To
-            - ${WD2To_PATH}:/mount/media/WD2To
-        hostname: samba
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
-    sftp: # Sftp server
-        container_name: sftp
-        image: atmoz/sftp
-        command: ${SFTP_COMMAND}
-        restart: ${RESTART_MODE}
-        ports:
-            - "32768:22"
-        volumes:
-            - ./download/complete:/home/shokohsc/upload/downloads
-            - ./shared:/home/shokohsc/upload/shared
-            - ${WD1To_PATH}:/home/shokohsc/upload/media/WD1To
-            - ${WD2To_PATH}:/home/shokohsc/upload/media/WD2To
-        hostname: sftp
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
-    # nfs-wd1to: # NFS server for media disks
-    #     container_name: nfs-wd1to
-    #     image: shokohsc/volume-nfs:v0.0.2
-    #     command: /mnt
+    # samba: # SMB server
+    #     container_name: samba
+    #     image: dperson/samba
+    #     command: '-s "shared;/mount;yes;no;yes;all;none" -p'
     #     restart: ${RESTART_MODE}
-    #     privileged: true
     #     ports:
-    #         - "32049:2049"
+    #         - "139:139"
+    #         - "445:445"
     #     volumes:
-    #         - ${WD1To_PATH}:/mnt
-    #     hostname: nfs-wd1to
+    #         - ./download/complete:/mount/downloads
+    #         - ./shared:/mount/shared
+    #         - ${WD1To_PATH}:/mount/media/WD1To
+    #         - ${WD2To_PATH}:/mount/media/WD2To
+    #     hostname: samba
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
     #
-    # nfs-wd2to: # NFS server for media disks
-    #     container_name: nfs-wd2to
-    #     image: shokohsc/volume-nfs:v0.0.2
-    #     command: /mnt
+    # sftp: # Sftp server
+    #     container_name: sftp
+    #     image: atmoz/sftp
+    #     command: ${SFTP_COMMAND}
     #     restart: ${RESTART_MODE}
-    #     privileged: true
     #     ports:
-    #         - "32050:2049"
+    #         - "32768:22"
     #     volumes:
-    #         - ${WD2To_PATH}:/mnt
-    #     hostname: nfs-wd2to
+    #         - ./download/complete:/home/shokohsc/upload/downloads
+    #         - ./shared:/home/shokohsc/upload/shared
+    #         - ${WD1To_PATH}:/home/shokohsc/upload/media/WD1To
+    #         - ${WD2To_PATH}:/home/shokohsc/upload/media/WD2To
+    #     hostname: sftp
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=false"
-
-    duckdns: # Dynamic IP <-> Domain
-        container_name: duckdns
-        image: linuxserver/duckdns
-        restart: ${RESTART_MODE}
-        environment:
-            SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
-            TOKEN: ${DUCKDNS_TOKEN}
-            TZ: ${TIMEZONE}
-        hostname: duckdns
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
-    openvpn: # Internal vpn
-        container_name: openvpn
-        image: kylemanna/openvpn
-        tty: true
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        expose:
-            - "5555"
-        ports:
-            - "32767:1194/udp"
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-        hostname: openvpn
-        networks:
-            - connected
-            - pihole
-        labels:
-            - "traefik.enable=false"
-
-    openvpn-tcp: # Internal vpn fallback tcp
-        container_name: openvpn-tcp
-        image: kylemanna/openvpn
-        command: ovpn_run --proto tcp
-        tty: true
-        privileged: true
-        restart: ${RESTART_MODE}
-        ports:
-            - "32767:1194/tcp"
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-        hostname: openvpn-tcp
-        networks:
-            - connected
-            - pihole
-        labels:
-            - "traefik.enable=false"
-
-    backup-openvpn:
-        container_name: backup-openvpn
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/openvpn:/backup/openvpn:ro
-            - ${WD1To_PATH}/backup/openvpn:/archive
-        hostname: backup-openvpn
-        networks:
-            - hidden
-
-    sidekick: # Vpn profile api
-        container_name: sidekick
-        image: shokohsc/sidekick
-        restart: ${RESTART_MODE}
-        environment:
-            MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
-            RCON_HOST: minecraft
-            RCON_PORT: ${RCON_PORT}
-            RCON_PASSWORD: ${RCON_PASSWORD}
-            AMQP_HOST: rabbitmq
-        hostname: sidekick
-        networks:
-            - connected
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:sidekick.${DOMAIN}"
-            - "traefik.port=3000"
-
-    vpn-client: # Torrenting vpn
-        container_name: vpn-client
-        image: shokohsc/openvpn-client
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        environment:
-            TZ: ${TIMEZONE}
-            FIREWALL: ''
-            ROUTE: 192.168.254.0/24
-            VPNPORT_1: 9091
-            VPNPORT_2: 9000
-            VPNPORT_3: 3000
-            VPNPORT_4: 8112
-            SIDEKICK_URL: http://sidekick:3000/api/ovpn
-        depends_on:
-            - sidekick
-        devices:
-            - "/dev/net/tun:/dev/net/tun"
-        hostname: vpn-client
-        networks:
-            connected:
-                ipv4_address: 172.1.0.63
-        dns: 1.1.1.1
-        labels:
-            - "autoheal=true"
-            - "traefik.enable=true"
-            - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
-            - "traefik.transmission.port=9091"
-            - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
-            - "traefik.peerflix.port=9000"
-            - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
-            - "traefik.cloudtorrent.port=3000"
-            - "traefik.deluge.frontend.rule=Host:deluge.${DOMAIN}"
-            - "traefik.deluge.port=8112"
-
-    transmission: # Torrent client
-        container_name: transmission
-        image: linuxserver/transmission
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/transmission:/config
-            - ./download:/downloads
-            - ./shared/transmission:/watch
-        network_mode: "service:vpn-client"
-        depends_on:
-            - vpn-client
-        labels:
-            - "autoheal=true"
-        healthcheck:
-            test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-            interval: 30s
-            timeout: 30s
-            start_period: 60s
-            retries: 5
-
-    # peerflix:
-    #     image: shokohsc/peerflix-server
-    #     container_name: peerflix
-    #     restart: ${RESTART_MODE}
-    #     network_mode: "service:vpn-client"
-    #     depends_on:
-    #         - vpn-client
-    #     labels:
-    #         - "autoheal=true"
-    #     healthcheck:
-    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-    #         interval: 30s
-    #         timeout: 30s
-    #         start_period: 60s
-    #         retries: 5
     #
-    # cloudtorrent:
-    #     image: shokohsc/cloud-torrent
-    #     container_name: cloudtorrent
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - ./download/complete:/downloads
-    #     network_mode: "service:vpn-client"
-    #     depends_on:
-    #         - vpn-client
-    #     labels:
-    #         - "autoheal=true"
-    #     healthcheck:
-    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-    #         interval: 30s
-    #         timeout: 30s
-    #         start_period: 60s
-    #         retries: 5
+    # # nfs-wd1to: # NFS server for media disks
+    # #     container_name: nfs-wd1to
+    # #     image: shokohsc/volume-nfs:v0.0.2
+    # #     command: /mnt
+    # #     restart: ${RESTART_MODE}
+    # #     privileged: true
+    # #     ports:
+    # #         - "32049:2049"
+    # #     volumes:
+    # #         - ${WD1To_PATH}:/mnt
+    # #     hostname: nfs-wd1to
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=false"
+    # #
+    # # nfs-wd2to: # NFS server for media disks
+    # #     container_name: nfs-wd2to
+    # #     image: shokohsc/volume-nfs:v0.0.2
+    # #     command: /mnt
+    # #     restart: ${RESTART_MODE}
+    # #     privileged: true
+    # #     ports:
+    # #         - "32050:2049"
+    # #     volumes:
+    # #         - ${WD2To_PATH}:/mnt
+    # #     hostname: nfs-wd2to
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=false"
     #
-    # deluge:
-    #     container_name: deluge
-    #     image: linuxserver/deluge
+    # duckdns: # Dynamic IP <-> Domain
+    #     container_name: duckdns
+    #     image: linuxserver/duckdns
     #     restart: ${RESTART_MODE}
     #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
+    #         SUBDOMAINS: ${DUCKDNS_SUBDOMAINS}
+    #         TOKEN: ${DUCKDNS_TOKEN}
     #         TZ: ${TIMEZONE}
-    #         DELUGE_LOGLEVEL: error
-    #     volumes:
-    #         - ./config/deluge:/config
-    #         - ./download:/downloads
-    #     network_mode: "service:vpn-client"
-    #     depends_on:
-    #         - vpn-client
+    #     hostname: duckdns
+    #     networks:
+    #         - connected
     #     labels:
-    #         - "autoheal=true"
-    #     healthcheck:
-    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
-    #         interval: 30s
-    #         timeout: 30s
-    #         start_period: 60s
-    #         retries: 5
-
-    traefik: # Reverse proxy
-        container_name: traefik
-        image: traefik:maroilles-alpine
-        restart: ${RESTART_MODE}
-        command: --configFile=/etc/traefik/traefik.toml --metrics --metrics.prometheus
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - ./config/traefik/certs:/etc/traefik/certs
-            - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml
-        hostname: traefik
-        networks:
-            - connected
-            - pihole
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
-            - "traefik.port=8080"
-
-    portainer: # Docker management
-        container_name: portainer
-        image: portainer/portainer
-        restart: ${RESTART_MODE}
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        hostname: portainer
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
-            - "traefik.port=9000"
-
-    autoheal: # Service looking for container to restart
-        container_name: autoheal
-        image: willfarrell/autoheal
-        restart: ${RESTART_MODE}
-        environment:
-            AUTOHEAL_INTERVAL: 10
-            AUTOHEAL_START_PERIOD: 60
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        hostname: autoheal
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=false"
-
-    commander: # Web ui server admin
-        container_name: commander
-        image: coderaiser/cloudcmd
-        restart: ${RESTART_MODE}
-        volumes:
-            - /:/mnt/fs
-            - ./download/complete:/root/downloads
-            - ./shared:/root/shared
-            - ${WD1To_PATH}:/root/media/WD1To
-            - ${WD2To_PATH}:/root/media/WD2To
-        hostname: commander
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:commander.${DOMAIN}"
-            - "traefik.port=8000"
-
-    plex: # Media server
-        container_name: plex
-        image: plexinc/pms-docker
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-            VERSION: docker
-            PLEX_CLAIM: ${PLEX_CLAIM}
-            ADVERTISE_IP: ${PLEX_ADVERTISED_URL}
-        ports:
-            - "32400:32400/tcp"
-            # - "32400:32400/udp"
-            - "32469:32469/tcp"
-            # - "32469:32469/udp"
-            # - "5353:5353/udp"
-            - "1900:1900/udp"
-            # - "3005:3005/tcp"
-            # - "8324:8324/tcp"
-            - "32410:32410/udp"
-            - "32412:32412/udp"
-            - "32413:32413/udp"
-            - "32414:32414/udp"
-        devices:
-            - "/dev/dri:/dev/dri"
-        volumes:
-            - ./config/plex:/config
-            - ${WD1To_PATH}:/data/WD1To
-            - ${WD2To_PATH}:/data/WD2To
-            - ./download/complete:/data/downloads
-        networks:
-            - connected
-        hostname: plex
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:plex.${DOMAIN}"
-            - "traefik.port=32400"
-
-    # jellyfin:
-    #     image: linuxserver/jellyfin
-    #     container_name: jellyfin
+    #         - "traefik.enable=false"
+    #
+    # openvpn: # Internal vpn
+    #     container_name: openvpn
+    #     image: kylemanna/openvpn
+    #     tty: true
+    #     cap_add:
+    #         - net_admin
     #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         TZ: ${TIMEZONE}
-    #     volumes:
-    #         - ./config/jellyfin:/config
-    #         - ${WD1To_PATH}:/data/WD1To
-    #         - ${WD2To_PATH}:/data/WD2To
+    #     expose:
+    #         - "5555"
     #     ports:
-    #         - "8096:8096/tcp"
-    #         # - "8920:8920/tcp" #optional
-    #         - "7359:7359/udp" #optional
-    #         # - "1900:1900/udp" #optional DLNA port
-    #     devices:
-    #         - /dev/dri:/dev/dri #optional
-    #         # - /dev/vcsm:/dev/vcsm #optional
-    #         # - /dev/vchiq:/dev/vchiq #optional
-    #         # - /dev/video10:/dev/video10 #optional
-    #         # - /dev/video11:/dev/video11 #optional
-    #         # - /dev/video12:/dev/video12 #optional
-    #     networks:
-    #         - connected
-    #     hostname: jellyfin
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
-    #         - "traefik.port=8096"
-
-    # grafana: # Monitoring tool connected server
-    #     container_name: grafana
-    #     image: grafana/grafana:6.7.3
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
-    #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
-    #         GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
-    #         GF_SMTP_HOST: ${GF_SMTP_HOST}
-    #         GF_SMTP_USER: ${GF_SMTP_USER}
-    #         GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
-    #         GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
-    #         GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
-    #         GF_INSTALL_PLUGINS: grafana-piechart-panel
-    #         GF_LOG_LEVEL: warn
-    #     volumes:
-    #         - grafana_data:/var/lib/grafana
-    #     hostname: grafana
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - influxdb
-    #         # - graphite
-    #         - elasticsearch
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.port=3000"
-    #
-    # prometheus: # Database, grafana requirement
-    #     image: prom/prometheus
-    #     container_name: prometheus
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - ./config/prometheus/:/etc/prometheus/
-    #         - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
-    #         - prometheus_data:/prometheus
-    #     command:
-    #         - '--config.file=/etc/prometheus/prometheus.yml'
-    #         - '--storage.tsdb.path=/prometheus'
-    #         - '--web.console.libraries=/etc/prometheus/console_libraries'
-    #         - '--web.console.templates=/etc/prometheus/consoles'
-    #         - '--storage.tsdb.retention.time=24h'
-    #         - '--web.enable-lifecycle'
-    #     hostname: prometheus
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
-    #         - "traefik.port=9090"
-    #
-    # blackbox: # Prometheus requirement
-    #     image: prom/blackbox-exporter:master
-    #     container_name: blackbox
-    #     restart: ${RESTART_MODE}
-    #     hostname: blackbox
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - prometheus
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
-    #         - "traefik.port=9115"
-
-    # mysqld-exporter: # Prometheus requirement
-    #     image: prom/mysqld-exporter
-    #     container_name: mysqld-exporter
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         DATA_SOURCE_NAME: "root:${MYSQL_ROOT_PASSWORD}@(mysql:3306)/"
-    #     hostname: mysqld-exporter
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - mysql
-    #     labels:
-    #         - "traefik.enable=false"
-    #
-    # redis-exporter: # Prometheus requirement
-    #     image: oliver006/redis_exporter:alpine
-    #     container_name: redis-exporter
-    #     restart: ${RESTART_MODE}
-    #     command: --redis.addr=redis:6379 --include-system-metrics
-    #     hostname: redis-exporter
-    #     networks:
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - redis
-    #
-    # elasticsearch-exporter: # Prometheus requirement
-    #     image: justwatch/elasticsearch_exporter:1.1.0
-    #     container_name: elasticsearch-exporter
-    #     restart: ${RESTART_MODE}
-    #     command: '--es.uri=http://elasticsearch:9200 --es.all --es.indices'
-    #     hostname: elasticsearch-exporter
-    #     networks:
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - elasticsearch
-    #
-    # transmission-exporter: # Prometheus requirement
-    #     image: metalmatze/transmission-exporter
-    #     container_name: transmission-exporter
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         TRANSMISSION_ADDR: http://vpn-client:9091
-    #     hostname: transmission-exporter
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - transmission
-    #     labels:
-    #         - "traefik.enable=false"
-    #
-    # deluge-exporter: # Prometheus requirement
-    #     image: tobbez/deluge_exporter
-    #     container_name: deluge-exporter
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         DELUGE_HOST: vpn-client
-    #     volumes:
-    #         - ./config/deluge:/root/.config/deluge/
-    #     hostname: deluge-exporter
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - deluge
-    #     labels:
-    #         - "traefik.enable=false"
-    #
-    # rabbitmq-exporter: # Prometheus requirement
-    #     image: kbudde/rabbitmq-exporter
-    #     container_name: rabbitmq-exporter
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         RABBIT_URL: http://rabbitmq:15672
-    #         LOG_LEVEL: error
-    #     hostname: rabbitmq-exporter
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-    #         - rabbitmq
-    #     labels:
-    #         - "traefik.enable=false"
-
-    # openvpn-exporter: # Prometheus requirement
-    #     image: kumina/openvpn-exporter
-    #     container_name: openvpn-exporter
-    #     command: -openvpn.status_paths /status/udp/openvpn-status.log,/status/tcp/openvpn-status.log
-    #     restart: ${RESTART_MODE}
-    #     hostname: openvpn-exporter
-    #     volumes:
-    #         - openvpn_data:/status/udp
-    #         - openvpn-tcp_data:/status/tcp
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - prometheus
-    #         - openvpn
-    #     labels:
-    #         - "traefik.enable=false"
-
-    # alertmanager: # Grafana requirement
-    #     image: prom/alertmanager
-    #     container_name: alertmanager
-    #     volumes:
-    #         - ./config/alertmanager/:/etc/alertmanager/
-    #     command:
-    #         - '--config.file=/etc/alertmanager/config.yml'
-    #         - '--storage.path=/alertmanager'
-    #         - '--cluster.listen-address='
-    #     restart: ${RESTART_MODE}
-    #     hostname: alertmanager
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - prometheus
-    #         - mattermost
-    #     labels:
-    #         - "traefik.enable=false"
-
-    # nodeexporter: # Grafana requirement
-    #     image: quay.io/prometheus/node-exporter
-    #     container_name: nodeexporter
-    #     restart: ${RESTART_MODE}
-    #     user: root
-    #     cap_add:
-    #         - sys_time
-    #     volumes:
-    #         - /proc:/host/proc:ro
-    #         - /sys:/host/sys:ro
-    #         - /:/host/root:ro
-    #     command:
-    #         - '--path.rootfs=/host/root'
-    #         - '--path.procfs=/host/proc'
-    #         - '--path.sysfs=/host/sys'
-    #         - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    #     hostname: nodeexporter
-    #     networks:
-    #         - hidden
-    #
-    # nodeexporter: # Grafana requirement
-    #     image: quay.io/prometheus/node-exporter
-    #     container_name: nodeexporter
-    #     restart: ${RESTART_MODE}
-    #     cap_add:
-    #         - sys_time
-    #     volumes:
-    #         - /:/host:ro,rslave
-    #     command:
-    #         - '--path.rootfs=/host'
-    #     pid: host
-    #     network_mode: host
-    #
-    # cadvisor: # Grafana requirement
-    #     image: gcr.io/google-containers/cadvisor
-    #     container_name: cadvisor
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - /dev/disk/:/dev/disk:ro
-    #         - /var/lib/docker/:/var/lib/docker:ro
-    #         - /sys:/sys:ro
-    #         - /var/run:/var/run:ro
-    #         - /:/rootfs:ro
-    #     hostname: cadvisor
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
-    #         - "traefik.port=8080"
-
-    # pushgateway: # Grafana requirement
-    #     image: prom/pushgateway
-    #     container_name: pushgateway
-    #     restart: ${RESTART_MODE}
-    #     hostname: pushgateway
-    #     networks:
-    #         - hidden
-    #     depends_on:
-    #         - prometheus
-
-    heimdall: # Heimdall
-        image: linuxserver/heimdall
-        container_name: heimdall
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/heimdall:/config
-            - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
-        hostname: heimdall
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
-            - "traefik.port=80"
-
-    backup-heimdall:
-        container_name: backup-heimdall
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/heimdall:/backup/heimdall:ro
-            - ${WD1To_PATH}/backup/heimdall:/archive
-        hostname: backup-heimdall
-        networks:
-            - hidden
-
-    # monitor: # Openvpn monitor
-    #     image: ruimarinho/openvpn-monitor
-    #     container_name: monitor
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         OPENVPNMONITOR_DEFAULT_MAPS: "True"
-    #         OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT: ${OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT}
-    #         OPENVPNMONITOR_DEFAULT_LATITUDE: ${OPENVPNMONITOR_DEFAULT_LATITUDE}
-    #         OPENVPNMONITOR_DEFAULT_LONGITUDE: ${OPENVPNMONITOR_DEFAULT_LONGITUDE}
-    #         OPENVPNMONITOR_DEFAULT_SITE: ${OPENVPNMONITOR_DEFAULT_SITE}
-    #         OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
-    #         OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
-    #         OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
-    #     hostname: monitor
-    #     networks:
-    #         - connected
-    #     depends_on:
-    #         - openvpn
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
-    #         - "traefik.port=80"
-    #
-    # openvpn-ui:
-    #     container_name: openvpn-ui
-    #     image: awalach/openvpn-web-ui
-    #     restart: ${RESTART_MODE}
+    #         - "32767:1194/udp"
     #     volumes:
     #         - ./config/openvpn:/etc/openvpn
-    #         - openvpn-ui_data:/opt/openvpn-gui/db
-    #     hostname: openvpn-ui
+    #     hostname: openvpn
     #     networks:
     #         - connected
+    #         - pihole
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # openvpn-tcp: # Internal vpn fallback tcp
+    #     container_name: openvpn-tcp
+    #     image: kylemanna/openvpn
+    #     command: ovpn_run --proto tcp
+    #     tty: true
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     ports:
+    #         - "32767:1194/tcp"
+    #     volumes:
+    #         - ./config/openvpn:/etc/openvpn
+    #     hostname: openvpn-tcp
+    #     networks:
+    #         - connected
+    #         - pihole
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # backup-openvpn:
+    #     container_name: backup-openvpn
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/openvpn:/backup/openvpn:ro
+    #         - ${WD1To_PATH}/backup/openvpn:/archive
+    #     hostname: backup-openvpn
+    #     networks:
+    #         - hidden
+    #
+    # sidekick: # Vpn profile api
+    #     container_name: sidekick
+    #     image: shokohsc/sidekick
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         MATTERMOST_WEBHOOK_URL: ${MATTERMOST_GATEWAY_SIDEKICK_WEBHOOK}
+    #         RCON_HOST: minecraft
+    #         RCON_PORT: ${RCON_PORT}
+    #         RCON_PASSWORD: ${RCON_PASSWORD}
+    #         AMQP_HOST: rabbitmq
+    #     hostname: sidekick
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "autoheal=true"
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:sidekick.${DOMAIN}"
+    #         - "traefik.port=3000"
+    #
+    # vpn-client: # Torrenting vpn
+    #     container_name: vpn-client
+    #     image: shokohsc/openvpn-client
+    #     cap_add:
+    #         - net_admin
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         TZ: ${TIMEZONE}
+    #         FIREWALL: ''
+    #         ROUTE: 192.168.254.0/24
+    #         VPNPORT_1: 9091
+    #         VPNPORT_2: 9000
+    #         VPNPORT_3: 3000
+    #         VPNPORT_4: 8112
+    #         SIDEKICK_URL: http://sidekick:3000/api/ovpn
     #     depends_on:
-    #         - openvpn-tcp
+    #         - sidekick
+    #     devices:
+    #         - "/dev/net/tun:/dev/net/tun"
+    #     hostname: vpn-client
+    #     networks:
+    #         connected:
+    #             ipv4_address: 172.1.0.63
+    #     dns: 1.1.1.1
+    #     labels:
+    #         - "autoheal=true"
+    #         - "traefik.enable=true"
+    #         - "traefik.transmission.frontend.rule=Host:transmission.${DOMAIN}"
+    #         - "traefik.transmission.port=9091"
+    #         - "traefik.peerflix.frontend.rule=Host:peerflix.${DOMAIN}"
+    #         - "traefik.peerflix.port=9000"
+    #         - "traefik.cloudtorrent.frontend.rule=Host:cloudtorrent.${DOMAIN}"
+    #         - "traefik.cloudtorrent.port=3000"
+    #         - "traefik.deluge.frontend.rule=Host:deluge.${DOMAIN}"
+    #         - "traefik.deluge.port=8112"
+    #
+    # transmission: # Torrent client
+    #     container_name: transmission
+    #     image: linuxserver/transmission
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes:
+    #         - ./config/transmission:/config
+    #         - ./download:/downloads
+    #         - ./shared/transmission:/watch
+    #     network_mode: "service:vpn-client"
+    #     depends_on:
+    #         - vpn-client
+    #     labels:
+    #         - "autoheal=true"
+    #     healthcheck:
+    #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    #         interval: 30s
+    #         timeout: 30s
+    #         start_period: 60s
+    #         retries: 5
+    #
+    # # peerflix:
+    # #     image: shokohsc/peerflix-server
+    # #     container_name: peerflix
+    # #     restart: ${RESTART_MODE}
+    # #     network_mode: "service:vpn-client"
+    # #     depends_on:
+    # #         - vpn-client
+    # #     labels:
+    # #         - "autoheal=true"
+    # #     healthcheck:
+    # #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    # #         interval: 30s
+    # #         timeout: 30s
+    # #         start_period: 60s
+    # #         retries: 5
+    # #
+    # # cloudtorrent:
+    # #     image: shokohsc/cloud-torrent
+    # #     container_name: cloudtorrent
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - ./download/complete:/downloads
+    # #     network_mode: "service:vpn-client"
+    # #     depends_on:
+    # #         - vpn-client
+    # #     labels:
+    # #         - "autoheal=true"
+    # #     healthcheck:
+    # #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    # #         interval: 30s
+    # #         timeout: 30s
+    # #         start_period: 60s
+    # #         retries: 5
+    # #
+    # # deluge:
+    # #     container_name: deluge
+    # #     image: linuxserver/deluge
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #         DELUGE_LOGLEVEL: error
+    # #     volumes:
+    # #         - ./config/deluge:/config
+    # #         - ./download:/downloads
+    # #     network_mode: "service:vpn-client"
+    # #     depends_on:
+    # #         - vpn-client
+    # #     labels:
+    # #         - "autoheal=true"
+    # #     healthcheck:
+    # #         test: ["CMD", "curl", "-IfkLX", "GET", "https://google.com"]
+    # #         interval: 30s
+    # #         timeout: 30s
+    # #         start_period: 60s
+    # #         retries: 5
+    #
+    # traefik: # Reverse proxy
+    #     container_name: traefik
+    #     image: traefik:maroilles-alpine
+    #     restart: ${RESTART_MODE}
+    #     command: --configFile=/etc/traefik/traefik.toml --metrics --metrics.prometheus
+    #     ports:
+    #         - "80:80"
+    #         - "443:443"
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #         - ./config/traefik/certs:/etc/traefik/certs
+    #         - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml
+    #     hostname: traefik
+    #     networks:
+    #         - connected
+    #         - pihole
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
+    #         - "traefik.frontend.rule=Host:traefik.${DOMAIN}"
     #         - "traefik.port=8080"
-
-    comic-reader:
-        container_name: comic-reader
-        image: shokohsc/server-comic-reader
-        restart: ${RESTART_MODE}
-        tty: true
-        volumes:
-            - /var/www/symfony
-            - ./shared/gazee:/var/www/symfony/public/files/weekly
-            - ${WD2To_PATH}/comics:/var/www/symfony/public/files/all
-        hostname: comic-reader
-        networks:
-            - hidden
-        logging:
-            driver: none
-
-    php-fpm-comic:
-        container_name: php-fpm-comic
-        image: shokohsc/alpine-php-fpm
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes_from:
-            - comic-reader
-        hostname: php-fpm
-        networks:
-            - connected
-        depends_on:
-            - comic-reader
-
-    nginx-comic:
-        container_name: nginx-comic
-        image: shokohsc/alpine-nginx
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes_from:
-            - comic-reader
-        hostname: nginx-comic
-        networks:
-            - connected
-        links:
-            - "php-fpm-comic:php-fpm"
-        depends_on:
-            - php-fpm-comic
-            - comic-reader
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:comics.${DOMAIN}"
-            - "traefik.port=80"
-
-    # wol-web:
-    #     container_name: wol-web
-    #     image: shokohsc/server-wol
+    #
+    # portainer: # Docker management
+    #     container_name: portainer
+    #     image: portainer/portainer
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #     hostname: portainer
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:portainer.${DOMAIN}"
+    #         - "traefik.port=9000"
+    #
+    # autoheal: # Service looking for container to restart
+    #     container_name: autoheal
+    #     image: willfarrell/autoheal
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         AUTOHEAL_INTERVAL: 10
+    #         AUTOHEAL_START_PERIOD: 60
+    #     volumes:
+    #         - /var/run/docker.sock:/var/run/docker.sock
+    #     hostname: autoheal
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # commander: # Web ui server admin
+    #     container_name: commander
+    #     image: coderaiser/cloudcmd
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - /:/mnt/fs
+    #         - ./download/complete:/root/downloads
+    #         - ./shared:/root/shared
+    #         - ${WD1To_PATH}:/root/media/WD1To
+    #         - ${WD2To_PATH}:/root/media/WD2To
+    #     hostname: commander
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:commander.${DOMAIN}"
+    #         - "traefik.port=8000"
+    #
+    # plex: # Media server
+    #     container_name: plex
+    #     image: plexinc/pms-docker
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #         VERSION: docker
+    #         PLEX_CLAIM: ${PLEX_CLAIM}
+    #         ADVERTISE_IP: ${PLEX_ADVERTISED_URL}
+    #     ports:
+    #         - "32400:32400/tcp"
+    #         # - "32400:32400/udp"
+    #         - "32469:32469/tcp"
+    #         # - "32469:32469/udp"
+    #         # - "5353:5353/udp"
+    #         - "1900:1900/udp"
+    #         # - "3005:3005/tcp"
+    #         # - "8324:8324/tcp"
+    #         - "32410:32410/udp"
+    #         - "32412:32412/udp"
+    #         - "32413:32413/udp"
+    #         - "32414:32414/udp"
+    #     devices:
+    #         - "/dev/dri:/dev/dri"
+    #     volumes:
+    #         - ./config/plex:/config
+    #         - ${WD1To_PATH}:/data/WD1To
+    #         - ${WD2To_PATH}:/data/WD2To
+    #         - ./download/complete:/data/downloads
+    #     networks:
+    #         - connected
+    #     hostname: plex
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:plex.${DOMAIN}"
+    #         - "traefik.port=32400"
+    #
+    # # jellyfin:
+    # #     image: linuxserver/jellyfin
+    # #     container_name: jellyfin
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #     volumes:
+    # #         - ./config/jellyfin:/config
+    # #         - ${WD1To_PATH}:/data/WD1To
+    # #         - ${WD2To_PATH}:/data/WD2To
+    # #     ports:
+    # #         - "8096:8096/tcp"
+    # #         # - "8920:8920/tcp" #optional
+    # #         - "7359:7359/udp" #optional
+    # #         # - "1900:1900/udp" #optional DLNA port
+    # #     devices:
+    # #         - /dev/dri:/dev/dri #optional
+    # #         # - /dev/vcsm:/dev/vcsm #optional
+    # #         # - /dev/vchiq:/dev/vchiq #optional
+    # #         # - /dev/video10:/dev/video10 #optional
+    # #         # - /dev/video11:/dev/video11 #optional
+    # #         # - /dev/video12:/dev/video12 #optional
+    # #     networks:
+    # #         - connected
+    # #     hostname: jellyfin
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:jellyfin.${DOMAIN}"
+    # #         - "traefik.port=8096"
+    #
+    # # grafana: # Monitoring tool connected server
+    # #     container_name: grafana
+    # #     image: grafana/grafana:6.7.3
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         GF_SECURITY_ADMIN_PASSWORD: ${GLOBAL_PASSWORD}
+    # #         GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL}
+    # #         GF_SMTP_ENABLED: ${GF_SMTP_ENABLED}
+    # #         GF_SMTP_HOST: ${GF_SMTP_HOST}
+    # #         GF_SMTP_USER: ${GF_SMTP_USER}
+    # #         GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD}
+    # #         GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS}
+    # #         GF_SMTP_FROM_NAME: ${GF_SMTP_FROM_NAME}
+    # #         GF_INSTALL_PLUGINS: grafana-piechart-panel
+    # #         GF_LOG_LEVEL: warn
+    # #     volumes:
+    # #         - grafana_data:/var/lib/grafana
+    # #     hostname: grafana
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - influxdb
+    # #         # - graphite
+    # #         - elasticsearch
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:grafana.${DOMAIN}"
+    # #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    # #         - "traefik.port=3000"
+    # #
+    # # prometheus: # Database, grafana requirement
+    # #     image: prom/prometheus
+    # #     container_name: prometheus
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - ./config/prometheus/:/etc/prometheus/
+    # #         - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
+    # #         - prometheus_data:/prometheus
+    # #     command:
+    # #         - '--config.file=/etc/prometheus/prometheus.yml'
+    # #         - '--storage.tsdb.path=/prometheus'
+    # #         - '--web.console.libraries=/etc/prometheus/console_libraries'
+    # #         - '--web.console.templates=/etc/prometheus/consoles'
+    # #         - '--storage.tsdb.retention.time=24h'
+    # #         - '--web.enable-lifecycle'
+    # #     hostname: prometheus
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    # #         - "traefik.frontend.rule=Host:prometheus.${DOMAIN}"
+    # #         - "traefik.port=9090"
+    # #
+    # # blackbox: # Prometheus requirement
+    # #     image: prom/blackbox-exporter:master
+    # #     container_name: blackbox
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: blackbox
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - prometheus
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:blackbox.${DOMAIN}"
+    # #         - "traefik.port=9115"
+    #
+    # # mysqld-exporter: # Prometheus requirement
+    # #     image: prom/mysqld-exporter
+    # #     container_name: mysqld-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         DATA_SOURCE_NAME: "root:${MYSQL_ROOT_PASSWORD}@(mysql:3306)/"
+    # #     hostname: mysqld-exporter
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - mysql
+    # #     labels:
+    # #         - "traefik.enable=false"
+    # #
+    # # redis-exporter: # Prometheus requirement
+    # #     image: oliver006/redis_exporter:alpine
+    # #     container_name: redis-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     command: --redis.addr=redis:6379 --include-system-metrics
+    # #     hostname: redis-exporter
+    # #     networks:
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - redis
+    # #
+    # # elasticsearch-exporter: # Prometheus requirement
+    # #     image: justwatch/elasticsearch_exporter:1.1.0
+    # #     container_name: elasticsearch-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     command: '--es.uri=http://elasticsearch:9200 --es.all --es.indices'
+    # #     hostname: elasticsearch-exporter
+    # #     networks:
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - elasticsearch
+    # #
+    # # transmission-exporter: # Prometheus requirement
+    # #     image: metalmatze/transmission-exporter
+    # #     container_name: transmission-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         TRANSMISSION_ADDR: http://vpn-client:9091
+    # #     hostname: transmission-exporter
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - transmission
+    # #     labels:
+    # #         - "traefik.enable=false"
+    # #
+    # # deluge-exporter: # Prometheus requirement
+    # #     image: tobbez/deluge_exporter
+    # #     container_name: deluge-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         DELUGE_HOST: vpn-client
+    # #     volumes:
+    # #         - ./config/deluge:/root/.config/deluge/
+    # #     hostname: deluge-exporter
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - deluge
+    # #     labels:
+    # #         - "traefik.enable=false"
+    # #
+    # # rabbitmq-exporter: # Prometheus requirement
+    # #     image: kbudde/rabbitmq-exporter
+    # #     container_name: rabbitmq-exporter
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         RABBIT_URL: http://rabbitmq:15672
+    # #         LOG_LEVEL: error
+    # #     hostname: rabbitmq-exporter
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    # #         - rabbitmq
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # # openvpn-exporter: # Prometheus requirement
+    # #     image: kumina/openvpn-exporter
+    # #     container_name: openvpn-exporter
+    # #     command: -openvpn.status_paths /status/udp/openvpn-status.log,/status/tcp/openvpn-status.log
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: openvpn-exporter
+    # #     volumes:
+    # #         - openvpn_data:/status/udp
+    # #         - openvpn-tcp_data:/status/tcp
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - prometheus
+    # #         - openvpn
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # # alertmanager: # Grafana requirement
+    # #     image: prom/alertmanager
+    # #     container_name: alertmanager
+    # #     volumes:
+    # #         - ./config/alertmanager/:/etc/alertmanager/
+    # #     command:
+    # #         - '--config.file=/etc/alertmanager/config.yml'
+    # #         - '--storage.path=/alertmanager'
+    # #         - '--cluster.listen-address='
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: alertmanager
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - prometheus
+    # #         - mattermost
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # # nodeexporter: # Grafana requirement
+    # #     image: quay.io/prometheus/node-exporter
+    # #     container_name: nodeexporter
+    # #     restart: ${RESTART_MODE}
+    # #     user: root
+    # #     cap_add:
+    # #         - sys_time
+    # #     volumes:
+    # #         - /proc:/host/proc:ro
+    # #         - /sys:/host/sys:ro
+    # #         - /:/host/root:ro
+    # #     command:
+    # #         - '--path.rootfs=/host/root'
+    # #         - '--path.procfs=/host/proc'
+    # #         - '--path.sysfs=/host/sys'
+    # #         - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    # #     hostname: nodeexporter
+    # #     networks:
+    # #         - hidden
+    # #
+    # # nodeexporter: # Grafana requirement
+    # #     image: quay.io/prometheus/node-exporter
+    # #     container_name: nodeexporter
+    # #     restart: ${RESTART_MODE}
+    # #     cap_add:
+    # #         - sys_time
+    # #     volumes:
+    # #         - /:/host:ro,rslave
+    # #     command:
+    # #         - '--path.rootfs=/host'
+    # #     pid: host
+    # #     network_mode: host
+    # #
+    # # cadvisor: # Grafana requirement
+    # #     image: gcr.io/google-containers/cadvisor
+    # #     container_name: cadvisor
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - /dev/disk/:/dev/disk:ro
+    # #         - /var/lib/docker/:/var/lib/docker:ro
+    # #         - /sys:/sys:ro
+    # #         - /var/run:/var/run:ro
+    # #         - /:/rootfs:ro
+    # #     hostname: cadvisor
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    # #         - "traefik.frontend.rule=Host:cadvisor.${DOMAIN}"
+    # #         - "traefik.port=8080"
+    #
+    # # pushgateway: # Grafana requirement
+    # #     image: prom/pushgateway
+    # #     container_name: pushgateway
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: pushgateway
+    # #     networks:
+    # #         - hidden
+    # #     depends_on:
+    # #         - prometheus
+    #
+    # heimdall: # Heimdall
+    #     image: linuxserver/heimdall
+    #     container_name: heimdall
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes:
+    #         - ./config/heimdall:/config
+    #         - ./config/traefik/certs/rootCA.pem:/etc/ca/rootCA.pem:ro
+    #     hostname: heimdall
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:heimdall.${DOMAIN}"
+    #         - "traefik.port=80"
+    #
+    # backup-heimdall:
+    #     container_name: backup-heimdall
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/heimdall:/backup/heimdall:ro
+    #         - ${WD1To_PATH}/backup/heimdall:/archive
+    #     hostname: backup-heimdall
+    #     networks:
+    #         - hidden
+    #
+    # # monitor: # Openvpn monitor
+    # #     image: ruimarinho/openvpn-monitor
+    # #     container_name: monitor
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         OPENVPNMONITOR_DEFAULT_MAPS: "True"
+    # #         OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT: ${OPENVPNMONITOR_DEFAULT_DATETIMEFORMAT}
+    # #         OPENVPNMONITOR_DEFAULT_LATITUDE: ${OPENVPNMONITOR_DEFAULT_LATITUDE}
+    # #         OPENVPNMONITOR_DEFAULT_LONGITUDE: ${OPENVPNMONITOR_DEFAULT_LONGITUDE}
+    # #         OPENVPNMONITOR_DEFAULT_SITE: ${OPENVPNMONITOR_DEFAULT_SITE}
+    # #         OPENVPNMONITOR_SITES_0_HOST: ${OPENVPNMONITOR_SITES_0_HOST}
+    # #         OPENVPNMONITOR_SITES_0_NAME: ${OPENVPNMONITOR_SITES_0_NAME}
+    # #         OPENVPNMONITOR_SITES_0_PORT: ${OPENVPNMONITOR_SITES_0_PORT}
+    # #     hostname: monitor
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - openvpn
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:monitor.${DOMAIN}"
+    # #         - "traefik.port=80"
+    # #
+    # # openvpn-ui:
+    # #     container_name: openvpn-ui
+    # #     image: awalach/openvpn-web-ui
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - ./config/openvpn:/etc/openvpn
+    # #         - openvpn-ui_data:/opt/openvpn-gui/db
+    # #     hostname: openvpn-ui
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - openvpn-tcp
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:openvpn.${DOMAIN}"
+    # #         - "traefik.port=8080"
+    #
+    # comic-reader:
+    #     container_name: comic-reader
+    #     image: shokohsc/server-comic-reader
     #     restart: ${RESTART_MODE}
     #     tty: true
-    #     hostname: wol-web
+    #     volumes:
+    #         - /var/www/symfony
+    #         - ./shared/gazee:/var/www/symfony/public/files/weekly
+    #         - ${WD2To_PATH}/comics:/var/www/symfony/public/files/all
+    #     hostname: comic-reader
     #     networks:
     #         - hidden
     #     logging:
     #         driver: none
     #
-    # php-fpm-wol:
-    #     container_name: php-fpm-wol
+    # php-fpm-comic:
+    #     container_name: php-fpm-comic
     #     image: shokohsc/alpine-php-fpm
     #     restart: ${RESTART_MODE}
     #     environment:
     #         PGID: ${PGID}
     #         PUID: ${PUID}
     #         TZ: ${TIMEZONE}
-    #         DOCKER_HOST: 'tcp://lucio.home:2376'
-    #         DOCKER_TLS_VERIFY: 'true'
-    #         DOCKER_CERT_PATH: /etc/ca
-    #         PEER_ID: ${PEER_ID}
-    #     volumes:
-    #         # - '/var/run/docker.sock:/var/run/docker.sock'
-    #         # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
-    #         - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
-    #         - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
     #     volumes_from:
-    #         - wol-web
+    #         - comic-reader
     #     hostname: php-fpm
     #     networks:
     #         - connected
     #     depends_on:
-    #         - wol-web
-    #     labels:
-    #         - "traefik.enable=false"
+    #         - comic-reader
     #
-    # nginx-wol:
-    #     container_name: nginx-wol
+    # nginx-comic:
+    #     container_name: nginx-comic
     #     image: shokohsc/alpine-nginx
     #     restart: ${RESTART_MODE}
     #     environment:
@@ -1057,345 +996,388 @@ services:
     #         PUID: ${PUID}
     #         TZ: ${TIMEZONE}
     #     volumes_from:
-    #         - wol-web
-    #     hostname: nginx-wol
+    #         - comic-reader
+    #     hostname: nginx-comic
     #     networks:
     #         - connected
     #     links:
-    #         - "php-fpm-wol:php-fpm"
+    #         - "php-fpm-comic:php-fpm"
     #     depends_on:
-    #         - php-fpm-wol
-    #         - wol-web
+    #         - php-fpm-comic
+    #         - comic-reader
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
+    #         - "traefik.frontend.rule=Host:comics.${DOMAIN}"
     #         - "traefik.port=80"
-
-    # paint-web:
-    #     container_name: paint-web
-    #     image: shokohsc/mini-paint
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         TZ: ${TIMEZONE}
-    #     hostname: paint-web
-    #     networks:
-    #         - connected
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:paint.${DOMAIN}"
-    #         - "traefik.port=80"
-
-    # telegraf: # Telegraf
-    #     container_name: telegraf
-    #     image: telegraf
-    #     restart: ${RESTART_MODE}
-    #     hostname: telegraf
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     volumes:
-    #         - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-    #     depends_on:
-    #         - influxdb
-    #         # - graphite
-    #         - elasticsearch
-    #         # - mosquitto
-    #     labels:
-    #         - "traefik.enable=false"
-
-    # graphite: # Graphite database
-    #     container_name: graphite
-    #     image: graphiteapp/graphite-statsd
-    #     restart: ${RESTART_MODE}
-    #     hostname: graphite
-    #     networks:
-    #         - connected
-    #     volumes:
-    #         - graphite_data:/opt/graphite/storage
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
-    #         - "traefik.port=8080"
-
-    # influxdb: # Influx database
-    #     container_name: influxdb
-    #     image: influxdb
-    #     restart: ${RESTART_MODE}
-    #     environment:
-    #         INFLUXDB_DB: miflora
-    #         INFLUXDB_USER: miflora
-    #         INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-    #         INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
-    #         INFLUXDB_HTTP_LOG_ENABLED: 'false'
-    #         INFLUXDB_LOGGING_LEVEL: warn
-    #     hostname: influxdb
-    #     networks:
-    #         - hidden
-    #     volumes:
-    #         - influx_data:/var/lib/influxdb
-
-    # chronograf: # InfluxDB Admin UI
-    #     image: chronograf
-    #     container_name: chronograf
-    #     restart: ${RESTART_MODE}
-    #     command: --influxdb-url=http://influxdb:8086
-    #     hostname: chronograf
-    #     volumes:
-    #         - chronograf_data:/var/lib/chronograf
-    #     networks:
-    #         - connected
-    #         - hidden
-    #     depends_on:
-    #         - influxdb
-    #     labels:
-    #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
-    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.port=8888"
     #
-    # mosquitto: # Mosquitto mqtt broker
-    #     container_name: mosquitto
-    #     image: eclipse-mosquitto
+    # # wol-web:
+    # #     container_name: wol-web
+    # #     image: shokohsc/server-wol
+    # #     restart: ${RESTART_MODE}
+    # #     tty: true
+    # #     hostname: wol-web
+    # #     networks:
+    # #         - hidden
+    # #     logging:
+    # #         driver: none
+    # #
+    # # php-fpm-wol:
+    # #     container_name: php-fpm-wol
+    # #     image: shokohsc/alpine-php-fpm
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #         DOCKER_HOST: 'tcp://lucio.home:2376'
+    # #         DOCKER_TLS_VERIFY: 'true'
+    # #         DOCKER_CERT_PATH: /etc/ca
+    # #         PEER_ID: ${PEER_ID}
+    # #     volumes:
+    # #         # - '/var/run/docker.sock:/var/run/docker.sock'
+    # #         # - ./config/traefik/certs/rootCA.pem:/etc/ca/ca.pem:ro
+    # #         - ./config/traefik/certs/lucio.home.pem:/etc/ca/cert.pem:ro
+    # #         - ./config/traefik/certs/lucio.home-key.pem:/etc/ca/key.pem:ro
+    # #     volumes_from:
+    # #         - wol-web
+    # #     hostname: php-fpm
+    # #     networks:
+    # #         - connected
+    # #     depends_on:
+    # #         - wol-web
+    # #     labels:
+    # #         - "traefik.enable=false"
+    # #
+    # # nginx-wol:
+    # #     container_name: nginx-wol
+    # #     image: shokohsc/alpine-nginx
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #     volumes_from:
+    # #         - wol-web
+    # #     hostname: nginx-wol
+    # #     networks:
+    # #         - connected
+    # #     links:
+    # #         - "php-fpm-wol:php-fpm"
+    # #     depends_on:
+    # #         - php-fpm-wol
+    # #         - wol-web
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:parsec.${DOMAIN}"
+    # #         - "traefik.port=80"
+    #
+    # # paint-web:
+    # #     container_name: paint-web
+    # #     image: shokohsc/mini-paint
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #     hostname: paint-web
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:paint.${DOMAIN}"
+    # #         - "traefik.port=80"
+    #
+    # # telegraf: # Telegraf
+    # #     container_name: telegraf
+    # #     image: telegraf
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: telegraf
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     volumes:
+    # #         - ./config/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    # #     depends_on:
+    # #         - influxdb
+    # #         # - graphite
+    # #         - elasticsearch
+    # #         # - mosquitto
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # # graphite: # Graphite database
+    # #     container_name: graphite
+    # #     image: graphiteapp/graphite-statsd
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: graphite
+    # #     networks:
+    # #         - connected
+    # #     volumes:
+    # #         - graphite_data:/opt/graphite/storage
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:graphite.${DOMAIN}"
+    # #         - "traefik.port=8080"
+    #
+    # # influxdb: # Influx database
+    # #     container_name: influxdb
+    # #     image: influxdb
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         INFLUXDB_DB: miflora
+    # #         INFLUXDB_USER: miflora
+    # #         INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    # #         INFLUXDB_DATA_QUERY_LOG_ENABLED: 'false'
+    # #         INFLUXDB_HTTP_LOG_ENABLED: 'false'
+    # #         INFLUXDB_LOGGING_LEVEL: warn
+    # #     hostname: influxdb
+    # #     networks:
+    # #         - hidden
+    # #     volumes:
+    # #         - influx_data:/var/lib/influxdb
+    #
+    # # chronograf: # InfluxDB Admin UI
+    # #     image: chronograf
+    # #     container_name: chronograf
+    # #     restart: ${RESTART_MODE}
+    # #     command: --influxdb-url=http://influxdb:8086
+    # #     hostname: chronograf
+    # #     volumes:
+    # #         - chronograf_data:/var/lib/chronograf
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - influxdb
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:chronograf.${DOMAIN}"
+    # #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    # #         - "traefik.port=8888"
+    # #
+    # # mosquitto: # Mosquitto mqtt broker
+    # #     container_name: mosquitto
+    # #     image: eclipse-mosquitto
+    # #     restart: ${RESTART_MODE}
+    # #     ports:
+    # #         - "1883:1883/tcp"
+    #     # hostname: mosquitto
+    # #     networks:
+    # #         - connected
+    # #     volumes:
+    # #         - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    # #         - mosquitto_data:/mosquitto/data
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # # miflora-daemon: # Miflora daemon
+    # #     container_name: miflora-daemon
+    # #     build:
+    # #         context: build/miflora-mqtt-daemon
+    # #     cap_add:
+    # #         - net_admin
+    # #         - sys_admin
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - ./config/miflora/config.ini:/app/config.ini
+    # #     network_mode: host
+    # #     depends_on:
+    # #         - mosquitto
+    # #
+    # # mqtt-forwarder:
+    # #     container_name: mqtt-forwarder
+    # #     build:
+    # #         context: build/mqtt-forwarder
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         INFLUXDB_HOST: influxdb
+    # #         INFLUXDB_DB: miflora
+    # #         INFLUXDB_USER: miflora
+    # #         INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    # #         MQTT_HOST: mosquitto
+    # #         MQTT_TOPIC: ${MQTT_TOPIC}
+    #     # hostname: mqtt-forwarder
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - influxdb
+    # #         - mosquitto
+    # #     labels:
+    # #         - "traefik.enable=false"
+    #
+    # minecraft:
+    #     container_name: minecraft
+    #     image: itzg/minecraft-server
     #     restart: ${RESTART_MODE}
+    #     environment:
+    #         EULA: 'TRUE'
+    #         VERSION: 1.14.4
+    #         TYPE: SPIGOT
+    #         OVERRIDE_SERVER_PROPERTIES: 'true'
+    #         CONSOLE: 'false'
+    #         ONLINE_MODE: 'false'
+    #         ALLOW_FLIGHT: 'true'
+    #         MEMORY: 2G
+    #         LEVEL_TYPE: AMPLIFIED
+    #         LEVEL: world
+    #         PVP: 'true'
+    #         MOTD: A Vanilla Minecraft Server powered by Docker
+    #         MODE: survival
+    #         SEED: -8913466909937400889
+    #         VIEW_DISTANCE: 10
+    #         SPAWN_PROTECTION: 16
+    #         SPAWN_MONSTERS: 'true'
+    #         SPAWN_NPCS: 'true'
+    #         SPAWN_ANIMALS: 'true'
+    #         MAX_TICK_TIME: 60000
+    #         MAX_BUILD_HEIGHT: 512
+    #         SNOOPER_ENABLED: 'false'
+    #         HARDCORE: 'false'
+    #         GENERATE_STRUCTURES: 'true'
+    #         FORCE_GAMEMODE: 'false'
+    #         ENABLE_COMMAND_BLOCK: 'true'
+    #         MAX_PLAYERS: 10
+    #         MAX_WORLD_SIZE: 29999984
+    #         ALLOW_NETHER: 'true'
+    #         ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
+    #         ENABLE_QUERY: 'false'
+    #         ENABLE_RCON: 'true'
+    #         RCON_PORT: ${RCON_PORT}
+    #         RCON_PASSWORD: ${RCON_PASSWORD}
+    #         OPS: ${MINECRAFT_OPS}
+    #         DIFFICULTY: hard
+    #         SERVER_NAME: minecraft
+    #         SERVER_PORT: 25565
     #     ports:
-    #         - "1883:1883/tcp"
-        # hostname: mosquitto
+    #         - "25565:25565/tcp"
+    #     volumes:
+    #         - ./config/minecraft:/data
+    #     hostname: minecraft
     #     networks:
     #         - connected
-    #     volumes:
-    #         - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    #         - mosquitto_data:/mosquitto/data
     #     labels:
-    #         - "traefik.enable=false"
-
-    # miflora-daemon: # Miflora daemon
-    #     container_name: miflora-daemon
-    #     build:
-    #         context: build/miflora-mqtt-daemon
-    #     cap_add:
-    #         - net_admin
-    #         - sys_admin
-    #     restart: ${RESTART_MODE}
-    #     volumes:
-    #         - ./config/miflora/config.ini:/app/config.ini
-    #     network_mode: host
-    #     depends_on:
-    #         - mosquitto
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
+    #         - "traefik.port=8123"
     #
-    # mqtt-forwarder:
-    #     container_name: mqtt-forwarder
-    #     build:
-    #         context: build/mqtt-forwarder
+    # minecraft-backup:
+    #     container_name: minecraft-backup
+    #     image: itzg/mc-backup
     #     restart: ${RESTART_MODE}
     #     environment:
-    #         INFLUXDB_HOST: influxdb
-    #         INFLUXDB_DB: miflora
-    #         INFLUXDB_USER: miflora
-    #         INFLUXDB_PASSWORD: ${INFLUXDB_USER_PASSWORD}
-    #         MQTT_HOST: mosquitto
-    #         MQTT_TOPIC: ${MQTT_TOPIC}
-        # hostname: mqtt-forwarder
+    #         BACKUP_INTERVAL: "24h"
+    #         PRUNE_BACKUPS_DAYS: 1
+    #         RCON_HOST: minecraft
+    #         RCON_PORT: ${RCON_PORT}
+    #         RCON_PASSWORD: ${RCON_PASSWORD}
+    #         EXCLUDES: "*.jar,cache,logs"
+    #     volumes:
+    #         - ./config/minecraft:/data:ro
+    #         - ${WD1To_PATH}/backup/minecraft:/backups
+    #     hostname: minecraft-backup
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - minecraft
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # mongo: # Wekan requirement
+    #     image: mongo
+    #     container_name: mongo
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - mongo_data:/data/db
+    #     hostname: mongo
+    #     networks:
+    #         - hidden
+    #
+    # mongo-backup: # Backup mongo
+    #     image: "istepanov/mongodump"
+    #     container_name: mongo-backup
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         MONGO_URI: "mongodb://mongo:27017"
+    #         CRON_SCHEDULE: "0 1 * * *"
+    #     volumes:
+    #         - ${WD1To_PATH}/backup/mongo:/backup
+    #     hostname: mongo-backup
+    #     networks:
+    #         - hidden
+    #     depends_on:
+    #         - mongo
+    #
+    # wekan: # Wekan
+    #     image: wekanteam/wekan:v3.50
+    #     container_name: wekan
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         ROOT_URL: ${WK_ROOT_URL}
+    #         MONGO_URL: ${MONGO_URL}/wekan
+    #     hostname: wekan
     #     networks:
     #         - connected
     #         - hidden
     #     depends_on:
-    #         - influxdb
-    #         - mosquitto
+    #         - mongo
     #     labels:
-    #         - "traefik.enable=false"
-
-    minecraft:
-        container_name: minecraft
-        image: itzg/minecraft-server
-        restart: ${RESTART_MODE}
-        environment:
-            EULA: 'TRUE'
-            VERSION: 1.14.4
-            TYPE: SPIGOT
-            OVERRIDE_SERVER_PROPERTIES: 'true'
-            CONSOLE: 'false'
-            ONLINE_MODE: 'false'
-            ALLOW_FLIGHT: 'true'
-            MEMORY: 2G
-            LEVEL_TYPE: AMPLIFIED
-            LEVEL: world
-            PVP: 'true'
-            MOTD: A Vanilla Minecraft Server powered by Docker
-            MODE: survival
-            SEED: -8913466909937400889
-            VIEW_DISTANCE: 10
-            SPAWN_PROTECTION: 16
-            SPAWN_MONSTERS: 'true'
-            SPAWN_NPCS: 'true'
-            SPAWN_ANIMALS: 'true'
-            MAX_TICK_TIME: 60000
-            MAX_BUILD_HEIGHT: 512
-            SNOOPER_ENABLED: 'false'
-            HARDCORE: 'false'
-            GENERATE_STRUCTURES: 'true'
-            FORCE_GAMEMODE: 'false'
-            ENABLE_COMMAND_BLOCK: 'true'
-            MAX_PLAYERS: 10
-            MAX_WORLD_SIZE: 29999984
-            ALLOW_NETHER: 'true'
-            ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
-            ENABLE_QUERY: 'false'
-            ENABLE_RCON: 'true'
-            RCON_PORT: ${RCON_PORT}
-            RCON_PASSWORD: ${RCON_PASSWORD}
-            OPS: ${MINECRAFT_OPS}
-            DIFFICULTY: hard
-            SERVER_NAME: minecraft
-            SERVER_PORT: 25565
-        ports:
-            - "25565:25565/tcp"
-        volumes:
-            - ./config/minecraft:/data
-        hostname: minecraft
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
-            - "traefik.port=8123"
-
-    minecraft-backup:
-        container_name: minecraft-backup
-        image: itzg/mc-backup
-        restart: ${RESTART_MODE}
-        environment:
-            BACKUP_INTERVAL: "24h"
-            PRUNE_BACKUPS_DAYS: 1
-            RCON_HOST: minecraft
-            RCON_PORT: ${RCON_PORT}
-            RCON_PASSWORD: ${RCON_PASSWORD}
-            EXCLUDES: "*.jar,cache,logs"
-        volumes:
-            - ./config/minecraft:/data:ro
-            - ${WD1To_PATH}/backup/minecraft:/backups
-        hostname: minecraft-backup
-        networks:
-            - connected
-        depends_on:
-            - minecraft
-        labels:
-            - "traefik.enable=false"
-
-    mongo: # Wekan requirement
-        image: mongo
-        container_name: mongo
-        restart: ${RESTART_MODE}
-        volumes:
-            - mongo_data:/data/db
-        hostname: mongo
-        networks:
-            - hidden
-
-    mongo-backup: # Backup mongo
-        image: "istepanov/mongodump"
-        container_name: mongo-backup
-        restart: ${RESTART_MODE}
-        environment:
-            MONGO_URI: "mongodb://mongo:27017"
-            CRON_SCHEDULE: "0 1 * * *"
-        volumes:
-            - ${WD1To_PATH}/backup/mongo:/backup
-        hostname: mongo-backup
-        networks:
-            - hidden
-        depends_on:
-            - mongo
-
-    wekan: # Wekan
-        image: wekanteam/wekan:v3.50
-        container_name: wekan
-        restart: ${RESTART_MODE}
-        environment:
-            ROOT_URL: ${WK_ROOT_URL}
-            MONGO_URL: ${MONGO_URL}/wekan
-        hostname: wekan
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - mongo
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:wekan.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8080"
-
-    mongo-express:
-        image: mongo-express
-        container_name: mongo-express
-        restart: ${RESTART_MODE}
-        hostname: mongo-express
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - mongo
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:mongo.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8081"
-
-    mysql:
-        image: mariadb
-        container_name: mysql
-        restart: ${RESTART_MODE}
-        volumes:
-            - mysql_data:/var/lib/mysql
-        hostname: mysql
-        networks:
-            - hidden
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: mattermost
-            MYSQL_USER: mattermost
-            MYSQL_PASSWORD: mattermost
-
-    mattermost:
-        build:
-            context: build/mattermost
-            network: host
-            args:
-                - edition=team
-        container_name: mattermost
-        restart: ${RESTART_MODE}
-        environment:
-            MM_USERNAME: mattermost
-            MM_PASSWORD: mattermost
-            MM_DBNAME: mattermost
-            MM_SQLSETTINGS_DRIVERNAME: mysql
-            MM_SQLSETTINGS_DATASOURCE: mattermost:mattermost@tcp(mysql:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
-            DB_HOST: mysql
-            DB_PORT_NUMBER: 3306
-        volumes:
-            - mattermost_data:/mattermost
-            - /etc/localtime:/etc/localtime:ro
-        hostname: mattermost
-        networks:
-            - connected
-            - hidden
-        depends_on:
-            - mysql
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:mattermost.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
-            - "traefik.port=8000"
-
-    # adminer:
-    #     image: adminer
-    #     container_name: adminer
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:wekan.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=8080"
+    #
+    # mongo-express:
+    #     image: mongo-express
+    #     container_name: mongo-express
+    #     restart: ${RESTART_MODE}
+    #     hostname: mongo-express
+    #     networks:
+    #         - connected
+    #         - hidden
+    #     depends_on:
+    #         - mongo
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:mongo.${DOMAIN}"
+    #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    #         - "traefik.port=8081"
+    #
+    # mysql:
+    #     image: mariadb
+    #     container_name: mysql
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - mysql_data:/var/lib/mysql
+    #     hostname: mysql
+    #     networks:
+    #         - hidden
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    #         MYSQL_DATABASE: mattermost
+    #         MYSQL_USER: mattermost
+    #         MYSQL_PASSWORD: mattermost
+    #
+    # mattermost:
+    #     build:
+    #         context: build/mattermost
+    #         network: host
+    #         args:
+    #             - edition=team
+    #     container_name: mattermost
     #     restart: ${RESTART_MODE}
     #     environment:
-    #         ADMINER_DESIGN: konya
-    #     hostname: adminer
+    #         MM_USERNAME: mattermost
+    #         MM_PASSWORD: mattermost
+    #         MM_DBNAME: mattermost
+    #         MM_SQLSETTINGS_DRIVERNAME: mysql
+    #         MM_SQLSETTINGS_DATASOURCE: mattermost:mattermost@tcp(mysql:3306)/mattermost?charset=utf8mb4,utf8&readTimeout=30s&writeTimeout=30s
+    #         DB_HOST: mysql
+    #         DB_PORT_NUMBER: 3306
+    #     volumes:
+    #         - mattermost_data:/mattermost
+    #         - /etc/localtime:/etc/localtime:ro
+    #     hostname: mattermost
     #     networks:
     #         - connected
     #         - hidden
@@ -1403,118 +1385,136 @@ services:
     #         - mysql
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
+    #         - "traefik.frontend.rule=Host:mattermost.${DOMAIN}"
     #         - "traefik.docker.network=${EXPOSED_NETWORK}"
-    #         - "traefik.port=8080"
+    #         - "traefik.port=8000"
     #
-    # stackedit:
-    #     image: benweet/stackedit
-    #     container_name: stackedit
+    # # adminer:
+    # #     image: adminer
+    # #     container_name: adminer
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         ADMINER_DESIGN: konya
+    # #     hostname: adminer
+    # #     networks:
+    # #         - connected
+    # #         - hidden
+    # #     depends_on:
+    # #         - mysql
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:adminer.${DOMAIN}"
+    # #         - "traefik.docker.network=${EXPOSED_NETWORK}"
+    # #         - "traefik.port=8080"
+    # #
+    # # stackedit:
+    # #     image: benweet/stackedit
+    # #     container_name: stackedit
+    # #     restart: ${RESTART_MODE}
+    # #     hostname: stackedit
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
+    # #         - "traefik.port=8080"
+    # #
+    # # airsonic:
+    # #     image: linuxserver/airsonic
+    # #     container_name: airsonic
+    # #     restart: ${RESTART_MODE}
+    # #     environment:
+    # #         PGID: ${PGID}
+    # #         PUID: ${PUID}
+    # #         TZ: ${TIMEZONE}
+    # #     volumes:
+    # #         - ${WD2To_PATH}/music:/music:ro
+    # #     hostname: airsonic
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:music.${DOMAIN}"
+    # #         - "traefik.port=4040"
+    # #
+    # # h5ai:
+    # #     image: corfr/h5ai
+    # #     container_name: h5ai
+    # #     restart: ${RESTART_MODE}
+    # #     volumes:
+    # #         - ./:/var/www/project
+    # #         - ${WD1To_PATH}:/var/www/WD1To
+    # #         - ${WD2To_PATH}:/var/www/WD2To
+    # #     hostname: h5ai
+    # #     networks:
+    # #         - connected
+    # #     labels:
+    # #         - "traefik.enable=true"
+    # #         - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
+    # #         - "traefik.port=80"
+    #
+    # rabbitmq:
+    #     image: rabbitmq:management-alpine
+    #     container_name: rabbitmq
     #     restart: ${RESTART_MODE}
-    #     hostname: stackedit
+    #     hostname: rabbitmq
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:stackedit.${DOMAIN}"
-    #         - "traefik.port=8080"
+    #         - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
+    #         - "traefik.port=15672"
     #
-    # airsonic:
-    #     image: linuxserver/airsonic
-    #     container_name: airsonic
+    # thelounge:
+    #     image: thelounge/thelounge
+    #     container_name: thelounge
     #     restart: ${RESTART_MODE}
-    #     environment:
-    #         PGID: ${PGID}
-    #         PUID: ${PUID}
-    #         TZ: ${TIMEZONE}
     #     volumes:
-    #         - ${WD2To_PATH}/music:/music:ro
-    #     hostname: airsonic
+    #         - thelounge_data:/var/opt/thelounge
+    #     hostname: thelounge
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:music.${DOMAIN}"
-    #         - "traefik.port=4040"
+    #         - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
+    #         - "traefik.irc.port=9000"
     #
-    # h5ai:
-    #     image: corfr/h5ai
-    #     container_name: h5ai
+    # backup-thelounge:
+    #     container_name: backup-thelounge
+    #     image: futurice/docker-volume-backup
     #     restart: ${RESTART_MODE}
     #     volumes:
-    #         - ./:/var/www/project
-    #         - ${WD1To_PATH}:/var/www/WD1To
-    #         - ${WD2To_PATH}:/var/www/WD2To
-    #     hostname: h5ai
+    #         - thelounge_data:/backup/thelounge:ro
+    #         - ${WD1To_PATH}/backup/thelounge:/archive
+    #     hostname: backup-thelounge
+    #     networks:
+    #         - hidden
+    #
+    # commafeed:
+    #     image: saggio/commafeed
+    #     container_name: commafeed
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - commafeed_data:/data
+    #         - ./config/commafeed/config.yml:/config/config.yml
+    #     hostname: commafeed
     #     networks:
     #         - connected
     #     labels:
     #         - "traefik.enable=true"
-    #         - "traefik.frontend.rule=Host:h5ai.${DOMAIN}"
-    #         - "traefik.port=80"
-
-    rabbitmq:
-        image: rabbitmq:management-alpine
-        container_name: rabbitmq
-        restart: ${RESTART_MODE}
-        hostname: rabbitmq
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:rabbitmq.${DOMAIN}"
-            - "traefik.port=15672"
-
-    thelounge:
-        image: thelounge/thelounge
-        container_name: thelounge
-        restart: ${RESTART_MODE}
-        volumes:
-            - thelounge_data:/var/opt/thelounge
-        hostname: thelounge
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.irc.frontend.rule=Host:irc.${DOMAIN}"
-            - "traefik.irc.port=9000"
-
-    backup-thelounge:
-        container_name: backup-thelounge
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - thelounge_data:/backup/thelounge:ro
-            - ${WD1To_PATH}/backup/thelounge:/archive
-        hostname: backup-thelounge
-        networks:
-            - hidden
-
-    commafeed:
-        image: saggio/commafeed
-        container_name: commafeed
-        restart: ${RESTART_MODE}
-        volumes:
-            - commafeed_data:/data
-            - ./config/commafeed/config.yml:/config/config.yml
-        hostname: commafeed
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:rss.${DOMAIN}"
-            - "traefik.port=8082"
-
-    backup-commafeed:
-        container_name: backup-commafeed
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - commafeed_data:/backup/commafeed:ro
-            - ${WD1To_PATH}/backup/commafeed:/archive
-        hostname: backup-commafeed
-        networks:
-            - hidden
+    #         - "traefik.frontend.rule=Host:rss.${DOMAIN}"
+    #         - "traefik.port=8082"
+    #
+    # backup-commafeed:
+    #     container_name: backup-commafeed
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - commafeed_data:/backup/commafeed:ro
+    #         - ${WD1To_PATH}/backup/commafeed:/archive
+    #     hostname: backup-commafeed
+    #     networks:
+    #         - hidden
 
     # zenbot:
     #     image: deviavir/zenbot
@@ -1594,11 +1594,11 @@ services:
             - theia_data:/home/project:cached
         hostname: theia
         networks:
-            - connected
+            - lucio
         labels:
             - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:theia.${DOMAIN}"
-            - "traefik.docker.network=${EXPOSED_NETWORK}"
+            - "traefik.frontend.rule=Host:theia.kind.lucio.home"
+            - "traefik.docker.network=lucio"
             - "traefik.port=3000"
     #
     # backup-theia:
@@ -1758,28 +1758,28 @@ services:
     #         - "traefik.docker.network=${EXPOSED_NETWORK}"
     #         - "traefik.port=3000"
 
-    rotate-backup: # rotate backups
-        container_name: rotate-backup
-        image: eyjhb/backup-rotate
-        restart: ${RESTART_MODE}
-        environment:
-            PGID: ${PGID}
-            PUID: ${PUID}
-            TZ: ${TIMEZONE}
-        volumes:
-            - ./config/rotate-backup/rotate-backup.ini:/config/rotate-backup.ini
-            - ${WD1To_PATH}/backup:/media
-        hostname: rotate-backup
-        networks:
-            - hidden
-
-    backup-shared:
-        container_name: backup-shared
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./shared:/backup/shared:ro
-            - ${WD1To_PATH}/backup/shared:/archive
-        hostname: backup-shared
-        networks:
-            - hidden
+    # rotate-backup: # rotate backups
+    #     container_name: rotate-backup
+    #     image: eyjhb/backup-rotate
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         PGID: ${PGID}
+    #         PUID: ${PUID}
+    #         TZ: ${TIMEZONE}
+    #     volumes:
+    #         - ./config/rotate-backup/rotate-backup.ini:/config/rotate-backup.ini
+    #         - ${WD1To_PATH}/backup:/media
+    #     hostname: rotate-backup
+    #     networks:
+    #         - hidden
+    #
+    # backup-shared:
+    #     container_name: backup-shared
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./shared:/backup/shared:ro
+    #         - ${WD1To_PATH}/backup/shared:/archive
+    #     hostname: backup-shared
+    #     networks:
+    #         - hidden
