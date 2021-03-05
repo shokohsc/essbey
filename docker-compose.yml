@@ -21,13 +21,13 @@ networks:
             name: pihole
 
 volumes:
-    elasticsearch_data: {}
+    # elasticsearch_data: {}
     # elasticsearch-diskover_data: {}
-    grafana_data: {}
-    influx_data: {}
+    # grafana_data: {}
+    # influx_data: {}
     mongo_data: {}
     # mosquitto_data: {}
-    prometheus_data: {}
+    # prometheus_data: {}
     # openvpn-ui_data: {}
     mattermost_data: {}
     mysql_data: {}
@@ -36,7 +36,7 @@ volumes:
     commafeed_data: {}
     # redis_data: {}
     # zenbot_data: {}
-    theia_data: {}
+    # theia_data: {}
     # jsbin_data: {}
     # jenkins_data: {}
     # see-eye_data: {}
@@ -300,54 +300,54 @@ services:
         labels:
             - "traefik.enable=false"
 
-    openvpn: # Internal vpn
-        container_name: openvpn
-        image: kylemanna/openvpn
-        tty: true
-        cap_add:
-            - net_admin
-        restart: ${RESTART_MODE}
-        expose:
-            - "5555"
-        ports:
-            - "32767:1194/udp"
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-        hostname: openvpn
-        networks:
-            - connected
-            - pihole
-        labels:
-            - "traefik.enable=false"
-
-    openvpn-tcp: # Internal vpn fallback tcp
-        container_name: openvpn-tcp
-        image: kylemanna/openvpn
-        command: ovpn_run --proto tcp
-        tty: true
-        privileged: true
-        restart: ${RESTART_MODE}
-        ports:
-            - "32767:1194/tcp"
-        volumes:
-            - ./config/openvpn:/etc/openvpn
-        hostname: openvpn-tcp
-        networks:
-            - connected
-            - pihole
-        labels:
-            - "traefik.enable=false"
-
-    backup-openvpn:
-        container_name: backup-openvpn
-        image: futurice/docker-volume-backup
-        restart: ${RESTART_MODE}
-        volumes:
-            - ./config/openvpn:/backup/openvpn:ro
-            - ${WD1To_PATH}/backup/openvpn:/archive
-        hostname: backup-openvpn
-        networks:
-            - hidden
+    # openvpn: # Internal vpn
+    #     container_name: openvpn
+    #     image: kylemanna/openvpn
+    #     tty: true
+    #     cap_add:
+    #         - net_admin
+    #     restart: ${RESTART_MODE}
+    #     expose:
+    #         - "5555"
+    #     ports:
+    #         - "32767:1194/udp"
+    #     volumes:
+    #         - ./config/openvpn:/etc/openvpn
+    #     hostname: openvpn
+    #     networks:
+    #         - connected
+    #         - pihole
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # openvpn-tcp: # Internal vpn fallback tcp
+    #     container_name: openvpn-tcp
+    #     image: kylemanna/openvpn
+    #     command: ovpn_run --proto tcp
+    #     tty: true
+    #     privileged: true
+    #     restart: ${RESTART_MODE}
+    #     ports:
+    #         - "32767:1194/tcp"
+    #     volumes:
+    #         - ./config/openvpn:/etc/openvpn
+    #     hostname: openvpn-tcp
+    #     networks:
+    #         - connected
+    #         - pihole
+    #     labels:
+    #         - "traefik.enable=false"
+    #
+    # backup-openvpn:
+    #     container_name: backup-openvpn
+    #     image: futurice/docker-volume-backup
+    #     restart: ${RESTART_MODE}
+    #     volumes:
+    #         - ./config/openvpn:/backup/openvpn:ro
+    #         - ${WD1To_PATH}/backup/openvpn:/archive
+    #     hostname: backup-openvpn
+    #     networks:
+    #         - hidden
 
     sidekick: # Vpn profile api
         container_name: sidekick
@@ -1206,82 +1206,82 @@ services:
     #     labels:
     #         - "traefik.enable=false"
 
-    minecraft:
-        container_name: minecraft
-        image: itzg/minecraft-server
-        restart: ${RESTART_MODE}
-        environment:
-            EULA: 'TRUE'
-            VERSION: 1.14.4
-            TYPE: SPIGOT
-            OVERRIDE_SERVER_PROPERTIES: 'true'
-            CONSOLE: 'false'
-            ONLINE_MODE: 'false'
-            ALLOW_FLIGHT: 'true'
-            MEMORY: 2G
-            LEVEL_TYPE: AMPLIFIED
-            LEVEL: world
-            PVP: 'true'
-            MOTD: A Vanilla Minecraft Server powered by Docker
-            MODE: survival
-            SEED: -8913466909937400889
-            VIEW_DISTANCE: 10
-            SPAWN_PROTECTION: 16
-            SPAWN_MONSTERS: 'true'
-            SPAWN_NPCS: 'true'
-            SPAWN_ANIMALS: 'true'
-            MAX_TICK_TIME: 60000
-            MAX_BUILD_HEIGHT: 512
-            SNOOPER_ENABLED: 'false'
-            HARDCORE: 'false'
-            GENERATE_STRUCTURES: 'true'
-            FORCE_GAMEMODE: 'false'
-            ENABLE_COMMAND_BLOCK: 'true'
-            MAX_PLAYERS: 10
-            MAX_WORLD_SIZE: 29999984
-            ALLOW_NETHER: 'true'
-            ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
-            ENABLE_QUERY: 'false'
-            ENABLE_RCON: 'true'
-            RCON_PORT: ${RCON_PORT}
-            RCON_PASSWORD: ${RCON_PASSWORD}
-            OPS: ${MINECRAFT_OPS}
-            DIFFICULTY: hard
-            SERVER_NAME: minecraft
-            SERVER_PORT: 25565
-        ports:
-            - "25565:25565/tcp"
-        volumes:
-            - ./config/minecraft:/data
-        hostname: minecraft
-        networks:
-            - connected
-        labels:
-            - "traefik.enable=true"
-            - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
-            - "traefik.port=8123"
-
-    minecraft-backup:
-        container_name: minecraft-backup
-        image: itzg/mc-backup
-        restart: ${RESTART_MODE}
-        environment:
-            BACKUP_INTERVAL: "24h"
-            PRUNE_BACKUPS_DAYS: 1
-            RCON_HOST: minecraft
-            RCON_PORT: ${RCON_PORT}
-            RCON_PASSWORD: ${RCON_PASSWORD}
-            EXCLUDES: "*.jar,cache,logs"
-        volumes:
-            - ./config/minecraft:/data:ro
-            - ${WD1To_PATH}/backup/minecraft:/backups
-        hostname: minecraft-backup
-        networks:
-            - connected
-        depends_on:
-            - minecraft
-        labels:
-            - "traefik.enable=false"
+    # minecraft:
+    #     container_name: minecraft
+    #     image: itzg/minecraft-server
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         EULA: 'TRUE'
+    #         VERSION: 1.14.4
+    #         TYPE: SPIGOT
+    #         OVERRIDE_SERVER_PROPERTIES: 'true'
+    #         CONSOLE: 'false'
+    #         ONLINE_MODE: 'false'
+    #         ALLOW_FLIGHT: 'true'
+    #         MEMORY: 2G
+    #         LEVEL_TYPE: AMPLIFIED
+    #         LEVEL: world
+    #         PVP: 'true'
+    #         MOTD: A Vanilla Minecraft Server powered by Docker
+    #         MODE: survival
+    #         SEED: -8913466909937400889
+    #         VIEW_DISTANCE: 10
+    #         SPAWN_PROTECTION: 16
+    #         SPAWN_MONSTERS: 'true'
+    #         SPAWN_NPCS: 'true'
+    #         SPAWN_ANIMALS: 'true'
+    #         MAX_TICK_TIME: 60000
+    #         MAX_BUILD_HEIGHT: 512
+    #         SNOOPER_ENABLED: 'false'
+    #         HARDCORE: 'false'
+    #         GENERATE_STRUCTURES: 'true'
+    #         FORCE_GAMEMODE: 'false'
+    #         ENABLE_COMMAND_BLOCK: 'true'
+    #         MAX_PLAYERS: 10
+    #         MAX_WORLD_SIZE: 29999984
+    #         ALLOW_NETHER: 'true'
+    #         ANNOUNCE_PLAYER_ACHIEVEMENTS: 'true'
+    #         ENABLE_QUERY: 'false'
+    #         ENABLE_RCON: 'true'
+    #         RCON_PORT: ${RCON_PORT}
+    #         RCON_PASSWORD: ${RCON_PASSWORD}
+    #         OPS: ${MINECRAFT_OPS}
+    #         DIFFICULTY: hard
+    #         SERVER_NAME: minecraft
+    #         SERVER_PORT: 25565
+    #     ports:
+    #         - "25565:25565/tcp"
+    #     volumes:
+    #         - ./config/minecraft:/data
+    #     hostname: minecraft
+    #     networks:
+    #         - connected
+    #     labels:
+    #         - "traefik.enable=true"
+    #         - "traefik.frontend.rule=Host:minecraft.${DOMAIN}"
+    #         - "traefik.port=8123"
+    #
+    # minecraft-backup:
+    #     container_name: minecraft-backup
+    #     image: itzg/mc-backup
+    #     restart: ${RESTART_MODE}
+    #     environment:
+    #         BACKUP_INTERVAL: "24h"
+    #         PRUNE_BACKUPS_DAYS: 1
+    #         RCON_HOST: minecraft
+    #         RCON_PORT: ${RCON_PORT}
+    #         RCON_PASSWORD: ${RCON_PASSWORD}
+    #         EXCLUDES: "*.jar,cache,logs"
+    #     volumes:
+    #         - ./config/minecraft:/data:ro
+    #         - ${WD1To_PATH}/backup/minecraft:/backups
+    #     hostname: minecraft-backup
+    #     networks:
+    #         - connected
+    #     depends_on:
+    #         - minecraft
+    #     labels:
+    #         - "traefik.enable=false"
 
     mongo: # Wekan requirement
         image: mongo
