@@ -6,6 +6,8 @@ ARG HELM_VERSION="v3.5.2"
 ARG TERRAFORM_VERSION="0.14.5"
 ARG CHART_TESTING_VERSION="3.3.1"
 ARG KUBESEAL_VERSION="v0.15.0"
+ARG K3D_VERSION="v4.2.0"
+ARG K0S_VERSION="v0.11.0"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -34,6 +36,12 @@ sed -i 's/docker:x:101:theia/docker:x:999:theia/g' /etc/group && \
 wget https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64 && \
 chmod +x kind-linux-amd64 && \
 mv /home/theia/kind-linux-amd64 /usr/bin/kind && \
+# K3D https://github.com/rancher/k3d
+curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=${K3D_VERSION} bash && \
+# K0S https://github.com/k0sproject/k0s
+wget https://github.com/k0sproject/k0s/releases/download/${K0S_VERSION}/k0s-${K0S_VERSION}-amd64 && \
+chmod +x k0s-${K0S_VERSION}-amd64 && \
+mv /home/theia/k0s-${K0S_VERSION}-amd64 /usr/bin/k0s && \
 # KUBECTL https://kubernetes.io/docs/tasks/tools/install-kubectl/
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && \
 chmod +x ./kubectl && \
