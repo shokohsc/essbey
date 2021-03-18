@@ -373,6 +373,7 @@ services:
     vpn-client: # Torrenting vpn
         container_name: vpn-client
         image: shokohsc/openvpn-client
+        command: -d
         cap_add:
             - net_admin
         restart: ${RESTART_MODE}
