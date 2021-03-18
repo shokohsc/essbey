@@ -295,6 +295,7 @@ services:
             TOKEN: ${DUCKDNS_TOKEN}
             TZ: ${TIMEZONE}
         hostname: duckdns
+        dns: 1.1.1.1
         networks:
             - connected
         labels:
@@ -360,6 +361,7 @@ services:
             RCON_PASSWORD: ${RCON_PASSWORD}
             AMQP_HOST: rabbitmq
         hostname: sidekick
+        dns: 1.1.1.1
         networks:
             - connected
         labels:
@@ -588,6 +590,7 @@ services:
         networks:
             - connected
         hostname: plex
+        dns: 1.1.1.1
         labels:
             - "traefik.enable=true"
             - "traefik.frontend.rule=Host:plex.${DOMAIN}"
@@ -1472,6 +1475,7 @@ services:
         volumes:
             - thelounge_data:/var/opt/thelounge
         hostname: thelounge
+        dns: 1.1.1.1
         networks:
             - connected
         labels:
@@ -1498,6 +1502,7 @@ services:
             - commafeed_data:/data
             - ./config/commafeed/config.yml:/config/config.yml
         hostname: commafeed
+        dns: 1.1.1.1
         networks:
             - connected
         labels:
