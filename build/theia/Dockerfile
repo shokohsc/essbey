@@ -1,13 +1,14 @@
 FROM theiaide/theia:1.10.0
 
 ARG KIND_VERSION="v0.10.0"
-ARG K9S_VERSION="v0.24.2"
-ARG HELM_VERSION="v3.5.2"
-ARG TERRAFORM_VERSION="0.14.5"
+ARG K9S_VERSION="v0.24.3"
+ARG HELM_VERSION="v3.5.3"
+ARG TERRAFORM_VERSION="0.14.8"
 ARG CHART_TESTING_VERSION="3.3.1"
 ARG KUBESEAL_VERSION="v0.15.0"
-ARG K3D_VERSION="v4.2.0"
-ARG K0S_VERSION="v0.11.0"
+ARG K3D_VERSION="v4.3.0"
+ARG K0S_VERSION="v0.11.1"
+ARG FLUX_VERSION="1.22.0"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -71,6 +72,9 @@ mv ct /usr/bin/ct && \
 rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md && \
 # KUBESEAL https://github.com/bitnami-labs/sealed-secrets/
 wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
-install -m 755 kubeseal /usr/bin/kubeseal
+install -m 755 kubeseal /usr/bin/kubeseal && \
+# FLUXCD https://github.com/fluxcd/flux/
+wget https://github.com/fluxcd/flux/releases/download/${FLUX_VERSION}/fluxctl_linux_amd64 && \
+install -m 755 fluxctl_linux_amd64 /usr/bin/flux
 
 USER theia
