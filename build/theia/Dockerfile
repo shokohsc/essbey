@@ -8,7 +8,7 @@ ARG CHART_TESTING_VERSION="3.3.1"
 ARG KUBESEAL_VERSION="v0.15.0"
 ARG K3D_VERSION="v4.3.0"
 ARG K0S_VERSION="v0.11.1"
-ARG FLUX_VERSION="1.22.0"
+ARG FLUX2_VERSION="0.10.0"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -73,8 +73,10 @@ rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md &
 # KUBESEAL https://github.com/bitnami-labs/sealed-secrets/
 wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
 install -m 755 kubeseal /usr/bin/kubeseal && \
-# FLUXCD https://github.com/fluxcd/flux/
-wget https://github.com/fluxcd/flux/releases/download/${FLUX_VERSION}/fluxctl_linux_amd64 && \
-install -m 755 fluxctl_linux_amd64 /usr/bin/flux
+# FLUXCD https://github.com/fluxcd/flux2
+wget https://github.com/fluxcd/flux2/releases/download/v${FLUX2_VERSION}/flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
+tar zxf flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
+install -m 755 flux /usr/bin/flux && \
+rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz
 
 USER theia
