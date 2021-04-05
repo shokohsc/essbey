@@ -9,6 +9,7 @@ ARG KUBESEAL_VERSION="v0.15.0"
 ARG K3D_VERSION="v4.3.0"
 ARG K0S_VERSION="v0.11.1"
 ARG FLUX2_VERSION="0.11.0"
+ARG SOPS_VERSION="v3.7.0"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -73,10 +74,13 @@ rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md &
 # KUBESEAL https://github.com/bitnami-labs/sealed-secrets/
 wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
 install -m 755 kubeseal /usr/bin/kubeseal && \
-# FLUXCD https://github.com/fluxcd/flux2
+# FLUXCD https://github.com/fluxcd/flux2/
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX2_VERSION}/flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 tar zxf flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 install -m 755 flux /usr/bin/flux && \
-rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz
+rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz \
+# SOPS https://github.com/mozilla/sops/
+wget https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux -O sops && \
+install -m 755 sops /usr/bin/sops
 
 USER theia
