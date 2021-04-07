@@ -79,7 +79,7 @@ install -m 755 kubeseal /usr/bin/kubeseal && \
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX2_VERSION}/flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 tar zxf flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 install -m 755 flux /usr/bin/flux && \
-rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz \
+rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 # SOPS https://github.com/mozilla/sops/
 wget https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux -O sops && \
 install -m 755 sops /usr/bin/sops && \
