@@ -10,6 +10,7 @@ ARG K3D_VERSION="v4.3.0"
 ARG K0S_VERSION="v0.11.1"
 ARG FLUX2_VERSION="0.11.0"
 ARG SOPS_VERSION="v3.7.0"
+ARG KUSTOMIZE_VERSION="v4.0.5"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -81,6 +82,11 @@ install -m 755 flux /usr/bin/flux && \
 rm flux_${FLUX2_VERSION}_linux_amd64.tar.gz \
 # SOPS https://github.com/mozilla/sops/
 wget https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux -O sops && \
-install -m 755 sops /usr/bin/sops
+install -m 755 sops /usr/bin/sops && \
+# KUSTOMIZE https://github.com/mozilla/sops/
+wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
+tar zxf kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
+mv kustomize /usr/bin/kustomize && \
+rm kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
 
 USER theia
