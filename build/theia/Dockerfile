@@ -11,6 +11,8 @@ ARG K0S_VERSION="v0.11.1"
 ARG FLUX2_VERSION="0.12.1"
 ARG SOPS_VERSION="v3.7.1"
 ARG KUSTOMIZE_VERSION="v4.0.5"
+ARG KUBEVAL_VERSION="v0.16.1"
+ARG KREW_VERSION="v0.4.1"
 
 ENV SEALED_SECRETS_CONTROLLER_NAMESPACE="sealed-secrets"
 ENV SEALED_SECRETS_CONTROLLER_NAME="sealed-secrets"
@@ -87,6 +89,16 @@ install -m 755 sops /usr/bin/sops && \
 wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
 tar zxf kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
 mv kustomize /usr/bin/kustomize && \
-rm kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
+rm kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
+# KUBEVAL https://github.com/instrumenta/kubeval
+wget https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz && \
+tar xf kubeval-linux-amd64.tar.gz && \
+install -m 755 kubeval /usr/bin/kubeval && \
+# KREW https://github.com/kubernetes-sigs/krew
+wget https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/krew.tar.gz && \
+tar xzf krew.tar.gz && \
+./krew-linux_amd64 install krew && \
+rm krew* && \
+echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> /home/theia/.zshrc
 
 USER theia
