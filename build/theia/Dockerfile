@@ -1,13 +1,8 @@
-FROM theiaide/theia:1.10.0
+FROM theiaide/theia:1.13.0
 
-ARG KIND_VERSION="v0.10.0"
-ARG K9S_VERSION="v0.24.7"
-ARG HELM_VERSION="v3.5.3"
-ARG TERRAFORM_VERSION="0.14.9"
+ARG K9S_VERSION="v0.24.10"
+ARG HELM_VERSION="v3.5.4"
 ARG CHART_TESTING_VERSION="3.3.1"
-ARG KUBESEAL_VERSION="v0.15.0"
-ARG K3D_VERSION="v4.3.0"
-ARG K0S_VERSION="v0.11.1"
 ARG FLUX2_VERSION="0.12.1"
 ARG SOPS_VERSION="v3.7.1"
 ARG KUSTOMIZE_VERSION="v4.0.5"
@@ -37,24 +32,14 @@ grep -qxF 'docker' /etc/group || addgroup -g 998 docker && \
 groups theia |grep docker || addgroup theia docker && \
 groups theia |grep root || addgroup theia root && \
 sed -i 's/docker:x:101:theia/docker:x:999:theia/g' /etc/group && \
-# KIND https://github.com/kubernetes-sigs/kind
-wget https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64 && \
-chmod +x kind-linux-amd64 && \
-mv /home/theia/kind-linux-amd64 /usr/bin/kind && \
-# K3D https://github.com/rancher/k3d
-curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=${K3D_VERSION} bash && \
-# K0S https://github.com/k0sproject/k0s
-wget https://github.com/k0sproject/k0s/releases/download/${K0S_VERSION}/k0s-${K0S_VERSION}-amd64 && \
-chmod +x k0s-${K0S_VERSION}-amd64 && \
-mv /home/theia/k0s-${K0S_VERSION}-amd64 /usr/bin/k0s && \
 # KUBECTL https://kubernetes.io/docs/tasks/tools/install-kubectl/
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && \
 chmod +x ./kubectl && \
 mv /home/theia/kubectl /usr/bin/kubectl && \
 # K9S https://github.com/derailed/k9s
-wget https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_x86_64.tar.gz && \
-tar xzf k9s_Linux_x86_64.tar.gz && \
-rm k9s_Linux_x86_64.tar.gz && \
+wget https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_${K9S_VERSION}_Linux_x86_64.tar.gz && \
+tar xzf k9s_${K9S_VERSION}_Linux_x86_64.tar.gz && \
+rm k9s_${K9S_VERSION}_Linux_x86_64.tar.gz && \
 mv /home/theia/k9s /usr/bin/k9s && \
 bash -c "grep xterm-256color /home/theia/.zshrc || echo 'export TERM=xterm-256color' >> /home/theia/.zshrc" && \
 # HELM https://helm.sh/
@@ -63,20 +48,12 @@ tar zxf helm-${HELM_VERSION}-linux-amd64.tar.gz && \
 rm helm-${HELM_VERSION}-linux-amd64.tar.gz && \
 mv linux-amd64/helm /usr/bin/helm && \
 rm -rf linux-amd64 && \
-# TERRAFORM https://www.terraform.io/
-wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-mv terraform /usr/bin/terraform && \
-rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
 # CHART TESTING https://github.com/helm/chart-testing/
-pip install yamllint yamale && \
+pip3 install yamllint yamale && \
 wget https://github.com/helm/chart-testing/releases/download/v${CHART_TESTING_VERSION}/chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
 tar xzf chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz && \
 mv ct /usr/bin/ct && \
 rm chart-testing_${CHART_TESTING_VERSION}_linux_amd64.tar.gz LICENSE README.md && \
-# KUBESEAL https://github.com/bitnami-labs/sealed-secrets/
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/${KUBESEAL_VERSION}/kubeseal-linux-amd64 -O kubeseal && \
-install -m 755 kubeseal /usr/bin/kubeseal && \
 # FLUXCD https://github.com/fluxcd/flux2/
 wget https://github.com/fluxcd/flux2/releases/download/v${FLUX2_VERSION}/flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
 tar zxf flux_${FLUX2_VERSION}_linux_amd64.tar.gz && \
@@ -90,6 +67,9 @@ wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F
 tar zxf kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
 mv kustomize /usr/bin/kustomize && \
 rm kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz && \
+# SKAFFOLD https://github.com/GoogleContainerTools/skaffold
+wget https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+install -m 755 skaffold-linux-amd64 /usr/bin/skaffold && \
 # KUBEVAL https://github.com/instrumenta/kubeval
 wget https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz && \
 tar xf kubeval-linux-amd64.tar.gz && \
